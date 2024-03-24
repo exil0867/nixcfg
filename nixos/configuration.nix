@@ -1,15 +1,17 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{
-  inputs,
+
+{ inputs,
   outputs,
   lib,
   config,
   pkgs,
-  ...
-}: {
+  ... }:
+
+{
   # You can import other NixOS modules here
-  imports = [
+  imports =
+    [ 
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
 
@@ -21,8 +23,8 @@
     # ./users.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
-    ./hardware-configuration.nix
-  ];
+      ./hardware-configuration.nix
+    ];
 
   nixpkgs = {
     # You can add overlays here
@@ -70,30 +72,96 @@
     # Deduplicate and optimize nix store
     auto-optimise-store = true;
   };
+  # Set your hostname
+ networking.hostName = "3x1l-s3rv3r"; 
 
-  # FIXME: Add the rest of your current configuration
 
-  # TODO: Set your hostname
-  networking.hostName = "your-hostname";
+  # Bootloader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.useOSProber = true;
 
-  # TODO: This is just an example, be sure to use whatever bootloader you prefer
-  boot.loader.systemd-boot.enable = true;
+  boot.initrd.luks.devices."luks-1e15011d-afb3-4779-8262-249ba80d8d64".device = "/dev/disk/by-uuid/1e15011d-afb3-4779-8262-249ba80d8d64";
+  # Setup keyfile
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = null;
+  };
 
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
-  users.users = {
-    # FIXME: Replace with your username
-    your-username = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "correcthorsebatterystaple";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
+  boot.loader.grub.enableCryptodisk=true;
+
+  boot.initrd.luks.devices."luks-019f7ba1-de51-4c17-b12f-e404b943f8e9".keyFile = "/crypto_keyfile.bin";
+  boot.initrd.luks.devices."luks-1e15011d-afb3-4779-8262-249ba80d8d64".keyFile = "/crypto_keyfile.bin";
+ 
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Set your time zone.
+  time.timeZone = "Africa/Tunis";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "ar_TN.UTF-8";
+    LC_IDENTIFICATION = "ar_TN.UTF-8";
+    LC_MEASUREMENT = "ar_TN.UTF-8";
+    LC_MONETARY = "ar_TN.UTF-8";
+    LC_NAME = "ar_TN.UTF-8";
+    LC_NUMERIC = "ar_TN.UTF-8";
+    LC_PAPER = "ar_TN.UTF-8";
+    LC_TELEPHONE = "ar_TN.UTF-8";
+    LC_TIME = "ar_TN.UTF-8";
+  };
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  # Configure keymap in X11
+  services.xserver = {
+    layout = "us";
+    xkbVariant = "";
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.exil0359 = {
+    initialPassword = "changeme"
+    isNormalUser = true;
+    openssh.authorizedKeys.keys = [
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = ["wheel"];
-    };
+    extraGroups = [ "networkmanager" "wheel" ];
   };
 
   # This setups a SSH server. Very important if you're setting up a headless system.
@@ -108,6 +176,38 @@
     };
   };
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "23.05";
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  # environment.systemPackages = with pkgs; [
+  # #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  # #  wget
+  # ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "23.11"; # Did you read the comment?
+
 }
