@@ -24,7 +24,7 @@
       TZ = "America/New_York";
       JELLYFIN_PublishedServerUrl = "jellyfin.bspwr.com"; # optional
     };
-    dependsOn = [ "create-network-jellyfin" "tailscale-jellyfin" ];
+    dependsOn = [ "create-network-jellyfin" ];
     extraOptions = [
       # networks
       "--network=jellyfin"
@@ -66,7 +66,7 @@
     autoStart = true;
     image = "ghcr.io/tailscale/tailscale:latest";
     dependsOn = [
-      "create-network-jellyfin"
+      "create-network-jellyfin" "jellyfin"
     ];
     cmd = [ "tailscaled"];
     extraOptions = [
