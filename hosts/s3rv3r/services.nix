@@ -1,20 +1,20 @@
 { config, pkgs, lib, ... }: {
   imports = [
-    ./services/arr.nix
+    # ./services/arr.nix
     # ./services/webdav.nix
-    ./services/filebrowser.nix
-    ./services/portainer.nix
+    # ./services/filebrowser.nix
+    # ./services/portainer.nix
     # ./services/heimdall.nix
-    ./services/heimdall-bspwr.nix
+    # ./services/heimdall-bspwr.nix
     ./services/jellyfin.nix
-    # # ./services/headscale.nix
+    # ./services/headscale.nix
     # ./services/poste.nix
-    # ./services/coturn.nix
+    ./services/coturn.nix
     # ./services/virt-manager.nix
     # ./services/blog.nix
     # ./services/mullvad-usa.nix
     # ./services/mullvad-sweden.nix
-    ./services/gitea.nix
+    # ./services/gitea.nix
     # ./services/lxdware.nix
     # ./services/projectsend.nix
     # ./services/photoprism.nix
@@ -24,24 +24,10 @@
     ./services/traefik.nix
     # ./services/jitsi.nix
     # ./services/matrix.nix
-    # ./services/socks-proxy.nix
+    ./services/socks-proxy.nix
     # ./services/syncthing.nix
     # ./services/immich.nix
   ];
-
-  systemd.services.docker-modprobe-wireguard = {
-    enable = true;
-    description = "modprobe wireguard";
-    path = [ pkgs.kmod ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-      ExecStart = "${pkgs.kmod}/bin/modprobe wireguard";
-      ExecStop = "${pkgs.kmod}/bin/modprobe -r wireguard";
-    };
-    after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-  };
 
   # docker autoheal tool
   virtualisation.oci-containers.containers."dependheal" = {
@@ -49,20 +35,6 @@
     image = "ghcr.io/whimbree/dependheal:latest";
     volumes = [ "/var/run/docker.sock:/var/run/docker.sock" ];
     environment = { DEPENDHEAL_ENABLE_ALL = "true"; };
-  };
-
-  # docker image auto update tool
-  virtualisation.oci-containers.containers."watchtower" = {
-    autoStart = true;
-    image = "docker.io/containrrr/watchtower";
-    volumes = [ "/var/run/docker.sock:/var/run/docker.sock" ];
-    environment = {
-      TZ = "America/New_York";
-      WATCHTOWER_CLEANUP = "true";
-      WATCHTOWER_NO_RESTART = "true";
-      # Run every day at 3:00 EDT
-      WATCHTOWER_SCHEDULE = "0 0 3 * * *";
-    };
   };
 
   # open TCP port 80 443 for Traefik
