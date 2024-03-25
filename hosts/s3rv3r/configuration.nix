@@ -21,8 +21,6 @@
 
 
  
-
-  networking.hostName = "3x1l-s3rv3r"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary

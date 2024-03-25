@@ -1,5 +1,5 @@
  { config, pkgs, lib, ... }: {
-  networking.hostName = "bastion";
+  networking.hostName = "3x1l-s3rv3r";
   networking.useDHCP = lib.mkDefault true;
   networking.useNetworkd = true;
   networking.networkmanager.enable = true;
