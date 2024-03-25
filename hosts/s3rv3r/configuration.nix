@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ./filesystem.nix
       ./networking.nix
-      # ./tailscale.nix
+      ./tailscale.nix
     ./virtualisation.nix
     ./services.nix
       ../../common/base.nix

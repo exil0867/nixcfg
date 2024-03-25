@@ -9,7 +9,7 @@
     ./services/jellyfin.nix
     # ./services/headscale.nix
     # ./services/poste.nix
-    ./services/coturn.nix
+    # ./services/coturn.nix
     # ./services/virt-manager.nix
     # ./services/blog.nix
     # ./services/mullvad-usa.nix
