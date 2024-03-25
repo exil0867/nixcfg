@@ -70,4 +70,29 @@
       "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     ];
   };
+  virtualisation.oci-containers.containers."tailscale-jellyfin" = {
+    autoStart = true;
+    image = "ghcr.io/tailscale/tailscale:latest";
+    dependsOn = [
+      "docker-create-network-jellyfin"
+    ];
+    cmd = [ "tailscaled" "--tun=userspace-networking" ];
+    extraOptions = [
+      # cap_add
+      "--cap-add=NET_ADMIN"
+      # sysctls
+      "--sysctl"
+      "net.ipv4.ip_forward=1"
+      "--sysctl"
+      "net.ipv6.conf.all.forwarding=1"
+      # network_mode
+      "--net=container:jellyfin"
+      # labels
+      ## dependheal
+      "--label"
+      "dependheal.enable=true"
+      "--label"
+      "dependheal.parent=jellyfin"
+    ];
+  };
 }
