@@ -41,5 +41,5 @@
   boot.kernelModules = [ "kvm-amd" "vhost_vsock" ];
 
   # add groups
-  users.users.bree.extraGroups = [ "docker" "qemu-libvirtd" "libvirtd" "lxd" ];
+  users.users.exil0359.extraGroups = [ "docker" "qemu-libvirtd" "libvirtd" "lxd" ];
 }
