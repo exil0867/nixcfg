@@ -48,7 +48,7 @@
       nixosConfigurations = {
         "s3rv3r" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./s3rv3r/configuration.nix ];
+          modules = [ ./hosts/s3rv3r/configuration.nix ];
         };
       };
     };
