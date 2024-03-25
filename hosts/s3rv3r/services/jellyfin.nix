@@ -18,14 +18,6 @@
   virtualisation.oci-containers.containers."jellyfin" = {
     autoStart = true;
     image = "lscr.io/linuxserver/jellyfin:latest";
-    volumes = [
-      "/services/jellyfin/config:/config:Z"
-      "/ocean/media/shows:/data/shows:z"
-      "/ocean/media/movies:/data/movies:z"
-      "/ocean/media/music:/data/music:z"
-      "/ocean/media/books:/data/books:z"
-      "/ocean/media/xxx:/data/xxx:z"
-    ];
     environment = {
       PUID = "1420";
       PGID = "1420";
@@ -76,7 +68,7 @@
     dependsOn = [
       "docker-create-network-jellyfin"
     ];
-    cmd = [ "tailscaled" "--tun=userspace-networking" ];
+    cmd = [ "tailscaled"];
     extraOptions = [
       # cap_add
       "--cap-add=NET_ADMIN"

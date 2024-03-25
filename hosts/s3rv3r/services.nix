@@ -21,10 +21,10 @@
     # ./services/nextcloud.nix
     # ./services/incognito.nix
     # ./services/piped.nix
-    ./services/traefik.nix
+    # ./services/traefik.nix
     # ./services/jitsi.nix
     # ./services/matrix.nix
-    ./services/socks-proxy.nix
+    # ./services/socks-proxy.nix
     # ./services/syncthing.nix
     # ./services/immich.nix
   ];
@@ -60,9 +60,11 @@
     3478
     2222
     2200
+    8096
+    8920
   ];
 
   # open UDP port 3478 for TURN Server
   # open UDP port 10000 for Jitsi Meet
-  networking.firewall.allowedUDPPorts = [ 3478 10000 ];
+  networking.firewall.allowedUDPPorts = [ 3478 10000 8096 8920];
 }
