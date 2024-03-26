@@ -68,7 +68,7 @@
     dependsOn = [
       "create-network-jellyfin" "jellyfin"
     ];
-    cmd = [ "tailscaled"];
+    cmd = [ "tailscaled" "--tun=userspace-networking" ];
     extraOptions = [
       # cap_add
       "--cap-add=NET_ADMIN"
