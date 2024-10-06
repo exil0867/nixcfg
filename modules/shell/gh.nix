@@ -1,7 +1,3 @@
 {
-  programs = {
-    gh = {
-      enable = true;
-    };
-  };
+  programs = {};
 }
