@@ -1,0 +1,4 @@
+
+[
+  ./flameshot.nix
+]
