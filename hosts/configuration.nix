@@ -78,6 +78,7 @@ in
       VISUAL = "${vars.editor}";
     };
     systemPackages = with pkgs; [
+      gh
       btop # Resource Manager
       # cifs-utils # Samba
       coreutils # GNU Utilities
