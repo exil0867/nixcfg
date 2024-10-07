@@ -2,6 +2,8 @@
 
 This repository contains my personal NixOS configuration files.
 
+The migration of my devices and home server to NixOS is still in progress. The goal of this project is to rewrite everything I run in a declarative way.
+
 ## Usage
 
 After the installation, you can customize your NixOS configuration by editing the Nix files. Here are some common commands:
@@ -11,13 +13,6 @@ After the installation, you can customize your NixOS configuration by editing th
 ```bash
 sudo nixos-rebuild switch --flake <path>#<host>
 ```
-
-- To check the status of your NixOS configuration:
-
-```bash
-nixos-option
-```
-
 
 ## Contributing
 
