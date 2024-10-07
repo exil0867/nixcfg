@@ -29,6 +29,7 @@
   environment = {
     systemPackages = with pkgs; [
       kdePackages.kate
+      kdePackages.partitionmanager
       git
       zed-editor
       vscode
