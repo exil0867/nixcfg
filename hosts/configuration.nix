@@ -3,15 +3,16 @@
 
 let
   terminal = pkgs.${vars.terminal};
+  moduleImports = import ../modules/desktops ++
+                  import ../modules/hardware ++
+                  import ../modules/programs ++
+                  import ../modules/services ++
+                  import ../modules/shell ++
+                  import ../modules/theming;
 in
 {
-  imports = (import ../modules/desktops ++
-    import ../modules/hardware ++
-    import ../modules/programs ++
-    import ../modules/services ++
-    import ../modules/shell ++
-    import ../modules/theming);
-
+  
+  imports = moduleImports ++ [ inputs.sops-nix.nixosModules.sops ];
   boot = {
     tmp = {
       cleanOnBoot = true;
@@ -173,6 +174,11 @@ in
     #   channel = "https://nixos.org/channels/nixos-unstable";
     # };
     stateVersion = "22.05";
+  };
+
+  sops = {
+    defaultSopsFile = ./secrets/secret.yaml;
+    defaultSopsFormat = "yaml";
   };
 
   home-manager.users.${vars.user} = {

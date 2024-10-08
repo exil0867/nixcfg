@@ -21,6 +21,11 @@
         inputs.nixpkgs.follows = "nixpkgs-stable";
       };
 
+      # sops-nix
+      sops-nix = {
+        url = "github:Mic92/sops-nix";
+      };
+
       # NUR Community Packages
       nur = {
         url = "github:nix-community/NUR";
@@ -53,7 +58,7 @@
       };
     };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixos-hardware, home-manager, home-manager-stable, nur, nixgl, nixvim, nixvim-stable, plasma-manager, ... }: # Function telling flake which inputs to use
+  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixos-hardware, home-manager, home-manager-stable, nur, nixgl, nixvim, nixvim-stable, plasma-manager, sops-nix, ... }: # Function telling flake which inputs to use
     let
       # Variables Used In Flake
       vars = {
@@ -67,14 +72,14 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixos-hardware home-manager nur nixvim plasma-manager vars; # Inherit inputs
+          inherit inputs nixpkgs nixpkgs-stable nixos-hardware home-manager nur nixvim plasma-manager sops-nix vars; # Inherit inputs
         }
       );
-
+      
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable home-manager nixgl vars;
+          inherit inputs nixpkgs nixpkgs-stable home-manager nixgl sops-nix vars;
         }
       );
     };

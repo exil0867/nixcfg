@@ -40,6 +40,12 @@
       obs-studio
     ];
   };
+
+ sops = {
+    age.keyFile = "~/.config/sops/age/keys.txt";
+    secrets.example-key = {};
+    secrets."myservice/my_subdir/my_secret" = {};
+  };
   
   home-manager.users.${vars.user} = {
     imports = [
