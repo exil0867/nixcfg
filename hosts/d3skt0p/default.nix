@@ -41,10 +41,10 @@
     ];
   };
 
-  # sops = {
-  #   age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
-  #   secrets."myservice/my_subdir/my_secret" = {};
-  # };
+  sops = {
+    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
+    secrets."myservice/my_subdir/my_secret" = {};
+  };
   
   home-manager.users.${vars.user} = {
     imports = [
