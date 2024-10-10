@@ -3,7 +3,7 @@
 let
   secretsFile = builtins.path {
     name = "secrets";
-    path = ../secrets/example.yaml;
+    path = ../../secrets/example.yaml;
   };
 in
 
