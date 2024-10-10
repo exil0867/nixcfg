@@ -46,6 +46,7 @@ in
       jellyfin-media-player 
       obs-studio
       bottles
+      tailscale
     ];
   };
 
