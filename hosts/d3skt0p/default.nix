@@ -48,6 +48,7 @@ in
       bottles
       tailscale
       krita
+      firefox-devedition
     ];
   };
 
