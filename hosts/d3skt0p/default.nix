@@ -43,6 +43,7 @@
 
   sops = {
     age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
+    secrets."user-pwd" = {};
   };
   
   home-manager.users.${vars.user} = {
