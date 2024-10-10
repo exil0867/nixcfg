@@ -111,7 +111,8 @@ in
       qpwgraph # Pipewire Graph Manager
       remmina # XRDP & VNC Client
 
-
+      sops
+      neovim
 
       # Other Packages Found @
       # - ./<host>/default.nix
