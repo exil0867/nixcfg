@@ -41,9 +41,8 @@
     ];
   };
 
- sops = {
-    age.keyFile = "~/.config/sops/age/keys.txt";
-    secrets.example-key = {};
+  sops = {
+    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
     secrets."myservice/my_subdir/my_secret" = {};
   };
   
