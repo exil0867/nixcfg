@@ -57,6 +57,8 @@ in
     age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
     secrets."user-pwd" = {};
   };
+
+  services.tailscale.enable = true;
   
   home-manager.users.${vars.user} = {
     imports = [
