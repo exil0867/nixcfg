@@ -60,9 +60,15 @@ in
     imports = [
       inputs.plasma-manager.homeManagerModules.plasma-manager
     ];
-    programs.plasma = {
-      enable = true;
-      workspace.lookAndFeel = "org.kde.breezedark.desktop";
+    programs {
+      plasma = {
+        enable = true;
+        workspace.lookAndFeel = "org.kde.breezedark.desktop";
+      };
+      git = {
+        userEmail = "exil@n0t3x1l.dev";
+        userName = "Exil"
+      };
     };
   };
 }
