@@ -45,6 +45,7 @@ in
       gimp
       jellyfin-media-player 
       obs-studio
+      bottles
     ];
   };
 
