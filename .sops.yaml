@@ -1,7 +1,7 @@
 keys:
   - &primary age1yt4h27kf986wg972qq9wmdrqe3hq4ktpat7lrq8747qfp7ldf53qyk4jrz
 creation_rules:
-  - path_regex: secrets/secret.yaml$
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *primary
