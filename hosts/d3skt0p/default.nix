@@ -67,7 +67,7 @@ in
       };
       git = {
         userEmail = "exil@n0t3x1l.dev";
-        userName = "Exil"
+        userName = "Exil";
       };
     };
   };
