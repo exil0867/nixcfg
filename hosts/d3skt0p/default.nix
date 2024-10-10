@@ -47,6 +47,7 @@ in
       obs-studio
       bottles
       tailscale
+      krita
     ];
   };
 
