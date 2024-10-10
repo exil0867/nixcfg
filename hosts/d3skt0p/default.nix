@@ -65,6 +65,13 @@ in
       inputs.plasma-manager.homeManagerModules.plasma-manager
     ];
     programs = {
+      vscode = {
+        enable = true;
+        extensions = [pkgs.vscode-extensions.ms-vscode-remote.remote-ssh pkgs.vscode-extensions.ms-vscode-remote.remote-containers pkgs.vscode-extensions.ms-vscode-remote.remote-ssh-edit];
+        userSettings = {
+          "editor.wordWrap" = "on";
+        };
+      };
       plasma = {
         enable = true;
         workspace.lookAndFeel = "org.kde.breezedark.desktop";
