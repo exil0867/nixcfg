@@ -1,5 +1,12 @@
 { pkgs, vars, inputs, ... }:
 
+let
+  secretsFile = builtins.path {
+    name = "secrets";
+    path = ../secrets/example.yaml;
+  };
+in
+
 {
   imports = [
     ./hardware-configuration.nix
@@ -42,6 +49,8 @@
   };
 
   sops = {
+
+    defaultSopsFile = secretsFile;
     age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
     secrets."user-pwd" = {};
   };
