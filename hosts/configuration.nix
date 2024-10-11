@@ -96,6 +96,7 @@ in
       # usbutils # Manage USB
       wget # Retriever
       xdg-utils # Environment integration
+      thefuck
 
       # Video/Audio
       alsa-utils # Audio Control
