@@ -187,6 +187,13 @@ in
       stateVersion = "22.05";
     };
     programs = {
+      ssh = {
+        extraConfig = ''
+          Host n0t3x1l
+            HostName server.n0t3x1l.ovh
+            User exilvm
+        '';
+      };
       home-manager.enable = true;
       zsh = {
         enable = true;
