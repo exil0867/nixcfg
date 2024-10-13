@@ -59,17 +59,13 @@ in
     secrets."tailscale/s3rv3r/key" = {};
   };
 
-  services.tailscale = {
-    enable = true;
-    authKeyParameters = {
-      preauthorized = true;
-      baseURL = "192.168.1.5";
-    };
-    extraSetFlags = [
-      "--login-server=192.168.1.5"
-    ];
-    authKeyFile = sops.secrets."tailscale/s3rv3r/key".path;
-  };
+  # services.tailscale = {
+  #   enable = true;
+  #   extraSetFlags = [
+  #     "--login-server=192.168.1.5"
+  #   ];
+  #   # authKeyFile = sops.secrets."tailscale/s3rv3r/key".path;
+  # };
   
   home-manager.users.${vars.user} = {
     imports = [
