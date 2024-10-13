@@ -56,7 +56,6 @@ in
 
     defaultSopsFile = secretsFile;
     age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
-    secrets."user-pwd" = {};
   };
 
   services.tailscale.enable = true;
