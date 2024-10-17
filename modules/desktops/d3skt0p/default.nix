@@ -2,6 +2,7 @@
 
 with lib;
 {
+  imports = (import ../plasma6.nix);
   options = {
     d3skt0p-plasma6 = {
       enable = mkOption {
@@ -12,7 +13,6 @@ with lib;
   };
 
   config = mkIf (config.d3skt0p-plasma6.enable) {
-    imports = (import ../plasma6.nix);
     plasma6.enable = true;
     home-manager.users.${vars.user} = {
       imports = [
