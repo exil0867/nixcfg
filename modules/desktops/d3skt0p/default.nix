@@ -12,7 +12,7 @@ with lib;
   };
 
   config = mkIf (config.d3skt0p-plasma6.enable) {
-    imports = (import ../desktops/plasma6);
+    imports = (import ../plasma6);
     plasma6.enable = true;
     home-manager.users.${vars.user} = {
       imports = [
