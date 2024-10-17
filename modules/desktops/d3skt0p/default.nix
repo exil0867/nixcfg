@@ -20,7 +20,7 @@ with lib;
       ];
       programs.plasma = {
         enable = true;
-        workspace {
+        workspace = {
           lookAndFeel = "org.kde.breezedark.desktop";
         };
         shortcuts = {
