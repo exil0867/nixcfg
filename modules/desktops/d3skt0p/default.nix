@@ -2,7 +2,6 @@
 
 with lib;
 {
-  imports = (import ../plasma6.nix);
   options = {
     d3skt0p-plasma6 = {
       enable = mkOption {
