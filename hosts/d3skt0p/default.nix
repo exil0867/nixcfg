@@ -29,7 +29,7 @@ in
     };
   };
 
-  plasma6.enable = true;
+  d3skt0p-plasma6.enable = true;
 
   hardware = {};
 
@@ -78,10 +78,6 @@ in
         userSettings = {
           "editor.wordWrap" = "on";
         };
-      };
-      plasma = {
-        enable = true;
-        workspace.lookAndFeel = "org.kde.breezedark.desktop";
       };
       git = {
         userEmail = "exil@n0t3x1l.dev";
