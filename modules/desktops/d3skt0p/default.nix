@@ -22,6 +22,16 @@ with lib;
         workspace = {
           lookAndFeel = "org.kde.breezedark.desktop";
         };
+        kwin = {
+          nightLight = {
+            enable = true;
+            location = {
+              latitude = "36.797598659823876";
+              longitude = "10.190596383999777";
+              mode = "location";
+            };
+          };
+        };
         shortcuts = {
           "ActivityManager"."switch-to-activity-8a4cb892-ad99-4376-973f-4949912bf6e4" = [ ];
           "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = "Meta+Alt+L";
