@@ -26,7 +26,7 @@ with lib;
         kwin = {
           nightLight = {
             enable = true;
-            mode = "Location";
+            mode = "location";
             location = {
               latitude = "36.797598659823876";
               longitude = "10.190596383999777";
