@@ -22,6 +22,9 @@ in
     defaultSopsFormat = "yaml";
     defaultSopsFile = secretsFile;
     age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
+    secrets.user_pwd = {
+      neededForUsers = true;
+    };
   };
 
   boot = {
@@ -34,7 +37,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    hashedPasswordFile = sops.secrets.user-pwd.path;
+    hashedPasswordFile = config.sops.secrets.user_pwd.path;
     extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" ];
 
   };
