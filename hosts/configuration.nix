@@ -17,6 +17,13 @@ in
 {
   
   imports = moduleImports ++ [ inputs.sops-nix.nixosModules.sops ];
+
+  sops = {
+    defaultSopsFormat = "yaml";
+    defaultSopsFile = secretsFile;
+    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
+  };
+
   boot = {
     tmp = {
       cleanOnBoot = true;
@@ -185,12 +192,6 @@ in
     #   channel = "https://nixos.org/channels/nixos-unstable";
     # };
     stateVersion = "24.11";
-  };
-
-  sops = {
-    defaultSopsFormat = "yaml";
-    defaultSopsFile = secretsFile;
-    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
   };
 
   home-manager.users.${vars.user} = {
