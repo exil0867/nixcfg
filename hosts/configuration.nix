@@ -27,7 +27,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "changemenow";
+    hashedPasswordFile = sops.secrets.user-pwd.path;
     extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" ];
 
   };
