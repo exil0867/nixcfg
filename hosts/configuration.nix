@@ -79,6 +79,7 @@ in
       VISUAL = "${vars.editor}";
     };
     systemPackages = with pkgs; [
+      age
       gnupg
       gh
       btop # Resource Manager
