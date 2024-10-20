@@ -53,9 +53,9 @@ in
   };
 
   sops = {
-
-    defaultSopsFile = secretsFile;
-    secrets."hello" = {};
+    secrets."hello" = {
+      sopsFile = secretsFile;
+    };
   };
 
   # services.tailscale = {
