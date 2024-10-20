@@ -55,7 +55,7 @@ in
   sops = {
 
     defaultSopsFile = secretsFile;
-    # secrets."tailscale/s3rv3r/key" = {};
+    secrets."hello" = {};
   };
 
   # services.tailscale = {
