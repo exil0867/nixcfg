@@ -37,8 +37,7 @@ with lib;
                 iconTasks = {
                   launchers = [
                     "applications:org.kde.dolphin.desktop"
-                    "applications:firefox.desktop"
-                    "applications:rio.desktop"
+                    "applications:librewolf.desktop"
                   ];
                 };
               }
@@ -71,8 +70,7 @@ with lib;
                 iconTasks = {
                   launchers = [
                     "applications:org.kde.dolphin.desktop"
-                    "applications:firefox.desktop"
-                    "applications:rio.desktop"
+                    "applications:librewolf.desktop"
                   ];
                 };
               }
