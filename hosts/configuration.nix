@@ -79,6 +79,7 @@ in
       VISUAL = "${vars.editor}";
     };
     systemPackages = with pkgs; [
+      gnupg
       gh
       btop # Resource Manager
       # cifs-utils # Samba
@@ -124,6 +125,9 @@ in
 
   programs = {
     dconf.enable = true;
+    gnupg.agent = {
+      enable = true;
+    };
   };
 
   hardware.pulseaudio.enable = false;
