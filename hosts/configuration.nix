@@ -2,6 +2,10 @@
 { lib, config, pkgs, stable, inputs, vars, ... }:
 
 let
+  secretsFile = builtins.path {
+    name = "secrets";
+    path = ../secrets/general.yaml;
+  };
   terminal = pkgs.${vars.terminal};
   moduleImports = import ../modules/desktops ++
                   import ../modules/hardware ++
@@ -185,6 +189,8 @@ in
 
   sops = {
     defaultSopsFormat = "yaml";
+    defaultSopsFile = secretsFile;
+    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
   };
 
   home-manager.users.${vars.user} = {

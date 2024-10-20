@@ -55,8 +55,7 @@ in
   sops = {
 
     defaultSopsFile = secretsFile;
-    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
-    secrets."tailscale/s3rv3r/key" = {};
+    # secrets."tailscale/s3rv3r/key" = {};
   };
 
   # services.tailscale = {
