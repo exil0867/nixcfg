@@ -37,6 +37,7 @@ in
     systemPackages = with pkgs; [
       kdePackages.kate
       kdePackages.partitionmanager
+      ungoogled-chromium
       git
       zed-editor
       vscode
