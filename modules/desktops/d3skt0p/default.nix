@@ -23,6 +23,22 @@ with lib;
         workspace = {
           lookAndFeel = "org.kde.breezedark.desktop";
         };
+        input = {
+          mice = [
+            {
+              acceleration = 0.5;
+              accelerationProfile = "none";
+              enable = true;
+              leftHanded = false;
+              middleButtonEmulation = false;
+              name = "USB Gaming Mouse";
+              naturalScroll = false;
+              productId = "0xfc30";
+              scrollSpeed = 1;
+              vendorId = "0x04d9";
+            }
+          ];
+        };
          panels = [
           {
             location = "top";
