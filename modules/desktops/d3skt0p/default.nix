@@ -33,9 +33,9 @@ with lib;
               middleButtonEmulation = false;
               name = "USB Gaming Mouse";
               naturalScroll = false;
-              productId = "0xfc30";
+              productId = "fc30";
               scrollSpeed = 1;
-              vendorId = "0x04d9";
+              vendorId = "04d9";
             }
           ];
         };
