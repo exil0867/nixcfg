@@ -82,6 +82,11 @@ in
       git = {
         userEmail = "exil@n0t3x1l.dev";
         userName = "Exil";
+        extraConfig = {
+          user.name = "Exil";
+          user.email = "exil@n0t3x1l.dev";
+          init.defaultBranch = "master";
+        };
       };
     };
   };
