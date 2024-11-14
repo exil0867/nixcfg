@@ -50,6 +50,7 @@ in
       tailscale
       krita
       firefox-devedition
+      atlauncher
     ];
   };
 
