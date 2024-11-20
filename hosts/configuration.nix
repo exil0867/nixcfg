@@ -67,7 +67,6 @@ in
     rtkit.enable = true;
     polkit.enable = true;
     sudo.wheelNeedsPassword = false;
-    pam.services.login.enableKwallet = true;
   };
 
   fonts.packages = with pkgs; [
