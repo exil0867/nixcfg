@@ -26,14 +26,13 @@ with lib;
         input = {
           mice = [
             {
-              acceleration = 0.5;
               accelerationProfile = "none";
               enable = true;
               leftHanded = false;
               middleButtonEmulation = false;
               name = "USB Gaming Mouse";
               naturalScroll = false;
-              productId = "fc30";
+              productId = "fc5f";
               scrollSpeed = 1;
               vendorId = "04d9";
             }
