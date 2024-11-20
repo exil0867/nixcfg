@@ -26,6 +26,7 @@ with lib;
         input = {
           mice = [
             {
+              acceleration = 0;
               accelerationProfile = "none";
               enable = true;
               leftHanded = false;

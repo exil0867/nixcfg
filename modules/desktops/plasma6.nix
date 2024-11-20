@@ -32,10 +32,14 @@ with lib;
           enable = true;
         };
       };
-      # libinput.enable = true;
+      libinput = {
+        enable = true;
+        mouse = {
+          accelProfile = "flat";
+        };
+      };
       xserver = {
         enable = true;
-        libinput.mouse.accelProfile = "flat";
         xkb = {
           layout = "us";
           options = "eurosign:e";
