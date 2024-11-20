@@ -14,7 +14,7 @@ with lib;
   config = mkIf (config.d3skt0p-plasma6.enable) {
     services = {
       displayManager = {
-        defaultSession = "plasmawayland";
+        defaultSession = "plasma";
       };
     };
     plasma6.enable = true;
