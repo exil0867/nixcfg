@@ -12,16 +12,16 @@ with lib;
   };
 
   config = mkIf (config.d3skt0p-plasma6.enable) {
+    services = {
+      displayManager = {
+        defaultSession = "plasmawayland";
+      };
+    };
     plasma6.enable = true;
     home-manager.users.${vars.user} = {
       imports = [
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
-      services = {
-        displayManager = {
-          defaultSession = "plasmawayland";
-        };
-      };
       programs.plasma = {
         enable = true;
         overrideConfig = true;
