@@ -29,11 +29,11 @@ with lib;
               acceleration = 0;
               accelerationProfile = "none";
               enable = true;
-              leftHanded = false;
+              leftHanded = true;
               middleButtonEmulation = false;
               name = "USB Gaming Mouse";
               naturalScroll = false;
-              productId = "fc5f";
+              productId = "fc30";
               scrollSpeed = 1;
               vendorId = "04d9";
             }
