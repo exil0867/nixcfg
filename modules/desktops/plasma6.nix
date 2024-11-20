@@ -35,6 +35,7 @@ with lib;
       # libinput.enable = true;
       xserver = {
         enable = true;
+        libinput.mouse.accelProfile = "flat";
         xkb = {
           layout = "us";
           options = "eurosign:e";
