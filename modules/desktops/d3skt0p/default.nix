@@ -17,6 +17,11 @@ with lib;
       imports = [
         inputs.plasma-manager.homeManagerModules.plasma-manager
       ];
+      services = {
+        displayManager = {
+          defaultSession = "plasmawayland";
+        };
+      };
       programs.plasma = {
         enable = true;
         overrideConfig = true;
