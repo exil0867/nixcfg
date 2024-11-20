@@ -26,10 +26,9 @@ with lib;
         input = {
           mice = [
             {
-              acceleration = 0;
               accelerationProfile = "none";
               enable = true;
-              leftHanded = true;
+              leftHanded = false;
               middleButtonEmulation = false;
               name = "USB Gaming Mouse";
               naturalScroll = false;
