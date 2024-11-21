@@ -2,10 +2,6 @@
 { lib, config, pkgs, stable, inputs, vars, ... }:
 
 let
-  secretsFile = builtins.path {
-    name = "secrets";
-    path = ../secrets/secret1.age;
-  };
   terminal = pkgs.${vars.terminal};
   moduleImports = import ../modules/desktops ++
                   import ../modules/hardware ++
@@ -16,19 +12,15 @@ let
 in
 {
   
-  imports = moduleImports ++ [ inputs.sops-nix.nixosModules.sops inputs.agenix.nixosModules.default {
-          age.secrets."secret1".file = secretsFile;
+  imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
+          age.secrets."secret1".file = builtins.path {
+            name = "secrets";
+            path = ../secrets/secret1.age;
+          };
           age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
         } ];
 
-  sops = {
-    defaultSopsFormat = "yaml";
-    defaultSopsFile = secretsFile;
-    age.keyFile = "/home/${vars.user}/.config/sops/age/keys.txt";
-    secrets.user_pwd = {
-      neededForUsers = true;
-    };
-  };
+
 
   boot = {
     tmp = {
@@ -40,7 +32,6 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    hashedPasswordFile = config.sops.secrets.user_pwd.path;
     extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" ];
 
   };
@@ -128,7 +119,6 @@ in
       qpwgraph # Pipewire Graph Manager
       remmina # XRDP & VNC Client
 
-      sops
       neovim
 
       # Other Packages Found @

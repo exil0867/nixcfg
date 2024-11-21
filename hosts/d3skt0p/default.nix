@@ -1,10 +1,7 @@
 { pkgs, vars, inputs, ... }:
 
 let
-  secretsFile = builtins.path {
-    name = "secrets";
-    path = ../../secrets/d3skt0p.yaml;
-  };
+
 in
 
 {
@@ -54,11 +51,6 @@ in
     ];
   };
 
-  sops = {
-    secrets."hello" = {
-      sopsFile = secretsFile;
-    };
-  };
 
   # services.tailscale = {
   #   enable = true;
