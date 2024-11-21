@@ -12,13 +12,7 @@ let
 in
 {
   
-  imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
-          age.secrets."secret1".file = builtins.path {
-            name = "secrets";
-            path = ../secrets/secret1.age;
-          };
-          age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
-        } ];
+  imports = moduleImports ++ [ inputs.agenix.nixosModules.default ];
 
 
 

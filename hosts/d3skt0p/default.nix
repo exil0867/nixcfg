@@ -2,16 +2,19 @@
 
 let
 
-in
+  moduleImports = import ./hardware-configuration.nix ++
+                  import ../../modules/programs/games.nix ++
+                  import .../../modules/hardware/d3skt0p ++
+                  import ../../modules/desktops/virtualisation ++
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ../../modules/programs/games.nix
-  ] ++
-  (import ../../modules/hardware/d3skt0p) ++
-  (import ../../modules/desktops/virtualisation);
-
+  imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
+          age.secrets."tailscale-preauth-d3skt0p".file = builtins.path {
+            name = "secrets";
+            path = ../../secrets/tailscale-preauth-d3skt0p.age;
+          };
+          age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
+        } ];
   # Boot Options
   boot = {
     loader = {
@@ -52,13 +55,13 @@ in
   };
 
 
-  # services.tailscale = {
-  #   enable = true;
-  #   extraSetFlags = [
-  #     "--login-server=192.168.1.5"
-  #   ];
-  #   # authKeyFile = sops.secrets."tailscale/s3rv3r/key".path;
-  # };
+  services.tailscale = {
+    enable = true;
+    extraSetFlags = [
+      "--login-server=192.168.1.5"
+    ];
+    # authKeyFile = sops.secrets."tailscale/s3rv3r/key".path;
+  };
   
   home-manager.users.${vars.user} = {
     imports = [

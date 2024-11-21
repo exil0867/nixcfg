@@ -3,5 +3,5 @@ let
   remote_server_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMRBd09TZ22IUNl3oST8w2/imcenmjTd9To5RL8O4rDc";
   keys = [personal_key remote_server_key];
 in {
-  "secret1.age".publicKeys = keys;
+  "tailscale-preauth-d3skt0p.age".publicKeys = [personal_key];
 }
