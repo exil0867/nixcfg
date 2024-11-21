@@ -4,7 +4,7 @@
 let
   secretsFile = builtins.path {
     name = "secrets";
-    path = ../secrets/general.yaml;
+    path = ../secrets/secret1.age;
   };
   terminal = pkgs.${vars.terminal};
   moduleImports = import ../modules/desktops ++
@@ -16,7 +16,10 @@ let
 in
 {
   
-  imports = moduleImports ++ [ inputs.sops-nix.nixosModules.sops ];
+  imports = moduleImports ++ [ inputs.sops-nix.nixosModules.sops inputs.agenix.nixosModules.default {
+          age.secrets."secret1".file = secretsFile;
+          age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
+        } ];
 
   sops = {
     defaultSopsFormat = "yaml";
@@ -94,6 +97,7 @@ in
     };
     systemPackages = with pkgs; [
       age
+      inputs.agenix.packages.${system}.default
       gnupg
       gh
       btop # Resource Manager
