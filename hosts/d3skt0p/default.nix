@@ -57,7 +57,7 @@ in
     extraSetFlags = [
       "--login-server=https://192.168.1.5:8181"
     ];
-    authKeyFile = config.age.secrets."tailscale-preauth-d3skt0p".path;
+    authKeyFile = config.age.secrets.tailscale-preauth-d3skt0p.path;
     openFirewall = true;
   };
   
