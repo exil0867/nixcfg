@@ -12,7 +12,13 @@ let
 in
 {
   
-  imports = moduleImports ++ [ inputs.agenix.nixosModules.default ];
+  imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
+          age.secrets."tailscale-preauth-d3skt0p".file = builtins.path {
+            name = "secrets";
+            path = ../secrets/tailscale-preauth-d3skt0p.age;
+          };
+          age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
+        } ];
 
 
 
