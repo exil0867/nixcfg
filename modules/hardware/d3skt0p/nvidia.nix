@@ -5,7 +5,7 @@ let
 in
 {
 # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
 
