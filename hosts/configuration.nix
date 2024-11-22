@@ -13,9 +13,9 @@ in
 {
   
   imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
-          age.secrets."tailscale-preauth-d3skt0p".file = builtins.path {
+          age.secrets."tailscale/tailscale-preauth-d3skt0p".file = builtins.path {
             name = "secrets";
-            path = ../secrets/tailscale-preauth-d3skt0p.age;
+            path = ../secrets/tailscale/preauth-d3skt0p.age;
           };
           age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
         } ];
