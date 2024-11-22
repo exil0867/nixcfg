@@ -52,12 +52,7 @@ in
   };
 
 
-  services.tailscale = {
-    enable = true;
-    extraUpFlags = ["--login-server" "https://192.168.1.5:8181"];
-    authKeyFile = config.age.secrets.tailscale-preauth-d3skt0p.path;
-    openFirewall = true;
-  };
+
   
   home-manager.users.${vars.user} = {
     imports = [
