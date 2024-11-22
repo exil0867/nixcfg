@@ -85,7 +85,7 @@ in
     programs = {
       vscode = {
         enable = true;
-        extensions = [pkgs.vscode-extensions.ms-vscode-remote.remote-ssh pkgs.vscode-extensions.ms-vscode-remote.remote-containers pkgs.vscode-extensions.ms-vscode-remote.remote-ssh-edit];
+        extensions = [pkgs.vscode-extensions.ms-vscode-remote.remote-ssh pkgs.vscode-extensions.ms-vscode-remote.remote-containers pkgs.vscode-extensions.ms-vscode-remote.remote-ssh-edit pkgs.vscode-extensions.jnoortheen.nix-ide];
         userSettings = {
           "editor.wordWrap" = "on";
         };
