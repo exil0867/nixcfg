@@ -52,11 +52,30 @@ in
   };
 
 
-  services.tailscale = {
-    enable = true;
-    extraUpFlags = ["--login-server" "https://192.168.1.5:8181"];
-    authKeyFile = config.age.secrets.tailscale-preauth-d3skt0p.path;
-    openFirewall = true;
+  services.tailscale.enable = true;
+
+ systemd.services.tailscale-autoconnect = {
+    description = "Automatic connection to Tailscale";
+
+    after = [ "network-pre.target" "tailscale.service" ];
+    wants = [ "network-pre.target" "tailscale.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig.Type = "oneshot";
+
+    script = with pkgs; ''
+      # wait for tailscaled to settle
+      sleep 2
+
+      # check if we are already authenticated to tailscale
+      status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
+      if [ $status = "Running" ]; then # if so, then do nothing
+        exit 0
+      fi
+
+      # otherwise authenticate with tailscale
+      ${tailscale}/bin/tailscale up --login-server http://192.168.1.5:8181 -authkey "$(cat ${config.age.secrets.tailscale-preauth-d3skt0p.path})"
+    '';
   };
   
   home-manager.users.${vars.user} = {
