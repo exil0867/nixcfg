@@ -224,24 +224,24 @@ in
       };
     };
     xdg = {
-      # mime.enable = true;
-      # mimeApps = lib.mkIf (config.gnome.enable == false) {
-      #   enable = true;
-      #   defaultApplications = {
+      mime.enable = true;
+      mimeApps = lib.mkIf (config.gnome.enable == false) {
+        enable = true;
+        defaultApplications = {
+          "application/pdf" = [  "librewolf.desktop" ];
+          "x-scheme-handler/http" = [ "librewolf.desktop"  ];
+          "x-scheme-handler/https" = [ "librewolf.desktop"  ];
+          "x-scheme-handler/about" = [ "librewolf.desktop" ];
+          "x-scheme-handler/unknown" = [ "librewolf.desktop" ];
       #     # "image/jpeg" = [ "image-roll.desktop" "feh.desktop" ];
       #     # "image/png" = [ "image-roll.desktop" "feh.desktop" ];
       #     # "text/plain" = "nvim.desktop";
       #     # "text/html" = "nvim.desktop";
       #     # "text/csv" = "nvim.desktop";
-      #     "application/pdf" = [  "firefox.desktop" ];
       #     # "application/zip" = "org.gnome.FileRoller.desktop";
       #     # "application/x-tar" = "org.gnome.FileRoller.desktop";
       #     # "application/x-bzip2" = "org.gnome.FileRoller.desktop";
       #     # "application/x-gzip" = "org.gnome.FileRoller.desktop";
-      #     "x-scheme-handler/http" = [ "firefox.desktop"  ];
-      #     "x-scheme-handler/https" = [ "firefox.desktop"  ];
-      #     "x-scheme-handler/about" = [ "firefox.desktop" ];
-      #     "x-scheme-handler/unknown" = [ "firefox.desktop" ];
       #     # "x-scheme-handler/mailto" = [ "gmail.desktop" ];
       #     "audio/mp3" = "mpv.desktop";
       #     "audio/x-matroska" = "mpv.desktop";
@@ -249,8 +249,8 @@ in
       #     "video/mp4" = "mpv.desktop";
       #     "video/x-matroska" = "mpv.desktop";
       #     # "inode/directory" = "pcmanfm.desktop";
-      #   };
-      # };
+        };
+      };
       # desktopEntries.image-roll = {
       #   name = "image-roll";
       #   exec = "${stable.image-roll}/bin/image-roll %F";
