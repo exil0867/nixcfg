@@ -31,9 +31,7 @@ in
   hardware = {};
 
   environment = {
-    systemPackages = with pkgs; [
-      kdePackages.kate
-      kdePackages.partitionmanager
+    systemPackages = (with pkgs; [
       ungoogled-chromium
       git
       zed-editor
@@ -48,7 +46,11 @@ in
       krita
       firefox-devedition
       atlauncher
-    ];
+    ]) ++ (with pkgs.kdePackages; [
+      kate
+      partitionmanager
+      kdenlive
+    ]);
   };
 
 
