@@ -3,7 +3,7 @@
 with lib;
 {
   options = {
-    d3skt0p-plasma6 = {
+    kairos-plasma6 = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -11,7 +11,7 @@ with lib;
     };
   };
 
-  config = mkIf (config.d3skt0p-plasma6.enable) {
+  config = mkIf (config.kairos-plasma6.enable) {
     services = {
       displayManager = {
         defaultSession = "plasma";

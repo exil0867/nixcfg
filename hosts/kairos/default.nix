@@ -9,7 +9,7 @@ in
     ./hardware-configuration.nix
     ../../modules/programs/games.nix
   ] ++
-  (import ../../modules/hardware/d3skt0p) ++
+  (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
@@ -26,7 +26,11 @@ in
     };
   };
 
-  d3skt0p-plasma6.enable = true;
+  netwokring = {
+    hostName = "kairos";
+  };
+
+  kairos-plasma6.enable = true;
 
   hardware = {};
 
@@ -76,7 +80,7 @@ in
       fi
 
       # otherwise authenticate with tailscale
-      ${tailscale}/bin/tailscale up --login-server http://192.168.1.5:8181 -authkey "$(cat ${config.age.secrets."tailscale/preauth-d3skt0p".path})"
+      ${tailscale}/bin/tailscale up --login-server http://192.168.1.5:8181 -authkey "$(cat ${config.age.secrets."tailscale/preauth-kairos".path})"
     '';
   };
   

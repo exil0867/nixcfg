@@ -19,12 +19,12 @@ let
 in
 {
   # Desktop Profile
-  d3skt0p = lib.nixosSystem {
+  kairos = lib.nixosSystem {
     inherit system;
     specialArgs = {
       inherit inputs system stable vars;
       host = {
-        hostName = "d3skt0p";
+        hostName = "kairos";
         # mainMonitor = "HDMI-A-2";
         # secondMonitor = "HDMI-A-1";
       };
@@ -32,7 +32,7 @@ in
     modules = [
       nur.nixosModules.nur
       nixvim.nixosModules.nixvim
-      ./d3skt0p
+      ./kairos
       ./configuration.nix
 
       home-manager.nixosModules.home-manager
