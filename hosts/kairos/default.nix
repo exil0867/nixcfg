@@ -26,7 +26,7 @@ in
     };
   };
 
-  netwokring = {
+  networking = {
     hostName = "kairos";
   };
 
