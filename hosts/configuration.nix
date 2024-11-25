@@ -225,7 +225,7 @@ in
     };
     xdg = {
       mime.enable = true;
-      mimeApps = lib.mkIf (config.gnome.enable == false) {
+      mimeApps = {
         enable = true;
         defaultApplications = {
           "application/pdf" = [  "librewolf.desktop" ];
