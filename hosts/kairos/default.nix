@@ -50,6 +50,7 @@ in
       krita
       firefox-devedition
       atlauncher
+      osu-lazer
     ]) ++ (with pkgs.kdePackages; [
       kate
       partitionmanager
