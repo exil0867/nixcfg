@@ -53,6 +53,18 @@ with lib;
       ];
       programs.plasma = {
         enable = true;
+        input.keyboard.layouts = [
+          {
+            layout = "us";
+          }
+          {
+            layout = "fr";
+            variant = "azerty";
+          }
+          {
+            layout = "ar";
+          }
+        ];
       };
     };
   };
