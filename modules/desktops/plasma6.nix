@@ -62,7 +62,7 @@ with lib;
             variant = "azerty";
           }
           {
-            layout = "ar";
+            layout = "ara";
           }
         ];
       };
