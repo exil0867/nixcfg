@@ -30,7 +30,7 @@ in
       };
     };
     modules = [
-      nur.nixosModules.nur
+      nur.modules.nixos.default
       nixvim.nixosModules.nixvim
       ./kairos
       ./configuration.nix
