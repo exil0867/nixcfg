@@ -25,7 +25,7 @@ with lib;
     services = {
       displayManager = {
         sddm.enable = true;
-        # defaultSession = "plasmawayland";
+        defaultSession = "plasmawayland";
       };
       desktopManager = {
         plasma6 = {
