@@ -43,6 +43,7 @@ in
       keepassxc
       librewolf
       gimp
+      bruno
       jellyfin-media-player 
       obs-studio
       bottles
