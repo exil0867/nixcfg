@@ -53,6 +53,7 @@ with lib;
       ];
       programs.plasma = {
         enable = true;
+        session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
         input.keyboard.layouts = [
           {
             layout = "us";
