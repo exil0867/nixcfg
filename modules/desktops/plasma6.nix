@@ -54,6 +54,11 @@ with lib;
       programs.plasma = {
         enable = true;
         session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+        spectacle.shortcuts = {
+          captureWindowUnderCursor = "Meta+Z";
+          captureCurrentMonitor = "Meta+C";
+          captureRectangularRegion = "Meta+X";
+        };
         input.keyboard.layouts = [
           {
             layout = "us";
