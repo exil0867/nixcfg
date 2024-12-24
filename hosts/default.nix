@@ -1,6 +1,6 @@
 
 
-{ inputs, nixpkgs, nixpkgs-stable, nixos-hardware, home-manager, nur, nixvim, plasma-manager, vars, ... }:
+{ inputs, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager, nur, nixvim, plasma-manager, vars, ... }:
 
 let
   system = "x86_64-linux";
@@ -15,6 +15,11 @@ let
     config.allowUnfree = true;
   };
 
+  unstable = import nixpkgs-unstable {
+    inherit system;
+    config.allowUnfree = true;
+  };
+
   lib = nixpkgs.lib;
 in
 {
@@ -22,7 +27,7 @@ in
   kairos = lib.nixosSystem {
     inherit system;
     specialArgs = {
-      inherit inputs system stable vars;
+      inherit inputs system stable unstable vars;
       host = {
         hostName = "kairos";
         # mainMonitor = "HDMI-A-2";

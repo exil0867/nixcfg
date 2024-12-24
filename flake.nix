@@ -58,7 +58,7 @@
       };
     };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixos-hardware, home-manager, home-manager-stable, nur, nixgl, nixvim, nixvim-stable, plasma-manager, agenix, ... }: # Function telling flake which inputs to use
+  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager, home-manager-stable, nur, nixgl, nixvim, nixvim-stable, plasma-manager, agenix, ... }: # Function telling flake which inputs to use
     let
       # Variables Used In Flake
       vars = {
@@ -72,14 +72,14 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixos-hardware home-manager nur nixvim plasma-manager agenix vars; # Inherit inputs
+          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager nur nixvim plasma-manager agenix vars; # Inherit inputs
         }
       );
       
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable home-manager nixgl agenix vars;
+          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable  home-manager nixgl agenix vars;
         }
       );
     };

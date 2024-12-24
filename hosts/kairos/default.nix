@@ -1,4 +1,4 @@
-{ pkgs, config, vars, inputs, ... }:
+{ pkgs, config, vars, unstable, stable, inputs, ... }:
 
 let
 
@@ -57,6 +57,11 @@ in
       kate
       partitionmanager
       kdenlive
+    ]) ++
+    (with stable; [
+      # Apps
+      # firefox # Browser
+      # image-roll # Image Viewer
     ]);
   };
 
