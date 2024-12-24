@@ -43,6 +43,7 @@ in
       keepassxc
       librewolf
       gimp
+      discord
       bruno
       jellyfin-media-player 
       obs-studio
