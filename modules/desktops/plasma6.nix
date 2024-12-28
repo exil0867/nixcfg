@@ -18,10 +18,6 @@ with lib;
   };
 
   config = mkIf (config.plasma6.enable) {
-    programs = {
-      zsh.enable = true;
-    };
-
     services = {
       displayManager = {
         sddm.enable = true;

@@ -7,9 +7,9 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/programs/games.nix
+    # ../../modules/programs/games.nix
   ] ++
-  (import ../../modules/hardware/kairos) ++
+  # (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
@@ -27,7 +27,7 @@ in
   };
 
   networking = {
-    hostName = "kairos";
+    hostName = "server";
   };
 
   kairos-plasma6.enable = true;
@@ -68,7 +68,7 @@ in
 
   tailscale = {
     enable = true;
-    authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
+    authKeyFile = config.age.secrets."tailscale/preauth-server".path;
     loginServer = "http://192.168.1.5:8181"; 
   };
   
@@ -80,15 +80,6 @@ in
       enable = true;
       userName = "Exil";
       userEmail = "exil@n0t3x1l.dev";
-    };
-    programs = {
-      vscode = {
-        enable = true;
-        extensions = [pkgs.vscode-extensions.ms-vscode-remote.remote-ssh pkgs.vscode-extensions.ms-vscode-remote.remote-containers pkgs.vscode-extensions.ms-vscode-remote.remote-ssh-edit pkgs.vscode-extensions.jnoortheen.nix-ide];
-        userSettings = {
-          "editor.wordWrap" = "on";
-        };
-      };
     };
   };
 }
