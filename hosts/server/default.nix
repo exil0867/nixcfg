@@ -32,6 +32,10 @@ in
 
   kairos-plasma6.enable = true;
 
+  git = {
+    enable = true;
+  };
+
   hardware = {};
 
   environment = {
@@ -76,10 +80,5 @@ in
     imports = [
       inputs.plasma-manager.homeManagerModules.plasma-manager
     ];
-    git = {
-      enable = true;
-      userName = "Exil";
-      userEmail = "exil@n0t3x1l.dev";
-    };
   };
 }
