@@ -44,10 +44,10 @@ in
       librewolf
       gimp
       discord
-      bruno
+      # bruno
       jellyfin-media-player 
       obs-studio
-      bottles
+      # bottles
       tailscale
       krita
       firefox-devedition
