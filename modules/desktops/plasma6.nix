@@ -45,7 +45,7 @@ with lib;
 
     home-manager.users.${vars.user} = {
       imports = [
-        inputs.plasma-manager.homeManagerModules.plasma-manager
+        inputs.plasma-manager-unstable.homeManagerModules.plasma-manager
       ];
       programs.plasma = {
         enable = true;

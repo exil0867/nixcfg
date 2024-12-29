@@ -84,9 +84,9 @@ in
   #   loginServer = "http://192.168.1.5:8181"; 
   # };
   
-  home-manager-stable.users.${vars.user} = {
+  home-manager.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager-stable.homeManagerModules.plasma-manager
+      inputs.plasma-manager.homeManagerModules.plasma-manager
     ];
   };
 }

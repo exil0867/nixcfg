@@ -92,7 +92,7 @@
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs-unstable) lib;
-          inherit inputs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable nixgl-stable nixgl-unstable agenix vars;
+          inherit inputs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable plasma-manager-stable plasma-manager-unstable nixgl-stable nixgl-unstable agenix vars;
         }
       );
     };

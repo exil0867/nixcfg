@@ -172,14 +172,14 @@ in
       options = "--delete-older-than 2d";
     };
     # package = pkgs.nixVersions.latest;
-    registry.nixpkgs.flake = inputs.nixpkgs-stable;
+    registry.nixpkgs.flake = inputs.nixpkgs-unstable;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs          = true
       keep-derivations      = true
     '';
   };
-  nixpkgs-stable.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
   system = {
     # autoUpgrade = {
