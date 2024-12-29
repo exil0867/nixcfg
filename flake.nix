@@ -85,7 +85,7 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs-unstable) lib;
-          inherit input nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
+          inherit inputs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
         }
       );
       
