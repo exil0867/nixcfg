@@ -1,5 +1,5 @@
 
-{ lib, config, pkgs, stable, inputs, vars, ... }:
+{ lib, config, pkgs, stable, unstable, inputs, vars, ... }:
 
 let
   terminal = pkgs.${vars.terminal};
