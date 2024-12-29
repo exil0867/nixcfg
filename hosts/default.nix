@@ -20,7 +20,7 @@ let
     config.allowUnfree = true;
   };
 
-  stable-lib = nixxpkgs-stable.lib;
+  stable-lib = nixpkgs-stable.lib;
   unstable-lib = nixpkgs-unstable.lib;
 in
 {
