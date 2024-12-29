@@ -61,13 +61,13 @@
       plasma-manager-stable = {
         url = "github:pjones/plasma-manager";
         inputs.nixpkgs.follows = "nixpkgs-stable";
-        inputs.home-manager-stable.follows = "nixpkgs-stable";
+        inputs.home-manager.follows = "nixpkgs-stable";
       };
       # KDE Plasma User Settings Generator
       plasma-manager-unstable = {
         url = "github:pjones/plasma-manager";
         inputs.nixpkgs.follows = "nixpkgs-unstable";
-        inputs.home-manager-unstable.follows = "nixpkgs-unstable";
+        inputs.home-manager.follows = "nixpkgs-unstable";
       };
     };
 
