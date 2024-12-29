@@ -28,9 +28,9 @@ in
     };
     initrd = {
       secrets = {
-        "/boot/crypto_keyfile.bin" = null
+        "/boot/crypto_keyfile.bin" = null;
       };
-      luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin"
+      luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin";
     };
   };
 
