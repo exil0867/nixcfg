@@ -1,5 +1,5 @@
 
-{ lib, config, nixpkgs-channel, system-definition, inputs, vars, ... }:
+{ lib, config, nixpkgs-channel, system-definition, stable, unstable, inputs, vars, ... }:
 
 let
   terminal = system-definition.${vars.terminal};
@@ -63,7 +63,7 @@ in
     sudo.wheelNeedsPassword = false;
   };
 
-  fonts.packages = with system-definition; [
+  fonts.packages =( with system-definition; [
     carlito # NixOS
     vegur # NixOS
     source-code-pro
@@ -73,8 +73,12 @@ in
     noto-fonts # Google + Unicode
     noto-fonts-cjk-sans
     noto-fonts-emoji
+  ]) ++ (with unstable; [
     nerd-fonts.fira-mono
-  ];
+  ]) ++
+  (with stable; [
+    fira-mono
+  ]);
 
   environment = {
     variables = {
