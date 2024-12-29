@@ -40,27 +40,27 @@ in
 
   environment = {
     systemPackages = (with pkgs; [
-      ungoogled-chromium
+      # ungoogled-chromium
       git
-      zed-editor
-      vscode
-      keepassxc
+      # zed-editor
+      # vscode
+      # keepassxc
       librewolf
-      gimp
-      discord
+      # gimp
+      # discord
       # bruno
-      jellyfin-media-player 
-      obs-studio
+      # jellyfin-media-player 
+      # obs-studio
       # bottles
       tailscale
-      krita
-      firefox-devedition
-      atlauncher
-      osu-lazer
+      # krita
+      # firefox-devedition
+      # atlauncher
+      # osu-lazer
     ]) ++ (with pkgs.kdePackages; [
-      kate
-      partitionmanager
-      kdenlive
+      # kate
+      # partitionmanager
+      # kdenlive
     ]) ++
     (with stable; [
       # Apps
