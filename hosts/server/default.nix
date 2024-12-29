@@ -15,14 +15,22 @@ in
   # Boot Options
   boot = {
     loader = {
-      systemd-boot = {
+      grub = {
         enable = true;
-        configurationLimit = 3;
+        device = "/dev/vda";
+        useOSProber = true;
+        enableCryptodisk = true;
       };
       efi = {
         canTouchEfiVariables = true;
       };
       timeout = 5;
+    };
+    initrd = {
+      secrets = {
+        "/boot/crypto_keyfile.bin" = null
+      };
+      luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin"
     };
   };
 
