@@ -63,7 +63,7 @@ in
     sudo.wheelNeedsPassword = false;
   };
 
-  fonts.packages = with pkgs; [
+  fonts.packages = (with pkgs; [
     carlito # NixOS
     vegur # NixOS
     source-code-pro
@@ -73,8 +73,10 @@ in
     noto-fonts # Google + Unicode
     noto-fonts-cjk-sans
     noto-fonts-emoji
+  ]) ++
+  (with unstable; [
     nerd-fonts.fira-mono
-  ];
+  ]);
 
   environment = {
     variables = {
