@@ -70,11 +70,11 @@ in
   };
 
 
-  tailscale = {
-    enable = true;
-    authKeyFile = config.age.secrets."tailscale/preauth-server".path;
-    loginServer = "http://192.168.1.5:8181"; 
-  };
+  # tailscale = {
+  #   enable = true;
+  #   authKeyFile = config.age.secrets."tailscale/preauth-server".path;
+  #   loginServer = "http://192.168.1.5:8181"; 
+  # };
   
   home-manager.users.${vars.user} = {
     imports = [
