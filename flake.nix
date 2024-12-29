@@ -71,7 +71,7 @@
       };
     };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixgl-stable, nixgl-unstable, nixvim-stable, nixvim-unstable, plasma-manager-stable, plasma-manager-unstable, agenix, ... }: # Function telling flake which inputs to use
+  outputs = inputs @ { self, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixgl-stable, nixgl-unstable, nixvim-stable, nixvim-unstable, plasma-manager-stable, plasma-manager-unstable, agenix, ... }: # Function telling flake which inputs to use
     let
       # Variables Used In Flake
       vars = {
@@ -84,15 +84,15 @@
     {
       nixosConfigurations = (
         import ./hosts {
-          inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
+          inherit (nixpkgs-unstable) lib;
+          inherit input nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
         }
       );
       
       homeConfigurations = (
         import ./nix {
-          inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable nixgl-stable nixgl-unstable agenix vars;
+          inherit (nixpkgs-unstable) lib;
+          inherit inputs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable nixgl-stable nixgl-unstable agenix vars;
         }
       );
     };
