@@ -48,4 +48,27 @@ in
       }
     ];
   };
+
+  server = lib.nixosSystem {
+    inherit system;
+    specialArgs = {
+      inherit inputs system stable unstable vars;
+      host = {
+        hostName = "server";
+      };
+    };
+    modules = [
+      nur.modules.nixos.default
+      nixvim.nixosModules.nixvim
+      ./server
+      ./configuration.nix
+
+      home-manager.nixosModules.home-manager
+      {
+        home-manager.backupFileExtension = "backup";
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+      }
+    ];
+  };
 }
