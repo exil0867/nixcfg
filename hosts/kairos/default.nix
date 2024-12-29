@@ -52,6 +52,7 @@ in
       jellyfin-media-player 
       obs-studio
       # bottles
+      handbrake
       tailscale
       krita
       firefox-devedition
