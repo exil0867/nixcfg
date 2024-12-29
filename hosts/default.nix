@@ -20,11 +20,12 @@ let
     config.allowUnfree = true;
   };
 
-  lib = nixpkgs.lib;
+  stable-lib = xpkgs-stable.lib;
+  unstable-lib = nixpkgs-unstable.lib;
 in
 {
   # Desktop Profile
-  kairos = lib.nixosSystem {
+  kairos = unstable-lib.nixosSystem {
     inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
@@ -49,7 +50,7 @@ in
     ];
   };
 
-  server = lib.nixosSystem {
+  server = stable-lib.nixosSystem {
     inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
