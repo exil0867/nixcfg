@@ -1,14 +1,10 @@
 
 
-{ inputs, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager, nur, nixvim, plasma-manager, vars, ... }:
+{ inputs, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, home-manager-unstable, nur, nixvim-unstable, nixvim-stable, plasma-manager-unstable, plasma-manager-stable, vars, ... }:
 
 let
   system = "x86_64-linux";
 
-  pkgs = import nixpkgs {
-    inherit system;
-    config.allowUnfree = true;
-  };
 
   stable = import nixpkgs-stable {
     inherit system;
@@ -37,15 +33,15 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim.nixosModules.nixvim
+      nixvim-unstable.nixosModules.nixvim
       ./kairos
       ./configuration.nix
 
-      home-manager.nixosModules.home-manager
+      home-manager-unstable.nixosModules.home-manager
       {
-        home-manager.backupFileExtension = "backup";
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
+        home-manager-unstable.backupFileExtension = "backup";
+        home-manager-unstable.useGlobalPkgs = true;
+        home-manager-unstable.useUserPackages = true;
       }
     ];
   };
@@ -60,15 +56,15 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim.nixosModules.nixvim
+      nixvim-stable.nixosModules.nixvim
       ./server
       ./configuration.nix
 
-      home-manager.nixosModules.home-manager
+      home-manager-stable.nixosModules.home-manager
       {
-        home-manager.backupFileExtension = "backup";
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
+        home-manager-stable.backupFileExtension = "backup";
+        home-manager-stable.useGlobalPkgs = true;
+        home-manager-stable.useUserPackages = true;
       }
     ];
   };

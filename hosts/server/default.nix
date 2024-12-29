@@ -1,4 +1,4 @@
-{ pkgs, config, vars, unstable, stable, inputs, ... }:
+{ config, vars, unstable, stable, inputs, ... }:
 
 let
 
@@ -47,7 +47,7 @@ in
   hardware = {};
 
   environment = {
-    systemPackages = (with pkgs; [
+    systemPackages = (with stable; [
       # ungoogled-chromium
       git
       # zed-editor
@@ -65,12 +65,12 @@ in
       # firefox-devedition
       # atlauncher
       # osu-lazer
-    ]) ++ (with pkgs.kdePackages; [
+    ]) ++ (with stable.kdePackages; [
       # kate
       # partitionmanager
       # kdenlive
     ]) ++
-    (with stable; [
+    (with unstable; [
       # Apps
       # firefox # Browser
       # image-roll # Image Viewer
@@ -84,9 +84,9 @@ in
   #   loginServer = "http://192.168.1.5:8181"; 
   # };
   
-  home-manager.users.${vars.user} = {
+  home-manager-stable.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager.homeManagerModules.plasma-manager
+      inputs.plasma-manager-stable.homeManagerModules.plasma-manager
     ];
   };
 }

@@ -10,9 +10,9 @@
       nixos-hardware.url = "github:nixos/nixos-hardware/master"; # Hardware Specific Configurations
 
       # User Environment Manager
-      home-manager = {
+      home-manager-unstable = {
         url = "github:nix-community/home-manager";
-        inputs.nixpkgs.follows = "nixpkgs";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
       };
 
       # Stable User Environment Manager
@@ -33,15 +33,22 @@
       };
 
       # Fixes OpenGL With Other Distros.
-      nixgl = {
+      nixgl-stable = {
         url = "github:guibou/nixGL";
-        inputs.nixpkgs.follows = "nixpkgs";
+        inputs.nixpkgs.follows = "nixpkgs-stable";
       };
 
+      # Fixes OpenGL With Other Distros.
+      nixgl-unstable = {
+        url = "github:guibou/nixGL";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
+      };
+
+
       # Neovim
-      nixvim = {
+      nixvim-unstable = {
         url = "github:nix-community/nixvim";
-        inputs.nixpkgs.follows = "nixpkgs";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
       };
 
       # Neovim
@@ -50,15 +57,21 @@
         inputs.nixpkgs.follows = "nixpkgs-stable";
       };
 
-      # KDE Plasma User Settings Generator
-      plasma-manager = {
+      # KDE Plasma User Settings Generator - stable
+      plasma-manager-stable = {
         url = "github:pjones/plasma-manager";
-        inputs.nixpkgs.follows = "nixpkgs";
-        inputs.home-manager.follows = "nixpkgs";
+        inputs.nixpkgs.follows = "nixpkgs-stable";
+        inputs.home-manager-stable.follows = "nixpkgs-stable";
+      };
+      # KDE Plasma User Settings Generator
+      plasma-manager-unstable = {
+        url = "github:pjones/plasma-manager";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
+        inputs.home-manager-unstable.follows = "nixpkgs-unstable";
       };
     };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager, home-manager-stable, nur, nixgl, nixvim, nixvim-stable, plasma-manager, agenix, ... }: # Function telling flake which inputs to use
+  outputs = inputs @ { self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixgl-stable, nixgl-unstable, nixvim-stable, nixvim-unstable, plasma-manager-stable, plasma-manager-unstable, agenix, ... }: # Function telling flake which inputs to use
     let
       # Variables Used In Flake
       vars = {
@@ -72,14 +85,14 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager nur nixvim plasma-manager agenix vars; # Inherit inputs
+          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
         }
       );
       
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable  home-manager nixgl agenix vars;
+          inherit inputs nixpkgs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable nixgl-stable nixgl-unstable agenix vars;
         }
       );
     };

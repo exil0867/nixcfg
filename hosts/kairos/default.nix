@@ -1,4 +1,4 @@
-{ pkgs, config, vars, unstable, stable, inputs, ... }:
+{  config, vars, unstable, stable, inputs, ... }:
 
 let
 
@@ -39,7 +39,7 @@ in
   hardware = {};
 
   environment = {
-    systemPackages = (with pkgs; [
+    systemPackages = (with unstable; [
       ungoogled-chromium
       git
       zed-editor
@@ -58,7 +58,7 @@ in
       firefox-devedition
       atlauncher
       osu-lazer
-    ]) ++ (with pkgs.kdePackages; [
+    ]) ++ (with unstable.kdePackages; [
       kate
       partitionmanager
       kdenlive
@@ -77,14 +77,14 @@ in
     loginServer = "http://192.168.1.5:8181"; 
   };
   
-  home-manager.users.${vars.user} = {
+  home-manager-unstable.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager.homeManagerModules.plasma-manager
+      inputs.plasma-manager-unstable.homeManagerModules.plasma-manager
     ];
     programs = {
       vscode = {
         enable = true;
-        extensions = [pkgs.vscode-extensions.ms-vscode-remote.remote-ssh pkgs.vscode-extensions.ms-vscode-remote.remote-containers pkgs.vscode-extensions.ms-vscode-remote.remote-ssh-edit pkgs.vscode-extensions.jnoortheen.nix-ide];
+        extensions = [stable.vscode-extensions.ms-vscode-remote.remote-ssh unstable.vscode-extensions.ms-vscode-remote.remote-containers unstable.vscode-extensions.ms-vscode-remote.remote-ssh-edit unstable.vscode-extensions.jnoortheen.nix-ide];
         userSettings = {
           "editor.wordWrap" = "on";
         };

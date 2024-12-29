@@ -1,8 +1,8 @@
 
-{ lib, config, pkgs, stable, unstable, inputs, vars, ... }:
+{ lib, config, stable, stable, unstable, inputs, vars, ... }:
 
 let
-  terminal = pkgs.${vars.terminal};
+  terminal = stable.${vars.terminal};
   moduleImports = import ../modules/desktops ++
                   import ../modules/hardware ++
                   import ../modules/programs ++
@@ -63,7 +63,7 @@ in
     sudo.wheelNeedsPassword = false;
   };
 
-  fonts.packages = (with pkgs; [
+  fonts.packages = (with stable; [
     carlito # NixOS
     vegur # NixOS
     source-code-pro
@@ -84,7 +84,7 @@ in
       EDITOR = "${vars.editor}";
       VISUAL = "${vars.editor}";
     };
-    systemPackages = with pkgs; [
+    systemPackages = with stable; [
       age
       inputs.agenix.packages.${system}.default
       gnupg
@@ -172,14 +172,14 @@ in
       options = "--delete-older-than 2d";
     };
     # package = pkgs.nixVersions.latest;
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry.nixpkgs.flake = inputs.nixpkgs-stable;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs          = true
       keep-derivations      = true
     '';
   };
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs-stable.config.allowUnfree = true;
 
   system = {
     # autoUpgrade = {
@@ -189,7 +189,7 @@ in
     stateVersion = "24.11";
   };
 
-  home-manager.users.${vars.user} = {
+  home-manager-stable.users.${vars.user} = {
     home = {
       stateVersion = "24.11";
     };
