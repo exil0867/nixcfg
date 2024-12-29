@@ -12,6 +12,10 @@ in
   # (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
 
+  nix = {
+    registry.nixpkgs.flake = inputs.nixpkgs-stable;
+  };
+
   # Boot Options
   boot = {
     loader = {
