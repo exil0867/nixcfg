@@ -39,9 +39,9 @@ in
 
       home-manager-unstable.nixosModules.home-manager
       {
-        home-manager-unstable.backupFileExtension = "backup";
-        home-manager-unstable.useGlobalPkgs = true;
-        home-manager-unstable.useUserPackages = true;
+        home-manager.backupFileExtension = "backup";
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
       }
     ];
   };
@@ -62,9 +62,9 @@ in
 
       home-manager-stable.nixosModules.home-manager
       {
-        home-manager-stable.backupFileExtension = "backup";
-        home-manager-stable.useGlobalPkgs = true;
-        home-manager-stable.useUserPackages = true;
+        home-manager.backupFileExtension = "backup";
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
       }
     ];
   };

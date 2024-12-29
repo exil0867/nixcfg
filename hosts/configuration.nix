@@ -1,5 +1,5 @@
 
-{ lib, config, stable, unstable, inputs, vars, ... }:
+{ lib, config, stable, unstable, home-manager-stable, home-manager-unstable, inputs, vars, ... }:
 
 let
   terminal = stable.${vars.terminal};
@@ -189,7 +189,7 @@ in
     stateVersion = "24.11";
   };
 
-  home-manager-stable.users.${vars.user} = {
+  home-manager.users.${vars.user} = {
     home = {
       stateVersion = "24.11";
     };
