@@ -1,5 +1,5 @@
 
-{ lib, config, stable, stable, unstable, inputs, vars, ... }:
+{ lib, config, stable, unstable, inputs, vars, ... }:
 
 let
   terminal = stable.${vars.terminal};
