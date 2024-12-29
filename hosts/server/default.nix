@@ -86,7 +86,7 @@ in
   
   home-manager.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager.homeManagerModules.plasma-manager
+      inputs.plasma-manager-stable.homeManagerModules.plasma-manager
     ];
   };
 }
