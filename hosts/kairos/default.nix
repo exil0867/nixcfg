@@ -1,4 +1,4 @@
-{  config, vars, unstable, stable, inputs, ... }:
+{  config, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
 
@@ -39,7 +39,7 @@ in
   hardware = {};
 
   environment = {
-    systemPackages = (with unstable; [
+    systemPackages = (with system-definition; [
       ungoogled-chromium
       git
       zed-editor
@@ -58,7 +58,7 @@ in
       firefox-devedition
       atlauncher
       osu-lazer
-    ]) ++ (with unstable.kdePackages; [
+    ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
       kdenlive
@@ -84,7 +84,7 @@ in
     programs = {
       vscode = {
         enable = true;
-        extensions = [stable.vscode-extensions.ms-vscode-remote.remote-ssh unstable.vscode-extensions.ms-vscode-remote.remote-containers unstable.vscode-extensions.ms-vscode-remote.remote-ssh-edit unstable.vscode-extensions.jnoortheen.nix-ide];
+        extensions = [system-definition.vscode-extensions.ms-vscode-remote.remote-ssh system-definition.vscode-extensions.ms-vscode-remote.remote-containers system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit system-definition.vscode-extensions.jnoortheen.nix-ide];
         userSettings = {
           "editor.wordWrap" = "on";
         };

@@ -25,6 +25,8 @@ in
     inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
+      nixpkgs-channel = nixpkgs-unstable;
+      system-definition = unstable;
       host = {
         hostName = "kairos";
         # mainMonitor = "HDMI-A-2";
@@ -50,6 +52,8 @@ in
     inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
+      nixpkgs-channel = nixpkgs-stable;
+      system-definition = stable;
       host = {
         hostName = "server";
       };

@@ -1,8 +1,8 @@
 
-{ lib, config, stable, unstable, home-manager-stable, home-manager-unstable, inputs, vars, ... }:
+{ lib, config, nixpkgs-channel, system-definition, inputs, vars, ... }:
 
 let
-  terminal = stable.${vars.terminal};
+  terminal = system-definition.${vars.terminal};
   moduleImports = import ../modules/desktops ++
                   import ../modules/hardware ++
                   import ../modules/programs ++
@@ -63,7 +63,7 @@ in
     sudo.wheelNeedsPassword = false;
   };
 
-  fonts.packages = (with stable; [
+  fonts.packages = with system-definition; [
     carlito # NixOS
     vegur # NixOS
     source-code-pro
@@ -73,10 +73,8 @@ in
     noto-fonts # Google + Unicode
     noto-fonts-cjk-sans
     noto-fonts-emoji
-  ]) ++
-  (with unstable; [
     nerd-fonts.fira-mono
-  ]);
+  ];
 
   environment = {
     variables = {
@@ -84,7 +82,7 @@ in
       EDITOR = "${vars.editor}";
       VISUAL = "${vars.editor}";
     };
-    systemPackages = with stable; [
+    systemPackages = with system-definition; [
       age
       inputs.agenix.packages.${system}.default
       gnupg
@@ -122,12 +120,7 @@ in
       # Other Packages Found @
       # - ./<host>/default.nix
       # - ../modules
-    ] ++
-    (with stable; [
-      # Apps
-      # firefox # Browser
-      # image-roll # Image Viewer
-    ]);
+    ];
   };
 
   programs = {
@@ -172,7 +165,7 @@ in
       options = "--delete-older-than 2d";
     };
     # package = pkgs.nixVersions.latest;
-    registry.nixpkgs.flake = inputs.nixpkgs-unstable;
+    registry.nixpkgs.flake = nixpkgs-channel;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs          = true

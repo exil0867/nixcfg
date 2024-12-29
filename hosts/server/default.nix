@@ -1,4 +1,4 @@
-{ config, vars, unstable, stable, inputs, ... }:
+{ config, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
 
@@ -11,10 +11,6 @@ in
   ] ++
   # (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
-
-  nix = {
-    registry.nixpkgs.flake = inputs.nixpkgs-stable;
-  };
 
   # Boot Options
   boot = {
@@ -51,7 +47,7 @@ in
   hardware = {};
 
   environment = {
-    systemPackages = (with stable; [
+    systemPackages = (with system-definition; [
       # ungoogled-chromium
       git
       # zed-editor
@@ -69,7 +65,7 @@ in
       # firefox-devedition
       # atlauncher
       # osu-lazer
-    ]) ++ (with stable.kdePackages; [
+    ]) ++ (with system-definition.kdePackages; [
       # kate
       # partitionmanager
       # kdenlive
