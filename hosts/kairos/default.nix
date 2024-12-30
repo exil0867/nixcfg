@@ -32,8 +32,9 @@ in
 
   plasma = {
     enable = true;
-    defaultSession = "plasmawayland";
+    defaultSession = "plasma";
     lookAndFeel = "org.kde.breezedark.desktop";
+    plasmaManager = inputs.plasma-manager-unstable.homeManagerModules.plasma-manager;
     panels = [
       {
         location = "top";

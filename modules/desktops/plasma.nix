@@ -18,7 +18,7 @@ in
 
       defaultSession = mkOption {
         type = types.str;
-        default = "plasmawayland";
+        default = "plasma";
         description = "Default session for the display manager";
       };
 
@@ -107,8 +107,7 @@ in
       };
 
       plasmaManager = mkOption {
-        type = types.attrs;
-        default = inputs.plasma-manager-unstable.homeManagerModules.plasma-manager;
+        type = types.unspecified;
         description = "Plasma Manager module to use (stable or unstable)";
       };
     };
