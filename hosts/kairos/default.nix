@@ -1,7 +1,7 @@
 {  config, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
-
+  plasmaConfig = import ../../modules/desktops/plasma-prefs.nix;
 in
 
 {
@@ -30,7 +30,45 @@ in
     hostName = "kairos";
   };
 
-  kairos-plasma6.enable = true;
+  plasma = {
+    enable = true;
+    defaultSession = "plasmawayland";
+    lookAndFeel = "org.kde.breezedark.desktop";
+    panels = [
+      {
+        location = "top";
+        height = 48;
+        screen = 0;
+        floating = false;
+        widgets = [
+          { name = "org.kde.plasma.kickoff"; }
+          {
+            iconTasks = {
+              launchers = [
+                "applications:org.kde.dolphin.desktop"
+                "applications:librewolf.desktop"
+              ];
+            };
+          }
+          { name = "org.kde.plasma.marginsseparator"; }
+          {
+            systemTray.items = {
+              shown = [
+                "org.kde.plasma.clipboard"
+                "org.kde.plasma.volume"
+                "org.kde.plasma.bluetooth"
+              ];
+              hidden = [ "org.kde.plasma.networkmanagement" ];
+            };
+          }
+          { digitalClock = { }; }
+        ];
+      }
+    ];
+    shortcuts = plasmaConfig.shortcuts; 
+    configFile = plasmaConfig.configFile; 
+    dataFile = plasmaConfig.dataFile; 
+  };
 
   git = {
     enable = true;
@@ -82,6 +120,31 @@ in
       inputs.plasma-manager-unstable.homeManagerModules.plasma-manager
     ];
     programs = {
+      plasma = {
+        input = {
+          mice = [
+            {
+              accelerationProfile = "none";
+              enable = true;
+              leftHanded = false;
+              middleButtonEmulation = false;
+              name = "USB Gaming Mouse";
+              naturalScroll = false;
+              productId = "fc30";
+              scrollSpeed = 1;
+              vendorId = "04d9";
+            }
+          ];
+        };
+      };
+      librewolf = {
+        enable = true;
+        settings = {
+          "webgl.disabled" = false;
+          "privacy.clearOnShutdown.history" = false;
+          "privacy.clearOnShutdown.cookies" = false;
+        };
+      };
       vscode = {
         enable = true;
         extensions = [system-definition.vscode-extensions.ms-vscode-remote.remote-ssh system-definition.vscode-extensions.ms-vscode-remote.remote-containers system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit system-definition.vscode-extensions.jnoortheen.nix-ide];
@@ -91,4 +154,4 @@ in
       };
     };
   };
-}
+ }

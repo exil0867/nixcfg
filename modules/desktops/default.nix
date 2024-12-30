@@ -1,7 +1,6 @@
 
 [
-  ./plasma6.nix
+  ./plasma.nix
   ./gnome.nix
   ./options.nix
-  ./kairos
 ]
