@@ -30,6 +30,8 @@ in
     hostName = "kairos";
   };
 
+  services.libinput.mouse.accelProfile = "flat";
+
   plasma = {
     enable = true;
     defaultSession = "plasma";
