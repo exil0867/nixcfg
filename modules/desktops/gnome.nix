@@ -48,14 +48,6 @@ with lib;
     home-manager.users.${vars.user} = {
       dconf.settings =
           {
-            "org/gnome/desktop/input-sources" = {
-              sources = [
-                (lib.hm.gvariant.mkTuple [ "xkb" "us+dvorak-intl" ])
-              ] ++ lib.optional config.talyz.media-center.enable
-                (lib.hm.gvariant.mkTuple [ "xkb" "se" ]);
-              xkb-options = [ "eurosign:e" "ctrl:nocaps" "numpad:mac" "kpdl:dot" ];
-            };
-
             "org/gnome/settings-daemon/plugins/color" = {
               night-light-enabled = true;
             };
