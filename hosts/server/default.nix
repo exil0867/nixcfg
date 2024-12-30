@@ -38,7 +38,7 @@ in
     hostName = "server";
   };
 
-  kairos-plasma6.enable = true;
+  gnome.enable = true;
 
   git = {
     enable = true;
