@@ -57,6 +57,8 @@ in
 
   hardware = {};
 
+  services.openssh.enable = true;
+
   environment = {
     systemPackages = (with system-definition; [
       # ungoogled-chromium
