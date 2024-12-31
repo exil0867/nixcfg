@@ -57,6 +57,16 @@ in
 
   hardware = {};
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+
+    # Add custom directories
+    extraConfig = {
+      XDG_PROJECTS_DIR = "${config.home.homeDirectory}/ServerData";
+    };
+  };
+
   environment = {
     systemPackages = (with system-definition; [
       # ungoogled-chromium
