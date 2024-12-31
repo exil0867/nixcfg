@@ -57,16 +57,6 @@ in
 
   hardware = {};
 
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
-
-    # Add custom directories
-    extraConfig = {
-      XDG_PROJECTS_DIR = "/home/${vars.user}/ServerData";
-    };
-  };
-
   environment = {
     systemPackages = (with system-definition; [
       # ungoogled-chromium
@@ -109,5 +99,14 @@ in
     imports = [
       inputs.plasma-manager-stable.homeManagerModules.plasma-manager
     ];
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+
+      # Add custom directories
+      extraConfig = {
+        XDG_PROJECTS_DIR = "/home/${vars.user}/ServerData";
+      };
+    };
   };
 }
