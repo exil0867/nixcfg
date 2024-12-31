@@ -64,6 +64,7 @@ in
     openRPCPort = true;
     settings = {
       rpc-bind-address = "0.0.0.0";
+      rpc-whitelist-enable = false;
       rpc-whitelist = "127.0.0.1,10.0.0.1,192.168.122.1";
     };
     settings = {
