@@ -135,7 +135,24 @@ in
         shortcuts = config.plasma.shortcuts; 
         configFile = config.plasma.configFile;
         dataFile = config.plasma.dataFile;
-        # Add more shared configurations here
+        session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+        spectacle.shortcuts = {
+          captureWindowUnderCursor = "Meta+Z";
+          captureCurrentMonitor = "Meta+C";
+          captureRectangularRegion = "Meta+X";
+        };
+        input.keyboard.layouts = [
+          {
+            layout = "us";
+          }
+          {
+            layout = "fr";
+            variant = "azerty";
+          }
+          {
+            layout = "ara";
+          }
+        ];
       };
     };
   };
