@@ -72,14 +72,6 @@ with lib;
         );
       };
 
-    # Ensure the Jellyfin user has access to external drives
-    systemd.services.jellyfin = mkIf (config.jellyfin.user != "jellyfin") {
-      serviceConfig = {
-        User = config.jellyfin.user;
-        ExecStartPre = "${pkgs.coreutils}/bin/chown -R ${config.jellyfin.user} /var/lib/jellyfin";
-      };
-    };
-
     # Combine all overlays into a single definition
     nixpkgs.overlays = [
       # Overlay for vaapiIntel
