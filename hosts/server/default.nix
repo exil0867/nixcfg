@@ -59,9 +59,22 @@ in
 
   services.openssh.enable = true;
 
+  services.transmission = {
+    enable = true;
+    openRPCPort = true;
+    settings = {
+      rpc-bind-address = "0.0.0.0";
+      rpc-whitelist = "127.0.0.1,10.0.0.1";
+    };
+    settings = {
+      download-dir = "/home/${vars.user}/ServerData/downbox";
+    }
+  };
+
   environment = {
     systemPackages = (with system-definition; [
       # ungoogled-chromium
+      transmission_4-gtk
       git
       # zed-editor
       # vscode
