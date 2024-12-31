@@ -62,7 +62,7 @@ in
   services.transmission = {
     enable = true;
     openRPCPort = true;
-    package = "transmission_4-gtk";
+    package = system-definition.transmission_4-gtk;
     settings = {
       rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enable = false;
