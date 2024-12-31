@@ -46,7 +46,7 @@ in
     user = vars.user;
     hardwareAcceleration = {
       enable = true;
-      vaapi = true;
+      vaapi = false;
       intelQSV = true;
     };
   };

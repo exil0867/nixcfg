@@ -15,4 +15,5 @@
   ./games.nix
   ./kitty.nix
   ./obs.nix
+  ./jellyfin.nix
 ]

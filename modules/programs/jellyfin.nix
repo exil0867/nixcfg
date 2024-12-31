@@ -1,43 +1,51 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, vars, ... }:
 
 with lib;
 
-let
-  cfg = config.services.jellyfin;
-in {
-  options.services.jellyfin = {
-    enable = mkEnableOption "Jellyfin media server";
-
-    openFirewall = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Open ports in the firewall for Jellyfin.";
-    };
-
-    user = mkOption {
-      type = types.str;
-      default = "jellyfin";
-      description = "User under which Jellyfin runs.";
-    };
-
-    hardwareAcceleration = {
-      enable = mkEnableOption "Enable hardware acceleration for Jellyfin";
-
-      vaapi = mkOption {
+{
+  options = {
+    jellyfin = {
+      enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable VAAPI hardware acceleration.";
+        description = "Enable Jellyfin media server.";
       };
 
-      intelQSV = mkOption {
+      openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable Intel Quick Sync Video (QSV) hardware acceleration.";
+        description = "Open ports in the firewall for Jellyfin.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "jellyfin";
+        description = "User under which Jellyfin runs.";
+      };
+
+      hardwareAcceleration = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable hardware acceleration for Jellyfin.";
+        };
+
+        vaapi = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable VAAPI hardware acceleration.";
+        };
+
+        intelQSV = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable Intel Quick Sync Video (QSV) hardware acceleration.";
+        };
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf config.jellyfin.enable {
     environment.systemPackages = with pkgs; [
       jellyfin
       jellyfin-web
@@ -45,38 +53,41 @@ in {
     ];
 
     services.jellyfin = {
-      inherit (cfg) user;
-      openFirewall = cfg.openFirewall;
+      enable = true;
+      inherit (config.jellyfin) user openFirewall;
     };
 
     # Enable hardware acceleration if configured
-    nixpkgs.config.packageOverrides = mkIf cfg.hardwareAcceleration.enable (pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    });
-
-    hardware.graphics = mkIf (cfg.hardwareAcceleration.enable && (cfg.hardwareAcceleration.vaapi || cfg.hardwareAcceleration.intelQSV)) {
-      enable = true;
-      extraPackages = with pkgs; (
-        []
-        ++ optional cfg.hardwareAcceleration.vaapi vaapiVdpau
-        ++ optional cfg.hardwareAcceleration.intelQSV intel-media-driver
-        ++ optional cfg.hardwareAcceleration.intelQSV intel-vaapi-driver
-        ++ optional cfg.hardwareAcceleration.intelQSV intel-compute-runtime
-        ++ optional cfg.hardwareAcceleration.intelQSV vpl-gpu-rt
-        ++ optional cfg.hardwareAcceleration.intelQSV intel-media-sdk
-      );
-    };
+    hardware.graphics = mkIf (config.jellyfin.hardwareAcceleration.enable &&
+      (config.jellyfin.hardwareAcceleration.vaapi || config.jellyfin.hardwareAcceleration.intelQSV)) {
+        enable = true;
+        extraPackages = with pkgs; (
+          []
+          ++ optional config.jellyfin.hardwareAcceleration.vaapi vaapiVdpau
+          ++ optional config.jellyfin.hardwareAcceleration.intelQSV intel-media-driver
+          ++ optional config.jellyfin.hardwareAcceleration.intelQSV intel-vaapi-driver
+          ++ optional config.jellyfin.hardwareAcceleration.intelQSV intel-compute-runtime
+          ++ optional config.jellyfin.hardwareAcceleration.intelQSV vpl-gpu-rt
+          ++ optional config.jellyfin.hardwareAcceleration.intelQSV intel-media-sdk
+        );
+      };
 
     # Ensure the Jellyfin user has access to external drives
-    systemd.services.jellyfin = mkIf (cfg.user != "jellyfin") {
+    systemd.services.jellyfin = mkIf (config.jellyfin.user != "jellyfin") {
       serviceConfig = {
-        User = cfg.user;
-        ExecStartPre = "${pkgs.coreutils}/bin/chown -R ${cfg.user} /var/lib/jellyfin";
+        User = config.jellyfin.user;
+        ExecStartPre = "${pkgs.coreutils}/bin/chown -R ${config.jellyfin.user} /var/lib/jellyfin";
       };
     };
 
-    # Overlay for Intro Skipper plugin
-    nixpkgs.overlays = mkIf cfg.enable [
+    # Combine all overlays into a single definition
+    nixpkgs.overlays = [
+      # Overlay for vaapiIntel
+      (final: prev: {
+        vaapiIntel = prev.vaapiIntel.override { enableHybridCodec = true; };
+      })
+
+      # Overlay for Intro Skipper plugin
       (final: prev: {
         jellyfin-web = prev.jellyfin-web.overrideAttrs (finalAttrs: previousAttrs: {
           installPhase = ''
