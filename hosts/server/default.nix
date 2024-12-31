@@ -68,7 +68,7 @@ in
     };
     settings = {
       download-dir = "/home/${vars.user}/ServerData/downbox";
-    }
+    };
   };
 
   environment = {
