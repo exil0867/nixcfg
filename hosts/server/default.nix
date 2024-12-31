@@ -40,6 +40,17 @@ in
 
   gnome.enable = true;
 
+  jellyfin = {
+    enable = true;
+    openFirewall = true;
+    user = vars.user;
+    hardwareAcceleration = {
+      enable = true;
+      vaapi = true;
+      intelQSV = true;
+    };
+  };
+
   git = {
     enable = true;
   };
