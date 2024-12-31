@@ -63,7 +63,7 @@ in
 
     # Add custom directories
     extraConfig = {
-      XDG_PROJECTS_DIR = "${config.home.homeDirectory}/ServerData";
+      XDG_PROJECTS_DIR = "/home/${vars.user}/ServerData";
     };
   };
 
