@@ -120,7 +120,8 @@ in
 
       # Add custom directories
       extraConfig = {
-        XDG_PROJECTS_DIR = "/home/${vars.user}/ServerData";
+        XDG_SERVERDATA_DIR = "/home/${vars.user}/ServerData";
+        XDG_DOWNBOX_DIR = "/home/${vars.user}/ServerData/downbox";
       };
     };
   };
