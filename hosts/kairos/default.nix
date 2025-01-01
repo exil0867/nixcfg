@@ -99,6 +99,7 @@ in
       firefox-devedition
       atlauncher
       osu-lazer
+      transmission_4-qt
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
