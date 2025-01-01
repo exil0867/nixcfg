@@ -91,6 +91,7 @@ in
       inputs.agenix.packages.${system}.default
       gnupg
       gh
+      devenv
       btop # Resource Manager
       # cifs-utils # Samba
       coreutils # GNU Utilities
@@ -174,6 +175,7 @@ in
       experimental-features = nix-command flakes
       keep-outputs          = true
       keep-derivations      = true
+      trusted-users = root ${vars.user}
     '';
   };
   nixpkgs.config.allowUnfree = true;
