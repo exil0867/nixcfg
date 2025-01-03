@@ -11,12 +11,8 @@ let
                   import ../modules/theming;
 in
 {
-  
+
   imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
-          age.secrets."tailscale/preauth-kairos".file = builtins.path {
-            name = "secrets";
-            path = ../secrets/tailscale/preauth-kairos.age;
-          };
           age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
         } ];
 

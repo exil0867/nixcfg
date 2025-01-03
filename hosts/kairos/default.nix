@@ -68,9 +68,9 @@ in
         ];
       }
     ];
-    shortcuts = plasmaConfig.shortcuts; 
-    configFile = plasmaConfig.configFile; 
-    dataFile = plasmaConfig.dataFile; 
+    shortcuts = plasmaConfig.shortcuts;
+    configFile = plasmaConfig.configFile;
+    dataFile = plasmaConfig.dataFile;
   };
 
   git = {
@@ -90,7 +90,7 @@ in
       gimp
       discord
       # bruno
-      jellyfin-media-player 
+      jellyfin-media-player
       obs-studio
       # bottles
       handbrake
@@ -99,6 +99,7 @@ in
       firefox-devedition
       atlauncher
       osu-lazer
+      transmission_4-qt
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
@@ -111,13 +112,13 @@ in
     ]);
   };
 
-
+  config.age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
   tailscale = {
     enable = true;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
-    loginServer = "http://192.168.1.5:8181"; 
+    loginServer = "http://192.168.1.5:8181";
   };
-  
+
   home-manager.users.${vars.user} = {
     imports = [
       inputs.plasma-manager-unstable.homeManagerModules.plasma-manager

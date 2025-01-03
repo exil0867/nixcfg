@@ -1,2 +1,8 @@
 result
+// Direnv
 **/.direnv
+# Ignore everything in the secrets directory
+secrets/*
+
+# Except for the secret.nix file
+!secrets/secret.nix

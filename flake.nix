@@ -88,7 +88,7 @@
           inherit inputs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
         }
       );
-      
+
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs-unstable) lib;

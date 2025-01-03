@@ -1,6 +1,6 @@
 
 
-{ inputs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixvim-unstable, nixvim-stable, plasma-manager-unstable, plasma-manager-stable, vars, ... }:
+{ inputs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, agenix, home-manager-stable, nur, nixvim-unstable, nixvim-stable, plasma-manager-unstable, plasma-manager-stable, vars, ... }:
 
 let
   system = "x86_64-linux";

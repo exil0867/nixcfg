@@ -1,9 +1,7 @@
 { config, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
-
 in
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -13,52 +11,46 @@ in
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
-  boot = {
-    loader = {
-      grub = {
-        enable = true;
-        device = "/dev/vda";
-        useOSProber = true;
-        enableCryptodisk = true;
-      };
-      efi = {
-        canTouchEfiVariables = true;
-      };
-      timeout = 5;
+  boot.loader = {
+    grub = {
+      enable = true;
+      device = "/dev/vda";
+      useOSProber = true;
+      enableCryptodisk = true;
     };
-    initrd = {
-      secrets = {
-        "/boot/crypto_keyfile.bin" = null;
-      };
-      luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin";
-    };
+    efi.canTouchEfiVariables = true;
+    timeout = 5;
   };
 
-  networking = {
-    hostName = "server";
+  boot.initrd = {
+    secrets."/boot/crypto_keyfile.bin" = null;
+    luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin";
   };
 
-  gnome.enable = true;
+  networking.hostName = "server";
 
-  jellyfin = {
+  # Enable GNOME
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  # Jellyfin Configuration
+  services.jellyfin = {
     enable = true;
     openFirewall = true;
     user = vars.user;
-    hardwareAcceleration = {
-      enable = true;
-      vaapi = false;
-      intelQSV = true;
-    };
   };
 
-  git = {
-    enable = true;
-  };
+  # Git Configuration
+  programs.git.enable = true;
 
+  # Hardware Configuration
   hardware = {};
 
+  # OpenSSH
   services.openssh.enable = true;
 
+  # Transmission Configuration
   services.transmission = {
     enable = true;
     openRPCPort = true;
@@ -67,51 +59,64 @@ in
       rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enable = false;
       rpc-whitelist = "127.0.0.1,10.0.0.1,192.168.122.1";
-    };
-    settings = {
       download-dir = "/home/${vars.user}/ServerData/downbox";
     };
   };
 
-  environment = {
-    systemPackages = (with system-definition; [
-      # ungoogled-chromium
-      transmission_4-gtk
-      git
-      # zed-editor
-      # vscode
-      # keepassxc
-      librewolf
-      # gimp
-      # discord
-      # bruno
-      # jellyfin-media-player 
-      # obs-studio
-      # bottles
-      tailscale
-      # krita
-      # firefox-devedition
-      # atlauncher
-      # osu-lazer
-    ]) ++ (with system-definition.kdePackages; [
-      # kate
-      # partitionmanager
-      # kdenlive
-    ]) ++
-    (with unstable; [
-      # Apps
-      # firefox # Browser
-      # image-roll # Image Viewer
-    ]);
+  # Tailscale Configuration
+  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
+  # ACME (Let's Encrypt) Configuration
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "exiL@n0t3x1l.dev";
+    certs."n0t3x1l.dev" = {
+      group = config.services.caddy.group;
+      domain = "n0t3x1l.dev";
+      extraDomainNames = [ "*.n0t3x1l.dev" ];
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1:53";
+      dnsPropagationCheck = true;
+      environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
+    };
   };
 
+  # Caddy Configuration
+  services.caddy = {
+    enable = true;
+    virtualHosts."jellyfin.n0t3x1l.dev".extraConfig = ''
+      reverse_proxy http://localhost:8096
+      tls /var/lib/acme/n0t3x1l.dev/cert.pem /var/lib/acme/n0t3x1l.dev/key.pem {
+        protocols tls1.3
+      }
+    '';
+    virtualHosts."ok.n0t3x1l.dev".extraConfig = ''
+      respond "OK"
+      tls /var/lib/acme/n0t3x1l.dev/cert.pem /var/lib/acme/n0t3x1l.dev/key.pem {
+        protocols tls1.3
+      }
+    '';
+  };
 
-  # tailscale = {
-  #   enable = true;
-  #   authKeyFile = config.age.secrets."tailscale/preauth-server".path;
-  #   loginServer = "http://192.168.1.5:8181"; 
-  # };
-  
+  # System Packages
+  environment.systemPackages = (with system-definition; [
+    transmission_4-gtk
+    git
+    nginx
+    certbot
+    librewolf
+    tailscale
+  ]) ++ (with system-definition.kdePackages; [
+    # kate
+    # partitionmanager
+    # kdenlive
+  ]) ++ (with unstable; [
+    # firefox
+    # image-roll
+  ]);
+
+  # Home Manager Configuration
   home-manager.users.${vars.user} = {
     imports = [
       inputs.plasma-manager-stable.homeManagerModules.plasma-manager
@@ -119,8 +124,6 @@ in
     xdg.userDirs = {
       enable = true;
       createDirectories = true;
-
-      # Add custom directories
       extraConfig = {
         XDG_SERVERDATA_DIR = "/home/${vars.user}/ServerData";
         XDG_DOWNBOX_DIR = "/home/${vars.user}/ServerData/downbox";

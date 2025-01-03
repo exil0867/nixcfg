@@ -4,4 +4,5 @@ let
   keys = [personal_key remote_server_key];
 in {
   "tailscale/preauth-kairos.age".publicKeys = [personal_key remote_server_key];
+  "cloudflare/n0t3x1l.dev-DNS-RW.age".publicKeys = [remote_server_key];
 }
