@@ -298,7 +298,7 @@ in
       barbar.enable = true;
       gitgutter = {
         enable = true;
-        defaultMaps = false;
+        settings.map_keys = false;
       };
       mini = {
         enable = true;
@@ -384,7 +384,7 @@ in
       treesitter-refactor = {
         enable = true;
       };
-      nvim-colorizer = {
+      colorizer = {
         enable = true;
         # userDefaultOptions = {
         #   css = true;
@@ -404,11 +404,14 @@ in
           minLength = 3;
         };
       };
+      web-devicons = {
+        enable = true;
+      };
       neorg = {
         enable = true;
         package = stable.vimPlugins.neorg;
-        lazyLoading = true;
-        modules = {
+        settings.lazy_loading = true;
+        settings.load = {
           "core.defaults".__empty = null;
           "core.dirman".config = {
             workspaces = {
@@ -423,12 +426,12 @@ in
       lsp = {
         enable = true;
         servers = {
-          nil-ls.enable = true;
+          nil_ls.enable = true;
           svelte.enable = true;
           html.enable = true;
           cssls.enable = true;
           eslint.enable = true;
-          ts-ls.enable = true;
+          ts_ls.enable = true;
           pyright.enable = true;
           tailwindcss = {
             enable = true;
