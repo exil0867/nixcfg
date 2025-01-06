@@ -93,6 +93,7 @@ in
       jellyfin-media-player 
       obs-studio
       # bottles
+      neovide
       handbrake
       tailscale
       krita

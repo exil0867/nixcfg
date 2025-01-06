@@ -3,15 +3,15 @@
 let
   colors = import ../theming/colors.nix;
 
-  nvim-spell-nl-utf8-dictionary = builtins.fetchurl {
-    url = "http://ftp.vim.org/vim/runtime/spell/nl.utf-8.spl";
-    sha256 = "sha256:1v4knd9i4zf3lhacnkmhxrq0lgk9aj4iisbni9mxi1syhs4lfgni";
-  };
+  # nvim-spell-nl-utf8-dictionary = builtins.fetchurl {
+  #   url = "http://ftp.vim.org/vim/runtime/spell/nl.utf-8.spl";
+  #   sha256 = "sha256:1v4knd9i4zf3lhacnkmhxrq0lgk9aj4iisbni9mxi1syhs4lfgni";
+  # };
 
-  nvim-spell-nl-utf8-suggestions = builtins.fetchurl {
-    url = "http://ftp.vim.org/vim/runtime/spell/nl.utf-8.sug";
-    sha256 = "sha256:0clvhlg52w4iqbf5sr4bb3lzja2ch1dirl0963d5vlg84wzc809y";
-  };
+  # nvim-spell-nl-utf8-suggestions = builtins.fetchurl {
+  #   url = "http://ftp.vim.org/vim/runtime/spell/nl.utf-8.sug";
+  #   sha256 = "sha256:0clvhlg52w4iqbf5sr4bb3lzja2ch1dirl0963d5vlg84wzc809y";
+  # };
 in
 {
   # # steam-run for codeium-vim
@@ -373,7 +373,7 @@ in
         enable = true;
         nixvimInjections = true;
         folding = false;
-        nixGrammars = true;
+        # nixGrammars = true;
         settings = {
           ensure_installed = "all";
           highlight.enable = true;
@@ -386,10 +386,10 @@ in
       };
       nvim-colorizer = {
         enable = true;
-        userDefaultOptions = {
-          css = true;
-          tailwind = "both";
-        };
+        # userDefaultOptions = {
+        #   css = true;
+        #   tailwind = "both";
+        # };
       };
       cursorline = {
         enable = true;
@@ -580,16 +580,16 @@ in
           sha256 = "sha256-x6S4WdgfUr7HGEHToSDy3pSHEwOPQalzWhBUipqMtnw=";
         };
       })
-      (pkgs.vimUtils.buildVimPlugin rec {
-        pname = "follow-md-links.nvim";
-        version = "cf081a0a8e93dd188241a570b9a700b6a546ad1c";
-        src = pkgs.fetchFromGitHub {
-          owner = "jghauser";
-          repo = "follow-md-links.nvim";
-          rev = version;
-          sha256 = "sha256-ElgYrD+5FItPftpjDTdKAQR37XBkU8mZXs7EmAwEKJ4=";
-        };
-      })
+      # (pkgs.vimUtils.buildVimPlugin rec {
+      #   pname = "follow-md-links.nvim";
+      #   version = "cf081a0a8e93dd188241a570b9a700b6a546ad1c";
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "jghauser";
+      #     repo = "follow-md-links.nvim";
+      #     rev = version;
+      #     sha256 = "sha256-ElgYrD+5FItPftpjDTdKAQR37XBkU8mZXs7EmAwEKJ4=";
+      #   };
+      # })
       (pkgs.vimUtils.buildVimPlugin rec {
         pname = "vim-plist";
         version = "60e69bec50dfca32f0a62ee2dacdfbe63fd92038";
@@ -659,7 +659,7 @@ in
   };
 
   home-manager.users.${vars.user} = {
-    home.file.".local/share/nvim/site/spell/nl.utf-8.spl".source = nvim-spell-nl-utf8-dictionary;
-    home.file.".local/share/nvim/site/spell/nl.utf-8.sug".source = nvim-spell-nl-utf8-suggestions;
+    # home.file.".local/share/nvim/site/spell/nl.utf-8.spl".source = nvim-spell-nl-utf8-dictionary;
+    # home.file.".local/share/nvim/site/spell/nl.utf-8.sug".source = nvim-spell-nl-utf8-suggestions;
   };
 }
