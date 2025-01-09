@@ -8,6 +8,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules/programs/games.nix
+    ../../modules/services/sshfs.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -77,6 +78,34 @@ in
     enable = true;
   };
 
+
+# fileSystems."/home/exil0681/media" = {
+#     device = "exil0681@192.168.122.213:/";
+#     fsType = "fuse.sshfs";
+#     options = [
+#       "identityfile=/home/exil0681/.ssh/id_ed25519_no_passphrase"
+#       "idmap=user"
+#       "x-systemd.automount" #< mount the filesystem automatically on first access
+#       "allow_other" #< don't restrict access to only the user which `mount`s it (because that's probably systemd who mounts it, not you)
+#       "user" #< allow manual `mount`ing, as ordinary user.
+#       "_netdev"
+#     ];
+#   };
+#   boot.supportedFilesystems."fuse.sshfs" = true;
+
+
+  sshfsMounts = [
+    {
+      mountPoint = "/home/exil0681/mnt/servers";
+      remoteUser = "exil0681";
+      remoteHost = "192.168.122.213";
+      remotePath = "/home/exil0681/ServerData";
+      sshKey = "/home/exil0681/.ssh/id_ed25519";
+      uid = "exil0681";
+      gid = "users";
+    }
+  ];
+
   hardware = {};
 
   environment = {
@@ -87,6 +116,7 @@ in
       vscode
       keepassxc
       librewolf
+      sshpass
       gimp
       discord
       # bruno

@@ -1,5 +1,4 @@
 
 [
-  # ./flameshot.nix
   ./tailscale.nix
 ]
