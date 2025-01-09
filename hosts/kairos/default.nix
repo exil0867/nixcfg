@@ -143,7 +143,7 @@ in
     ]);
   };
 
-  config.age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
+  age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
   tailscale = {
     enable = true;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
