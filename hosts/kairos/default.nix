@@ -92,7 +92,8 @@ in
       # bruno
       jellyfin-media-player
       obs-studio
-      # bottles
+      bottles
+      neovide
       handbrake
       tailscale
       krita
