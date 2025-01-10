@@ -27,9 +27,9 @@
     };
 
   fileSystems."/mnt/PNY-CS900-120GB" =
-  { device = "/dev/disk/by-uuid/dacdfec7-f091-4a24-9789-41d9ab4f505d";
-    fsType = "btrfs";
-    options = [ "users" "nofail" ]; 
+  { device = "/dev/disk/by-uuid/f1afb020-5567-41a3-943b-c20320886c21";
+    fsType = "ext4";
+    options = [ "users" "nofail" "exec" ]; 
   };
 
   systemd.services.chown-pny-cs900-120gb = {
@@ -43,9 +43,9 @@
   };
 
   fileSystems."/mnt/TOSHIBA-MQ04ABF100-1TB" =
-  { device = "/dev/disk/by-uuid/7b4b5e46-bb46-4b49-a24f-a914ee9e6f50";
-    fsType = "btrfs";
-    options = [ "users" "nofail" ]; 
+  { device = "/dev/disk/by-uuid/05c63c90-8c1b-4aba-b17c-88ba2f117e1c";
+    fsType = "ext4";
+    options = [ "users" "nofail" "exec" ]; 
   };
 
   systemd.services.chown-toshiba-mq04abf100-1tb = {
