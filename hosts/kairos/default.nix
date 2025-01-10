@@ -119,7 +119,7 @@ in
       sshpass
       gimp
       discord
-      # bruno
+      bruno
       jellyfin-media-player
       obs-studio
       bottles
