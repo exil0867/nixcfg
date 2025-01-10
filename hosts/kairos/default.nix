@@ -8,7 +8,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules/programs/games.nix
-    ../../modules/services/sshfs.nix
+    ../../modules/services/rclone-sftp.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -77,7 +77,7 @@ in
   git = {
     enable = true;
   };
-
+  
   programs.ssh.startAgent = true;
 
   hardware = {};

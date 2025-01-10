@@ -53,9 +53,9 @@
         host = ${mount.host}
         user = ${mount.user}
         key_file = ${mount.sshKey}
-        key_use_agent = true
         use_insecure_cipher = false
         disable_hashcheck = true
+        ssh_agent_auth = true
       '';
     }) config.rcloneSftpMounts);
 
@@ -72,11 +72,5 @@
         "vfs-cache-mode=${mount.vfsCacheMode}"
       ];
     }) config.rcloneSftpMounts);
-
-    # Automate ssh-agent for passphrase-protected keys
-    programs.ssh.startAgent = true;
-    programs.ssh.extraConfig = ''
-      AddKeysToAgent yes
-    '';
   };
 }
