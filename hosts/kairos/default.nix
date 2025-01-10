@@ -127,7 +127,10 @@ in
   home-manager.users.${vars.user} = {
     imports = [
       inputs.plasma-manager-unstable.homeManagerModules.plasma-manager
+    ../../modules/utilities/media-mime.nix
     ];
+
+    mediaMime = "mpv.desktop";
     programs = {
       plasma = {
         input = {
