@@ -99,6 +99,31 @@ in
     '';
   };
 
+  services = {
+    headscale = {
+      enable = true;
+      address = "0.0.0.0";
+      port = 8888;
+      settings = {
+        dns_config = {
+          override_local_dns = true;
+          nameservers = [ "1.1.1.1" ]; # TODO: and 100.100.100.100?
+          base_domain = "n0t3x1l.dev"
+        };
+        server_url = "https://headscale.n0t3x1l.dev";
+        logtail.enabled = false;
+        # log.level = "warn";
+        # ip_prefixes
+        derp.server = {
+          enable = true;
+          region_id = 999;
+          stun_listen_addr = "0.0.0.0:8888";
+        };
+      };
+    };
+  };
+
+
   # System Packages
   environment.systemPackages = (with system-definition; [
     transmission_4-gtk
@@ -107,6 +132,7 @@ in
     certbot
     librewolf
     tailscale
+    headscale
   ]) ++ (with system-definition.kdePackages; [
     # kate
     # partitionmanager
