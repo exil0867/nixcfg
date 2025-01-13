@@ -27,7 +27,7 @@ in
     luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin";
   };
 
-  networking.hostName = "server";
+  networking.hostName = "echo";
 
   # Enable GNOME
   services.xserver.enable = true;

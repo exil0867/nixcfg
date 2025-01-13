@@ -55,13 +55,13 @@ in
       nixpkgs-channel = nixpkgs-stable;
       system-definition = stable;
       host = {
-        hostName = "server";
+        hostName = "echo";
       };
     };
     modules = [
       nur.modules.nixos.default
       nixvim-stable.nixosModules.nixvim
-      ./server
+      ./echo
       ./configuration.nix
 
       home-manager-stable.nixosModules.home-manager
