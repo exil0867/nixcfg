@@ -11,30 +11,46 @@ in
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
-  boot.loader = {
-    grub = {
-      enable = true;
-      device = "/dev/vda";
-      useOSProber = true;
-      enableCryptodisk = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 3;
+      };
+      efi = {
+        canTouchEfiVariables = true;
+      };
+      timeout = 5;
     };
-    efi.canTouchEfiVariables = true;
-    timeout = 5;
   };
 
-  boot.initrd = {
-    secrets."/boot/crypto_keyfile.bin" = null;
-    luks.devices."luks-5e1b7503-7da3-49fa-bdcd-caa168dc28d5".keyFile = "/boot/crypto_keyfile.bin";
+  networking = {
+    hostName = "echo";
   };
 
-  networking.hostName = "echo";
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Enable GNOME
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  programs.nix-ld.enable = true;
+
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
+
+  # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Jellyfin Configuration
+  # Enable sound with pipewire.
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  
+    # Jellyfin Configuration
   services.jellyfin = {
     enable = true;
     openFirewall = true;
@@ -52,7 +68,7 @@ in
 
   # Transmission Configuration
   services.transmission = {
-    enable = true;
+    enable = false;
     openRPCPort = true;
     package = system-definition.transmission_4-gtk;
     settings = {
@@ -68,18 +84,22 @@ in
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   # ACME (Let's Encrypt) Configuration
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "exiL@n0t3x1l.dev";
-    certs."n0t3x1l.dev" = {
-      group = config.services.caddy.group;
-      domain = "n0t3x1l.dev";
-      extraDomainNames = [ "*.n0t3x1l.dev" ];
-      dnsProvider = "cloudflare";
-      dnsResolver = "1.1.1.1:53";
-      dnsPropagationCheck = true;
-      environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
-    };
+ security.acme = {
+   acceptTerms = true;
+   defaults.email = "exiL@n0t3x1l.dev";
+   certs."n0t3x1l.dev" = {
+     group = config.services.caddy.group;
+     domain = "n0t3x1l.dev";
+     extraDomainNames = [ "*.n0t3x1l.dev" ];
+     dnsProvider = "cloudflare";
+     dnsResolver = "1.1.1.1:53";
+     dnsPropagationCheck = true;
+     environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
+   };
+ };
+
+ git = {
+    enable = true;
   };
 
   # Caddy Configuration
@@ -101,14 +121,14 @@ in
 
   services = {
     headscale = {
-      enable = true;
+      enable = false;
       address = "0.0.0.0";
       port = 8888;
       settings = {
-        dns_config = {
+        dns = {
           override_local_dns = true;
-          nameservers = [ "1.1.1.1" ]; # TODO: and 100.100.100.100?
-          base_domain = "n0t3x1l.dev"
+          nameservers.global = [ "1.1.1.1" ]; # TODO: and 100.100.100.100?
+          base_domain = "n0t3x1l.dev";
         };
         server_url = "https://headscale.n0t3x1l.dev";
         logtail.enabled = false;

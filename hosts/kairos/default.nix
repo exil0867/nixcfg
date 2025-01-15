@@ -33,6 +33,8 @@ in
 
   services.libinput.mouse.accelProfile = "flat";
 
+  services.pulseaudio.enable = false;
+
   plasma = {
     enable = true;
     defaultSession = "plasma";

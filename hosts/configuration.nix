@@ -132,7 +132,6 @@ in
     };
   };
 
-  services.pulseaudio.enable = false;
   services = {
     printing = {
       enable = true;

@@ -48,7 +48,7 @@ in
     ];
   };
 
-  server = stable-lib.nixosSystem {
+  echo = stable-lib.nixosSystem {
     inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
@@ -60,7 +60,7 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim-stable.nixosModules.nixvim
+      nixvim-unstable.nixosModules.nixvim
       ./echo
       ./configuration.nix
 
