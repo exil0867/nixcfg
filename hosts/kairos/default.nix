@@ -9,6 +9,7 @@ in
     ./hardware-configuration.nix
     ../../modules/programs/games.nix
     ../../modules/services/rclone-sftp.nix
+    ../../modules/services/mounter.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -26,6 +27,21 @@ in
       timeout = 5;
     };
   };
+
+  mounter.mounts = [
+    {
+      mountPoint = "/mnt/PNY-CS900-120GB";
+      deviceUUID = "f1afb020-5567-41a3-943b-c20320886c21";
+      user = "exil0681";
+      group = "users";
+    }
+    {
+      mountPoint = "/mnt/TOSHIBA-MQ04ABF100-1TB";
+      deviceUUID = "05c63c90-8c1b-4aba-b17c-88ba2f117e1c";
+      user = "exil0681";
+      group = "users";
+    }
+  ];
 
   networking = {
     hostName = "kairos";

@@ -26,38 +26,6 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  fileSystems."/mnt/PNY-CS900-120GB" =
-  { device = "/dev/disk/by-uuid/f1afb020-5567-41a3-943b-c20320886c21";
-    fsType = "ext4";
-    options = [ "users" "nofail" "exec" ]; 
-  };
-
-  systemd.services.chown-pny-cs900-120gb = {
-    description = "Change ownership of /mnt/PNY-CS900-120GB to the user";
-    after = [ "mnt-PNY\x2dCS900\x2d120GB.mount" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${system-definition.coreutils}/bin/chown -R exil0681:users /mnt/PNY-CS900-120GB";
-    };
-  };
-
-  fileSystems."/mnt/TOSHIBA-MQ04ABF100-1TB" =
-  { device = "/dev/disk/by-uuid/05c63c90-8c1b-4aba-b17c-88ba2f117e1c";
-    fsType = "ext4";
-    options = [ "users" "nofail" "exec" ]; 
-  };
-
-  systemd.services.chown-toshiba-mq04abf100-1tb = {
-    description = "Change ownership of /mnt/TOSHIBA-MQ04ABF100-1TB to the user";
-    after = [ "mnt-TOSHIBA\x2dMQ04ABF100\x2d1TB.mount" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${system-definition.coreutils}/bin/chown -R exil0681:users /mnt/TOSHIBA-MQ04ABF100-1TB";
-    };
-  };
-
   swapDevices =
     [ { device = "/dev/disk/by-uuid/18c21d2c-be8d-43af-a560-79aedb126c5b"; }
     ];
