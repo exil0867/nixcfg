@@ -104,6 +104,7 @@ in
     systemPackages = (with system-definition; [
       ungoogled-chromium
       git
+      ollama
       zed-editor
       vscode
       keepassxc
