@@ -36,6 +36,16 @@ in
             type = types.str;
             description = "The group to own the mounted directory.";
           };
+          encrypted = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether the device is LUKS-encrypted.";
+          };
+          luksName = mkOption {
+            type = types.str;
+            default = "";
+            description = "Name of the LUKS mapping (e.g., 'cryptroot').";
+          };
         };
       });
       default = [];
@@ -44,26 +54,38 @@ in
   };
 
   config = {
+    # Open LUKS containers for encrypted drives
+    boot.initrd.luks.devices = listToAttrs (map (mount: {
+      name = mount.luksName;
+      value = {
+        device = "/dev/disk/by-uuid/${mount.deviceUUID}";
+        preLVM = true; # Open LUKS before LVM (if applicable)
+        allowDiscards = true; # Enable TRIM for SSDs (optional)
+      };
+    }) (filter (mount: mount.encrypted) cfg.mounts));
+
+    # Mount the decrypted filesystems
     fileSystems = listToAttrs (map (mount: {
       name = mount.mountPoint;
       value = {
-        device = "/dev/disk/by-uuid/${mount.deviceUUID}";
+        device = if mount.encrypted then "/dev/mapper/${mount.luksName}" else "/dev/disk/by-uuid/${mount.deviceUUID}";
         fsType = mount.fsType;
         options = mount.options;
       };
     }) cfg.mounts);
 
-    systemd.services = listToAttrs (map (mount: {
-      name = "chown-${replaceStrings ["/"] ["-"] (removePrefix "/" mount.mountPoint)}";
-      value = {
-        description = "Change ownership of ${mount.mountPoint} to ${mount.user}:${mount.group}";
-        after = [ "${replaceStrings ["/"] ["-"] (removePrefix "/" mount.mountPoint)}.mount" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.coreutils}/bin/chown -R ${mount.user}:${mount.group} ${mount.mountPoint}";
-        };
-      };
-    }) cfg.mounts);
+    # # Change ownership of the mounted directories
+    # systemd.services = listToAttrs (map (mount: {
+    #   name = "chown-${replaceStrings ["/"] ["-"] (removePrefix "/" mount.mountPoint)}";
+    #   value = {
+    #     description = "Change ownership of ${mount.mountPoint} to ${mount.user}:${mount.group}";
+    #     after = [ "${replaceStrings ["/"] ["-"] (removePrefix "/" mount.mountPoint)}.mount" ];
+    #     wantedBy = [ "multi-user.target" ];
+    #     serviceConfig = {
+    #       Type = "oneshot";
+    #       ExecStart = "${pkgs.coreutils}/bin/chown -R ${mount.user}:${mount.group} ${mount.mountPoint}";
+    #     };
+    #   };
+    # }) cfg.mounts);
   };
 }

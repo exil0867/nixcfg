@@ -5,7 +5,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    # ../../modules/programs/games.nix
+    ../../modules/services/mounter.nix
   ] ++
   # (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -23,6 +23,23 @@ in
       timeout = 5;
     };
   };
+
+  mounter.mounts = [
+    {
+      mountPoint = "/mnt/1TB-ST1000DM010-2EP102";
+      deviceUUID = "8661c3d7-ab61-4ac7-a542-51a74b946b9f";
+      user = vars.user;
+      group = "users";
+      encrypted = true;
+      luksName = "cryptdata";
+    }
+    {
+      mountPoint = "/mnt/1TB-TOSHIBA-MQ04ABF100";
+      deviceUUID = "a6a28b6e-e366-40c5-94ad-fca5d2f6cce5";
+      user = vars.user;
+      group = "users";
+    }
+  ];
 
   networking = {
     hostName = "echo";
@@ -54,6 +71,7 @@ in
   services.jellyfin = {
     enable = true;
     openFirewall = true;
+    dataDir = "/mnt/1TB-ST1000DM010-2EP102/data/jellyfin";
     user = vars.user;
   };
 
@@ -81,44 +99,115 @@ in
 
   # Tailscale Configuration
   age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/email".file = ../../secrets/cloudflare/email.age;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-  # ACME (Let's Encrypt) Configuration
- security.acme = {
-   acceptTerms = true;
-   defaults.email = "exiL@n0t3x1l.dev";
-   certs."n0t3x1l.dev" = {
-     group = config.services.caddy.group;
-     domain = "n0t3x1l.dev";
-     extraDomainNames = [ "*.n0t3x1l.dev" ];
-     dnsProvider = "cloudflare";
-     dnsResolver = "1.1.1.1:53";
-     dnsPropagationCheck = true;
-     environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
-   };
- };
+#   # ACME (Let's Encrypt) Configuration
+#  security.acme = {
+#    acceptTerms = true;
+#    defaults.email = "exiL@n0t3x1l.dev";
+#    certs."n0t3x1l.dev" = {
+#      group = config.services.caddy.group;
+#      domain = "n0t3x1l.dev";
+#      extraDomainNames = [ "*.n0t3x1l.dev" ];
+#      dnsProvider = "cloudflare";
+#      dnsResolver = "1.1.1.1:53";
+#      dnsPropagationCheck = true;
+#      environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
+#    };
+#  };
 
  git = {
     enable = true;
   };
 
-  # Caddy Configuration
-  services.caddy = {
-    enable = true;
-    virtualHosts."jellyfin.n0t3x1l.dev".extraConfig = ''
-      reverse_proxy http://localhost:8096
-      tls /var/lib/acme/n0t3x1l.dev/cert.pem /var/lib/acme/n0t3x1l.dev/key.pem {
-        protocols tls1.3
-      }
-    '';
-    virtualHosts."ok.n0t3x1l.dev".extraConfig = ''
-      respond "OK"
-      tls /var/lib/acme/n0t3x1l.dev/cert.pem /var/lib/acme/n0t3x1l.dev/key.pem {
-        protocols tls1.3
-      }
-    '';
-  };
+services.traefik = {
+      enable = true;
+      
 
+      staticConfigOptions = {
+        entryPoints = {
+          web = {
+            address = ":80";
+            http.redirections.entryPoint = {
+              to = "websecure";
+              scheme = "https";
+              permanent = true;
+            };
+          };
+
+          websecure = {
+            address = ":443";
+            forwardedHeaders = {
+              trustedIPs = ["127.0.0.1/32" "::1/128" "192.168.1.0/24"];
+            };
+            # http.tls = {
+            #   certResolver = "cloudflare";
+            #   domains = [{ main = "n0t3x1l.dev"; sans = [ "*.n0t3x1l.dev" ]; }];
+            # };
+          };
+        };
+
+        certificatesResolvers.cloudflare.acme = {
+          email = "exiL@n0t3x1l.dev";
+          storage = "/var/lib/traefik/acme.json";
+          dnsChallenge = {
+            provider = "cloudflare";
+            resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
+          };
+          # Add the Cloudflare API token
+          # dnsChallenge.env.CF_DNS_API_TOKEN = "your-cloudflare-api-token";
+        };
+      };
+
+      dynamicConfigOptions = {
+        http = {
+          routers = {
+            jellyfin = {
+              rule = "Host(`jellyfin.n0t3x1l.dev`)";
+              entryPoints = ["websecure"];
+              service = "jellyfin";
+              tls = {
+                certResolver = "cloudflare";
+              };
+            };
+
+            ok = {
+              rule = "Host(`ok.n0t3x1l.dev`)";
+              entryPoints = ["websecure"];
+              service = "ok";
+              tls = {
+                certResolver = "cloudflare";
+              };
+            };
+          };
+
+          services = {
+            jellyfin.loadBalancer.servers = [
+              {
+                url = "http://127.0.0.1:8096";
+              }
+            ];
+
+            ok.loadBalancer.servers = [
+              {
+                url = "http://127.0.0.1:8080"; # Replace with the appropriate port for your "OK" service
+              }
+            ];
+          };
+        };
+      };
+    };
+services.traefik.environmentFiles = [
+        # config.age.secrets."cloudflare/email".path
+        config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
+      ];
+
+    # Ensure the Traefik directory exists
+    systemd.services.traefik.preStart = ''
+      mkdir -p /var/lib/traefik
+      chown -R traefik:traefik /var/lib/traefik
+    '';
   services = {
     headscale = {
       enable = false;
