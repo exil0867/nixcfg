@@ -99,6 +99,13 @@ in
 
   # Tailscale Configuration
   age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world" = {
+    file = ../../secrets/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
+    owner = vars.user;
+    group = config.services.cloudflared.group;
+    mode = "400";
+  };
+
   age.secrets."cloudflare/email".file = ../../secrets/cloudflare/email.age;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -232,10 +239,24 @@ services.traefik.environmentFiles = [
     };
   };
 
+  services.cloudflared = {
+    enable = true;
+    user = vars.user;
+    tunnels = {
+      "64911839-8e12-46f9-9f31-2e8a84fd5406" = {
+        credentialsFile = "${config.age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world".path}";
+        ingress = {
+          "jellywrld.n0t3x1l.dev" = "http://localhost:8096";
+        };
+        default = "http_status:404";
+      };
+    };
+  };
 
   # System Packages
   environment.systemPackages = (with system-definition; [
     compose2nix
+    cloudflared
     transmission_4-gtk
     git
     nginx

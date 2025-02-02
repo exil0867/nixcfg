@@ -5,6 +5,7 @@ let
 in {
   "tailscale/preauth-kairos.age".publicKeys = [personal_key remote_server_key];
   "cloudflare/n0t3x1l.dev-DNS-RW.age".publicKeys = [remote_server_key];
+  "cloudflare/n0t3x1l.dev-tunnel-echo2world.age".publicKeys = [remote_server_key];
   "cloudflare/email.age".publicKeys = [remote_server_key];
   "discord/exil0138.age".publicKeys = [remote_server_key];
   "system/echo-user-pwd.age".publicKeys = [remote_server_key];
