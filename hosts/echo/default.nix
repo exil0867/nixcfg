@@ -235,6 +235,7 @@ services.traefik.environmentFiles = [
 
   # System Packages
   environment.systemPackages = (with system-definition; [
+    compose2nix
     transmission_4-gtk
     git
     nginx
