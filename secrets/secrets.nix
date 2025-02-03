@@ -9,4 +9,5 @@ in {
   "cloudflare/email.age".publicKeys = [remote_server_key];
   "discord/exil0138.age".publicKeys = [remote_server_key];
   "system/echo-user-pwd.age".publicKeys = [remote_server_key];
+  "reddit/reddit-cleaner.age".publicKeys = [remote_server_key];
 }

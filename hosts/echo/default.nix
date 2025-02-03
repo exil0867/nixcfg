@@ -99,6 +99,7 @@ in
 
   # Tailscale Configuration
   age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."reddit/reddit-cleaner".file = ../../secrets/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world" = {
     file = ../../secrets/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
     owner = vars.user;
@@ -239,6 +240,12 @@ services.traefik.environmentFiles = [
     };
   };
 
+  services.reddit-auto-delete = {
+    enable = true;
+    interval = "72h";
+    environmentFile = config.age.secrets."reddit/reddit-cleaner".path;
+  };
+
   services.cloudflared = {
     enable = true;
     user = vars.user;
@@ -259,6 +266,7 @@ services.traefik.environmentFiles = [
     cloudflared
     transmission_4-gtk
     git
+    curl
     nginx
     certbot
     librewolf
