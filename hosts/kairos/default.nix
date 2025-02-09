@@ -108,6 +108,7 @@ in
       zed-editor
       vscode
       keepassxc
+      libreoffice
       librewolf
       sshpass
       gimp
