@@ -268,7 +268,10 @@ services.traefik.environmentFiles = [
     git
     curl
     nginx
+    bottles
     certbot
+    jellyfin-web
+    jellyfin-media-player
     librewolf
     tailscale
     headscale
