@@ -392,16 +392,18 @@ in
         # };
       };
       cursorline = {
-        enable = true;
-        cursorline = {
+        settings = {
           enable = true;
-          number = true;
-          timeout = 0;
-        };
-        cursorword = {
-          enable = true;
-          hl = { underline = true; };
-          minLength = 3;
+          cursorline = {
+            enable = true;
+            number = true;
+            timeout = 0;
+          };
+          cursorword = {
+            enable = true;
+            hl = { underline = true; };
+            minLength = 3;
+          };
         };
       };
       web-devicons = {
