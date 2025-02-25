@@ -139,7 +139,7 @@ in
 
   age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
   tailscale = {
-    enable = true;
+    enable = false;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
     loginServer = "http://192.168.1.5:8181";
   };
