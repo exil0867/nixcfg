@@ -187,6 +187,12 @@ in
   home-manager.users.${vars.user} = {
     home = {
       stateVersion = "24.11";
+      pointerCursor = {
+        gtk.enable = false;
+        name = "Dracula-cursors";
+        package = system-definition.dracula-theme;
+        size = 24;
+      };
     };
     programs = {
       ssh = {
