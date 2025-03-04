@@ -125,6 +125,8 @@ in
       atlauncher
       osu-lazer
       transmission_4-qt
+      android-tools
+      android-udev-rules
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
