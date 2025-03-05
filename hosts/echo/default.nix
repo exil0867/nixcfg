@@ -260,6 +260,10 @@ services.traefik.environmentFiles = [
     };
   };
 
+  jellyfin-player = {
+    enable = true;
+  };
+
   # System Packages
   environment.systemPackages = (with system-definition; [
     compose2nix
@@ -270,8 +274,6 @@ services.traefik.environmentFiles = [
     nginx
     bottles
     certbot
-    jellyfin-web
-    jellyfin-media-player
     librewolf
     tailscale
     headscale

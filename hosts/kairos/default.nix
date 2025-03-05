@@ -114,7 +114,6 @@ in
       gimp
       discord
       bruno
-      jellyfin-media-player
       obs-studio
       bottles
       neovide
@@ -137,6 +136,11 @@ in
       # firefox # Browser
       # image-roll # Image Viewer
     ]);
+  };
+
+  jellyfin-player = {
+    enable = true;
+    useXcb = true;
   };
 
   age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
