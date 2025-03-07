@@ -86,14 +86,14 @@ in
 
   # Transmission Configuration
   services.transmission = {
-    enable = false;
+    enable = true;
     openRPCPort = true;
     package = system-definition.transmission_4-gtk;
     settings = {
       rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enable = false;
       rpc-whitelist = "127.0.0.1,10.0.0.1,192.168.122.1";
-      download-dir = "/home/${vars.user}/ServerData/downbox";
+      download-dir = "/mnt/1TB-ST1000DM010-2EP102/downbox";
     };
   };
 
@@ -157,7 +157,7 @@ services.traefik = {
         };
 
         certificatesResolvers.cloudflare.acme = {
-          email = "exiL@n0t3x1l.dev";
+          email = "exil@n0t3x1l.dev";
           storage = "/var/lib/traefik/acme.json";
           dnsChallenge = {
             provider = "cloudflare";
@@ -180,10 +180,10 @@ services.traefik = {
               };
             };
 
-            ok = {
-              rule = "Host(`ok.n0t3x1l.dev`)";
+            transmission = {
+              rule = "Host(`dl.n0t3x1l.dev`)";
               entryPoints = ["websecure"];
-              service = "ok";
+              service = "transmission";
               tls = {
                 certResolver = "cloudflare";
               };
@@ -197,9 +197,9 @@ services.traefik = {
               }
             ];
 
-            ok.loadBalancer.servers = [
+            transmission.loadBalancer.servers = [
               {
-                url = "http://127.0.0.1:8080"; # Replace with the appropriate port for your "OK" service
+                url = "http://127.0.0.1:9091";
               }
             ];
           };
