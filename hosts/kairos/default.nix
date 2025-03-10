@@ -10,6 +10,7 @@ in
     ../../modules/programs/games.nix
     ../../modules/services/rclone-sftp.nix
     ../../modules/services/mounter.nix
+    ../../modules/desktops/virtualisation/docker.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -120,7 +121,7 @@ in
       handbrake
       tailscale
       krita
-      firefox-devedition
+      # firefox-devedition
       atlauncher
       osu-lazer
       transmission_4-qt
@@ -148,6 +149,11 @@ in
     enable = false;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
     loginServer = "http://192.168.1.5:8181";
+  };
+
+  docker = {
+    enable = true;
+    dataRoot = "/mnt/TOSHIBA-MQ04ABF100-1TB/docker";
   };
 
   home-manager.users.${vars.user} = {

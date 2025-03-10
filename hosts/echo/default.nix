@@ -6,8 +6,8 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules/services/mounter.nix
+    ../../modules/desktops/virtualisation/docker.nix
   ] ++
-  # (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
@@ -261,6 +261,10 @@ services.traefik.environmentFiles = [
   };
 
   jellyfin-player = {
+    enable = true;
+  };
+
+  docker = {
     enable = true;
   };
 
