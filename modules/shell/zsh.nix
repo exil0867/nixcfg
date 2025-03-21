@@ -28,7 +28,7 @@
         #eval "$(direnv hook zsh)"
 
         # pnpm
-        export PNPM_HOME="~/.local/share/pnpm"
+        export PNPM_HOME="/home/${vars.user}/.local/share/pnpm"
         case ":$PATH:" in
           *":$PNPM_HOME:"*) ;;
           *) export PATH="$PNPM_HOME:$PATH" ;;
