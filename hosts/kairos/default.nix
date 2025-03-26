@@ -106,7 +106,7 @@ in
       ungoogled-chromium
       git
       ollama
-      zed-editor
+      # zed-editor
       vscode
       keepassxc
       libreoffice
