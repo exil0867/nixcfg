@@ -29,6 +29,9 @@ in
   # Enable SSH for remote management
   services.openssh = {
     enable = true;
+    authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
+    ];
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "no";
