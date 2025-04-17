@@ -72,4 +72,29 @@ in
       }
     ];
   };
+
+  sky = stable-lib.nixosSystem {
+    inherit system;
+    specialArgs = {
+      inherit inputs system stable unstable vars;
+      nixpkgs-channel = nixpkgs-stable;
+      system-definition = stable;
+      host = {
+        hostName = "sky";
+      };
+    };
+    modules = [
+      nur.modules.nixos.default
+      nixvim-unstable.nixosModules.nixvim
+      ./sky
+      ./configuration.nix
+
+      home-manager-stable.nixosModules.home-manager
+      {
+        home-manager.backupFileExtension = "backup";
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+      }
+    ];
+  };
 }
