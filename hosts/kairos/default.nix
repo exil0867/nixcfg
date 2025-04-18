@@ -29,6 +29,10 @@ in
     };
   };
 
+  users.users.${vars.user} = {
+    # openssh.authorizedKeys.keys = [];
+  };
+
   mounter.mounts = [
     {
       mountPoint = "/mnt/PNY-CS900-120GB";

@@ -24,6 +24,12 @@ in
     };
   };
 
+  users.users.${vars.user} = {
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
+    ];
+  };
+
   mounter.mounts = [
     {
       mountPoint = "/mnt/1TB-ST1000DM010-2EP102";
