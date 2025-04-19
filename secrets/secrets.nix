@@ -11,4 +11,5 @@ in {
   "discord/exil0138.age".publicKeys = [remote_server_key];
   "system/echo-user-pwd.age".publicKeys = [remote_server_key];
   "reddit/reddit-cleaner.age".publicKeys = [remote_server_key];
+  "deluge/auth.age".publicKeys = [sky_server_key];
 }
