@@ -138,7 +138,7 @@ in
             };
           };
         };
-        
+
         services = {
           jellyfin.loadBalancer.servers = [{
             url = "http://127.0.0.1:8096";
@@ -150,7 +150,7 @@ in
         };
       };
     };
-
+  };
   # Ensure the Deluge data directory exists
   systemd.tmpfiles.rules = [
     "d /home/${vars.user}/data/deluge 0750 ${vars.user} users -"
