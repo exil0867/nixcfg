@@ -74,7 +74,13 @@ in
     };
     
     # Reference to auth file managed by agenix
-    authFile = config.age.secrets."deluge/auth".path;
+    # authFile = config.age.secrets."deluge/auth".path;
+    authFile = pkgs.writeTextFile {
+      name = "deluge-auth";
+      text = ''
+        localclient:deluge:10
+      '';
+    };
   };
 
   # Create the agenix secret for Deluge authentication
