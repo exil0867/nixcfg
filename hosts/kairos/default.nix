@@ -157,7 +157,7 @@ in
 
   docker = {
     enable = true;
-    dataRoot = "/mnt/TOSHIBA-MQ04ABF100-1TB/docker";
+    dataRoot = "/var/lib/docker";
   };
 
   home-manager.users.${vars.user} = {
