@@ -136,7 +136,7 @@ in
           };
           # Add Deluge router
           deluge = {
-            rule = "Host(`deluge.n0t3x1l.dev`)";
+            rule = "Host(`dlsky.n0t3x1l.dev`)";
             entryPoints = ["websecure"];
             service = "deluge";
             tls = {
