@@ -75,7 +75,7 @@ in
     
     # Reference to auth file managed by agenix
     # authFile = config.age.secrets."deluge/auth".path;
-    authFile = pkgs.writeTextFile {
+    authFile = system-definition.writeTextFile {
       name = "deluge-auth";
       text = ''
         localclient:deluge:10
