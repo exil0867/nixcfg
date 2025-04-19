@@ -47,7 +47,7 @@ in
   # Jellyfin Configuration
   services.jellyfin = {
     enable = true;
-    openFirewall = false;
+    openFirewall = true;
     dataDir = "/data/jellyfin";
     user = vars.user;
   };
