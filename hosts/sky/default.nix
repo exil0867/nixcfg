@@ -67,7 +67,7 @@ in
       allow_remote = true;
       daemon_port = 58846;
       download_location = "/home/${vars.user}/data/deluge/downloads";
-      max_upload_speed = "1000.0";
+      # max_upload_speed = "1000.0";
       share_ratio_limit = "2.0";
       listen_ports = [51413 51413]; # Single port for better firewall management
       random_port = false;
