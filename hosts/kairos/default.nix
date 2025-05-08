@@ -30,6 +30,7 @@ in
   };
 
   users.users.${vars.user} = {
+    extraGroups = [ "adbusers" ];
     # openssh.authorizedKeys.keys = [];
   };
 
@@ -126,6 +127,7 @@ in
       tailscale
       krita
       # firefox-devedition
+      scrcpy
       atlauncher
       osu-lazer
       transmission_4-qt
@@ -154,6 +156,10 @@ in
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
     loginServer = "http://192.168.1.5:8181";
   };
+
+  services.udev.packages = [ system-definition.android-udev-rules ];
+
+  programs.adb.enable = true;
 
   docker = {
     enable = true;
