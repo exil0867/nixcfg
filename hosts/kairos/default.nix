@@ -126,6 +126,7 @@ in
       handbrake
       tailscale
       krita
+      spotify
       # firefox-devedition
       scrcpy
       atlauncher
