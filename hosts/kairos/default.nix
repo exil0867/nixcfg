@@ -128,6 +128,7 @@ in
       krita
       spotify
       # firefox-devedition
+      audacity
       scrcpy
       atlauncher
       osu-lazer
