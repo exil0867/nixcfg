@@ -45,43 +45,43 @@ in
   };
 
   # Jellyfin Configuration
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    dataDir = "/data/jellyfin";
-    user = vars.user;
-  };
+  # services.jellyfin = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   dataDir = "/data/jellyfin";
+  #   user = vars.user;
+  # };
 
   # Add this to your configuration
-  services.deluge = {
-    enable = true;
-    web.enable = true;
-    web.openFirewall = true;
-    declarative = true;
-    dataDir = "/home/${vars.user}/data/deluge";
-    user = vars.user;
-    group = "users";
+  # services.deluge = {
+  #   enable = true;
+  #   web.enable = true;
+  #   web.openFirewall = true;
+  #   declarative = true;
+  #   dataDir = "/home/${vars.user}/data/deluge";
+  #   user = vars.user;
+  #   group = "users";
     
-    # Basic configuration
-    config = {
-      allow_remote = true;
-      daemon_port = 58846;
-      download_location = "/home/${vars.user}/data/deluge/downloads";
-      # max_upload_speed = "1000.0";
-      # share_ratio_limit = "2.0";
-      listen_ports = [51413 51413]; # Single port for better firewall management
-      random_port = false;
-    };
+  #   # Basic configuration
+  #   config = {
+  #     allow_remote = true;
+  #     daemon_port = 58846;
+  #     download_location = "/home/${vars.user}/data/deluge/downloads";
+  #     # max_upload_speed = "1000.0";
+  #     # share_ratio_limit = "2.0";
+  #     listen_ports = [51413 51413]; # Single port for better firewall management
+  #     random_port = false;
+  #   };
     
-    # Reference to auth file managed by agenix
-    # authFile = config.age.secrets."deluge/auth".path;
-    authFile = system-definition.writeTextFile {
-      name = "deluge-auth";
-      text = ''
-        localclient:deluge:10
-      '';
-    };
-  };
+  #   # Reference to auth file managed by agenix
+  #   # authFile = config.age.secrets."deluge/auth".path;
+  #   authFile = system-definition.writeTextFile {
+  #     name = "deluge-auth";
+  #     text = ''
+  #       localclient:deluge:10
+  #     '';
+  #   };
+  # };
 
   # Create the agenix secret for Deluge authentication
   # age.secrets."deluge/auth" = {
@@ -92,88 +92,88 @@ in
   # };
   
   # Traefik Configuration
-  services.traefik = {
-    enable = true;
+  # services.traefik = {
+  #   enable = true;
 
-    staticConfigOptions = {
-      entryPoints = {
-        web = {
-          address = ":80";
-          http.redirections.entryPoint = {
-            to = "websecure";
-            scheme = "https";
-            permanent = true;
-          };
-        };
+  #   staticConfigOptions = {
+  #     entryPoints = {
+  #       web = {
+  #         address = ":80";
+  #         http.redirections.entryPoint = {
+  #           to = "websecure";
+  #           scheme = "https";
+  #           permanent = true;
+  #         };
+  #       };
 
-        websecure = {
-          address = ":443";
-          forwardedHeaders = {
-            trustedIPs = ["127.0.0.1/32" "::1/128"];
-          };
-        };
-      };
+  #       websecure = {
+  #         address = ":443";
+  #         forwardedHeaders = {
+  #           trustedIPs = ["127.0.0.1/32" "::1/128"];
+  #         };
+  #       };
+  #     };
 
-      certificatesResolvers.letsencrypt.acme = {
-        email = "exil@n0t3x1l.dev";
-        storage = "/var/lib/traefik/acme.json";
-        httpChallenge = {
-          entryPoint = "web";
-        };
-      };
-    };
+  #     certificatesResolvers.letsencrypt.acme = {
+  #       email = "exil@n0t3x1l.dev";
+  #       storage = "/var/lib/traefik/acme.json";
+  #       httpChallenge = {
+  #         entryPoint = "web";
+  #       };
+  #     };
+  #   };
 
-    dynamicConfigOptions = {
-      http = {
-        routers = {
-          jellyfin = {
-            rule = "Host(`jellysky.n0t3x1l.dev`)";
-            entryPoints = ["websecure"];
-            service = "jellyfin";
-            tls = {
-              certResolver = "letsencrypt";
-            };
-          };
-          # Add Deluge router
-          deluge = {
-            rule = "Host(`dlsky.n0t3x1l.dev`)";
-            entryPoints = ["websecure"];
-            service = "deluge";
-            tls = {
-              certResolver = "letsencrypt";
-            };
-          };
-        };
+  #   dynamicConfigOptions = {
+  #     http = {
+  #       routers = {
+  #         jellyfin = {
+  #           rule = "Host(`jellysky.n0t3x1l.dev`)";
+  #           entryPoints = ["websecure"];
+  #           service = "jellyfin";
+  #           tls = {
+  #             certResolver = "letsencrypt";
+  #           };
+  #         };
+  #         # Add Deluge router
+  #         deluge = {
+  #           rule = "Host(`dlsky.n0t3x1l.dev`)";
+  #           entryPoints = ["websecure"];
+  #           service = "deluge";
+  #           tls = {
+  #             certResolver = "letsencrypt";
+  #           };
+  #         };
+  #       };
 
-        services = {
-          jellyfin.loadBalancer.servers = [{
-            url = "http://127.0.0.1:8096";
-          }];
-          # Add Deluge service
-          deluge.loadBalancer.servers = [{
-            url = "http://127.0.0.1:8112";
-          }];
-        };
-      };
-    };
-  };
-  # Ensure the Deluge data directory exists
-  systemd.tmpfiles.rules = [
-    "d /home/${vars.user}/data/deluge 0750 ${vars.user} users -"
-    "d /home/${vars.user}/data/deluge/downloads 0750 ${vars.user} users -"
-  ];
+  #       services = {
+  #         jellyfin.loadBalancer.servers = [{
+  #           url = "http://127.0.0.1:8096";
+  #         }];
+  #         # Add Deluge service
+  #         deluge.loadBalancer.servers = [{
+  #           url = "http://127.0.0.1:8112";
+  #         }];
+  #       };
+  #     };
+  #   };
+  # };
+  # # Ensure the Deluge data directory exists
+  # systemd.tmpfiles.rules = [
+  #   "d /home/${vars.user}/data/deluge 0750 ${vars.user} users -"
+  #   "d /home/${vars.user}/data/deluge/downloads 0750 ${vars.user} users -"
+  # ];
 
   # age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
 
-  services.traefik.environmentFiles = [
-    # config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
-  ];
+  # services.traefik.environmentFiles = [
+  #   # config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
+  # ];
 
-  # Ensure the Traefik directory exists
-  systemd.services.traefik.preStart = ''
-    mkdir -p /var/lib/traefik
-    chown -R traefik:traefik /var/lib/traefik
-  '';
+  # # Ensure the Traefik directory exists
+  # systemd.services.traefik.preStart = ''
+  #   mkdir -p /var/lib/traefik
+  #   chown -R traefik:traefik /var/lib/traefik
+  # '';
 
   # Git Configuration
   programs.git.enable = true;
