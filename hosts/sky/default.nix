@@ -84,12 +84,12 @@ in
   };
 
   # Create the agenix secret for Deluge authentication
-  age.secrets."deluge/auth" = {
-    file = ../../secrets/deluge/auth.age;
-    owner = vars.user;
-    group = "users";
-    mode = "0400";
-  };
+  # age.secrets."deluge/auth" = {
+  #   file = ../../secrets/deluge/auth.age;
+  #   owner = vars.user;
+  #   group = "users";
+  #   mode = "0400";
+  # };
   
   # Traefik Configuration
   services.traefik = {
@@ -163,10 +163,10 @@ in
     "d /home/${vars.user}/data/deluge/downloads 0750 ${vars.user} users -"
   ];
 
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  # age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
-    config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
+    # config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
   ];
 
   # Ensure the Traefik directory exists
