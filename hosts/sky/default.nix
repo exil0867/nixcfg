@@ -20,6 +20,8 @@ in
       timeout = 5;
     };
   };
+  
+  programs.nix-ld.enable = true;
 
   users.users.${vars.user} = {
     openssh.authorizedKeys.keys = [
