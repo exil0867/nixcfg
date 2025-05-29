@@ -20,7 +20,7 @@ in
       timeout = 5;
     };
   };
-  
+
   programs.nix-ld.enable = true;
 
   users.users.${vars.user} = {
@@ -56,7 +56,7 @@ in
 
   # Add this to your configuration
   services.deluge = {
-    enable = true;
+    enable = false;
     web.enable = true;
     web.openFirewall = true;
     declarative = true;
