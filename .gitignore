@@ -7,5 +7,5 @@ secrets/*
 # Except for the secret.nix file
 !secrets/secret.nix
 secrets/*
-!secrets/secrets.nix
+!secrets/*.nix
 
