@@ -57,7 +57,7 @@ in
   age.secrets."deluge/auth" = {
     file = ../../secrets/deluge/auth.age;
     owner = vars.user;
-    group = config.services.deluge.group;
+    group = "users";
     mode = "0400";
   };
 
