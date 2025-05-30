@@ -85,7 +85,7 @@ in
     # Reference to auth file managed by agenix
     authFile = config.age.secrets."deluge/auth".path;
   };
-  
+
   # Traefik Configuration
   services.traefik = {
     enable = true;
