@@ -63,7 +63,7 @@ in
 
   # Add this to your configuration
   services.deluge = {
-    enable = false;
+    enable = true;
     web.enable = true;
     web.openFirewall = true;
     declarative = true;
