@@ -9,4 +9,5 @@ in {
   "discord/exil0138.age".publicKeys = [echo_key];
   "system/echo-user-pwd.age".publicKeys = [echo_key];
   "reddit/reddit-cleaner.age".publicKeys = [echo_key];
+  "deluge/auth.age".publicKeys = [sky_key];
 }
