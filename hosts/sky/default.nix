@@ -152,11 +152,6 @@ in
       };
     };
   };
-  # Ensure the Deluge data directory exists
-  systemd.tmpfiles.rules = [
-    "d /home/${vars.user}/data/deluge 0750 ${vars.user} users -"
-    "d /home/${vars.user}/data/deluge/downloads 0750 ${vars.user} users -"
-  ];
 
   age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
 
