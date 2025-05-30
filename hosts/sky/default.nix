@@ -67,7 +67,7 @@ in
     web.enable = true;
     web.openFirewall = true;
     declarative = true;
-    dataDir = "/home/${vars.user}/data/deluge";
+    # dataDir = "/home/${vars.user}/data/deluge";
     user = vars.user;
     group = "users";
     
@@ -75,7 +75,7 @@ in
     config = {
       allow_remote = true;
       daemon_port = 58846;
-      download_location = "/home/${vars.user}/data/deluge/downloads";
+      # download_location = "/home/${vars.user}/data/deluge/downloads";
       # max_upload_speed = "1000.0";
       # share_ratio_limit = "2.0";
       listen_ports = [51413 51413]; # Single port for better firewall management
