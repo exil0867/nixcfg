@@ -301,13 +301,5 @@ services.traefik.environmentFiles = [
     imports = [
       inputs.plasma-manager-stable.homeManagerModules.plasma-manager
     ];
-    xdg.userDirs = {
-      enable = true;
-      createDirectories = true;
-      extraConfig = {
-        XDG_SERVERDATA_DIR = "/home/${vars.user}/ServerData";
-        XDG_DOWNBOX_DIR = "/home/${vars.user}/ServerData/downbox";
-      };
-    };
   };
 }
