@@ -130,7 +130,6 @@ in
       # firefox-devedition
       audacity
       scrcpy
-      atlauncher
       osu-lazer
       transmission_4-qt
       android-tools
