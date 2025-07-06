@@ -176,6 +176,24 @@ in
     mediaMime = "mpv.desktop";
     programs = {
       plasma = {
+        powerdevil = {
+          AC = {
+            autoSuspend = {
+              action = "nothing";
+              idleTimeout = null;
+            };
+            dimDisplay = {
+              enable = true;
+              idleTimeout = 600;
+            };
+            turnOffDisplay = {
+              idleTimeout = 1200;
+              idleTimeoutWhenLocked = 1200;
+            };
+            powerButtonAction = "showLogoutScreen";
+            powerProfile = "performance";
+          };
+        };
         input = {
           mice = [
             {
