@@ -138,6 +138,7 @@ in
       kate
       partitionmanager
       kdenlive
+      kcalc
     ]) ++
     (with stable; [
       # Apps
