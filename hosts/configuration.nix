@@ -104,7 +104,6 @@ in
       # usbutils # Manage USB
       wget # Retriever
       xdg-utils # Environment integration
-      thefuck
 
       # Video/Audio
       alsa-utils # Audio Control
@@ -221,7 +220,7 @@ in
         };
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" "thefuck" ];
+          plugins = [ "git" ];
           theme = "robbyrussell";
         };
       };
