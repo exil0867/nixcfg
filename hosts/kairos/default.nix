@@ -128,7 +128,7 @@ in
       krita
       spotify
       # firefox-devedition
-      audacity
+      # audacity
       scrcpy
       osu-lazer
       transmission_4-qt
