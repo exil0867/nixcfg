@@ -134,11 +134,14 @@ in
       transmission_4-qt
       android-tools
       android-udev-rules
+      aspell
+      aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
       kdenlive
       kcalc
+      sonnet
     ]) ++
     (with stable; [
       # Apps
