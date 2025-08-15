@@ -143,6 +143,7 @@ in
       kdenlive
       kcalc
       sonnet
+      plasma-systemmonitor
     ]) ++
     (with stable; [
       # Apps
