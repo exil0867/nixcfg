@@ -51,6 +51,7 @@ in
 
   networking = {
     hostName = "kairos";
+    networkmanager.enable = true;
   };
 
   services.libinput.mouse.accelProfile = "flat";
