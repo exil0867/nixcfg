@@ -82,7 +82,7 @@ in
       EDITOR = "${vars.editor}";
       VISUAL = "${vars.editor}";
     };
-    systemPackages = with system-definition; [
+    systemPackages = (with system-definition; [
       age
       inputs.agenix.packages.${system}.default
       gnupg
@@ -120,7 +120,10 @@ in
       # Other Packages Found @
       # - ./<host>/default.nix
       # - ../modules
-    ];
+    ])
+    ++ (with unstable; [
+      devenv
+    ]);
   };
 
   programs = {
