@@ -87,7 +87,7 @@ in
       inputs.agenix.packages.${system}.default
       gnupg
       gh
-      devenv
+      # devenv
       btop # Resource Manager
       # cifs-utils # Samba
       coreutils # GNU Utilities
