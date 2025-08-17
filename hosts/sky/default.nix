@@ -54,37 +54,37 @@ in
     user = vars.user;
   };
 
-  age.secrets."deluge/auth" = {
-    file = ../../secrets/deluge/auth.age;
-    owner = vars.user;
-    group = "users";
-    mode = "0400";
-  };
+  # age.secrets."deluge/auth" = {
+  #   file = ../../secrets/deluge/auth.age;
+  #   owner = vars.user;
+  #   group = "users";
+  #   mode = "0400";
+  # };
 
   # Add this to your configuration
-  services.deluge = {
-    enable = true;
-    web.enable = true;
-    web.openFirewall = true;
-    declarative = true;
-    # dataDir = "/home/${vars.user}/data/deluge";
-    user = vars.user;
-    group = "users";
+  # services.deluge = {
+  #   enable = false;
+  #   web.enable = true;
+  #   web.openFirewall = true;
+  #   declarative = true;
+  #   # dataDir = "/home/${vars.user}/data/deluge";
+  #   user = vars.user;
+  #   group = "users";
     
-    # Basic configuration
-    config = {
-      allow_remote = true;
-      daemon_port = 58846;
-      # download_location = "/home/${vars.user}/data/deluge/downloads";
-      # max_upload_speed = "1000.0";
-      # share_ratio_limit = "2.0";
-      listen_ports = [51413 51413]; # Single port for better firewall management
-      random_port = false;
-    };
+  #   # Basic configuration
+  #   config = {
+  #     allow_remote = true;
+  #     daemon_port = 58846;
+  #     # download_location = "/home/${vars.user}/data/deluge/downloads";
+  #     # max_upload_speed = "1000.0";
+  #     # share_ratio_limit = "2.0";
+  #     listen_ports = [51413 51413]; # Single port for better firewall management
+  #     random_port = false;
+  #   };
     
-    # Reference to auth file managed by agenix
-    authFile = config.age.secrets."deluge/auth".path;
-  };
+  #   # Reference to auth file managed by agenix
+  #   authFile = config.age.secrets."deluge/auth".path;
+  # };
 
   # Traefik Configuration
   services.traefik = {
@@ -177,6 +177,7 @@ in
     htop
     tmux
     traefik
+    aria2
   ];
 
   # Home Manager Configuration
