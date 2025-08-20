@@ -14,10 +14,9 @@ Primary workstation for daily use, development, and gaming. With a customized Pl
 ### Echo (Home Server)
 Central homelab node running 24/7 with high uptime. Provides centralized storage, self-hosted services, and automated backups. Operates as a low-power HTPC capable of directing input to TVs and handling light gaming. Hosts containerized services while maintaining remote accessibility.
 
-## Quick Start
+### Sky (Public Server)
 
-### Initial Deployment
-1. Clone repository to target machine:
+A publicly accessible server hosting self-managed services like Jellyfin and other web applications.
 ```bash
 sudo nix-shell -p git --run "git clone https://github.com/your/repo /etc/nixos"
 ```
