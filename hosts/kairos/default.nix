@@ -131,7 +131,7 @@ in
       # firefox-devedition
       # audacity
       scrcpy
-      osu-lazer
+      # osu-lazer
       transmission_4-qt
       android-tools
       android-udev-rules
