@@ -5,6 +5,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/services/sync-secrets.nix
   ];
 
   # Boot Options
