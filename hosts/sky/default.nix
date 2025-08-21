@@ -161,7 +161,7 @@ in
     };
   };
 
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets-sync/cloudflare/n0t3x1l.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
     config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path

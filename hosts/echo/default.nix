@@ -112,16 +112,16 @@ in
   };
 
   # Tailscale Configuration
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
-  age.secrets."reddit/reddit-cleaner".file = ../../secrets/reddit/reddit-cleaner.age;
+  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets-sync/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world" = {
-    file = ../../secrets/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
+    file = ../../secrets-sync/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
     owner = vars.user;
     group = config.services.cloudflared.group;
     mode = "400";
   };
 
-  age.secrets."cloudflare/email".file = ../../secrets/cloudflare/email.age;
+  age.secrets."cloudflare/email".file = ../../secrets-sync/cloudflare/email.age;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
 #   # ACME (Let's Encrypt) Configuration

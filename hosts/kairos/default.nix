@@ -165,7 +165,7 @@ in
     useXcb = true;
   };
 
-  age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
+  age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
   tailscale = {
     enable = false;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;

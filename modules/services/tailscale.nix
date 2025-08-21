@@ -3,7 +3,7 @@
 with lib;
 
 let
-  defaultAuthKeyFile = "/etc/nixos/secrets/tailscale-preauth.key";
+  defaultAuthKeyFile = "/etc/nixos/secrets-sync/tailscale-preauth.key";
 in
 {
   options.tailscale = {
