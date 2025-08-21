@@ -15,7 +15,7 @@ in {
     settings = {
       devices = {
         # Fill in your host device IDs here after first run
-        "kairos" = { id = "DEVICEID_KAIROS"; };
+        "kairos" = { id = "DHDQNH5-PEIDPD5-FBGQP3V-KUV3222-O3NJSV7-EFTUWGF-P4CF5TG-7T2RTQT"; };
         "echo"   = { id = "DEVICEID_ECHO"; };
         "sky"    = { id = "DEVICEID_SKY"; };
       };
