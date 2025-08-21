@@ -50,7 +50,7 @@ in
 
   syncSecrets = {
     enable = true;
-    secretsDir = "/home/${vars.user}/nixcfg/secrets-sync";
+    secretsDir = "/home/${vars.user}/secrets-sync";
     user = vars.user;
     group = "users";
   };
