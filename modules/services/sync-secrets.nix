@@ -16,7 +16,7 @@ in {
       devices = {
         # Fill in your host device IDs here after first run
         "kairos" = { id = "DHDQNH5-PEIDPD5-FBGQP3V-KUV3222-O3NJSV7-EFTUWGF-P4CF5TG-7T2RTQT"; };
-        "echo"   = { id = "DEVICEID_ECHO"; };
+        "echo"   = { id = "GKU3ZWQ-EUXIRAP-275UCQ5-WUM3AEJ-6X6MXVW-VCNJYVP-G6AJTJH-URPCWQI"; };
         "sky"    = { id = "DEVICEID_SKY"; };
       };
       folders = {
