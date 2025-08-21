@@ -10,6 +10,7 @@ in
     ../../modules/programs/games.nix
     ../../modules/services/rclone-sftp.nix
     ../../modules/services/mounter.nix
+    ../../modules/services/sync-secrets.nix
     ../../modules/desktops/virtualisation/docker.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
