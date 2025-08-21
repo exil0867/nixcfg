@@ -5,10 +5,10 @@ let
 in {
   services.syncthing = {
     enable = true;
-    user = "syncthing";         # dedicated user for the service
-    group = "syncthing";
-    dataDir = "/var/lib/syncthing";
-    configDir = "/var/lib/syncthing/config";
+    user = vars.user;
+    group = "users";
+    dataDir = "/home/${vars.user}/.local/share/syncthing";
+    configDir = "/home/${vars.user}/.config/syncthing";
     guiAddress = "127.0.0.1:8384"; # web UI only on localhost
     overrideDevices = true;
     overrideFolders = true;
@@ -30,7 +30,7 @@ in {
 
   # Ensure the directory exists
   systemd.tmpfiles.rules = [
-    "d ${secretsDir} 0750 syncthing syncthing -"
+    "d ${secretsDir} 0700 ${vars.user} users -"
   ];
 
   # Open firewall for Syncthing traffic
