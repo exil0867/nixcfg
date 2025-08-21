@@ -50,6 +50,13 @@ in
     }
   ];
 
+  syncSecrets = {
+    enable = true;
+    secretsDir = "/mnt/TOSHIBA-MQ04ABF100-1TB/Develop/nixcfg/secrets-sync";
+    user = vars.user;
+    group = "users";
+  };
+
   networking = {
     hostName = "kairos";
     networkmanager.enable = true;
@@ -158,7 +165,7 @@ in
     useXcb = true;
   };
 
-  age.secrets."tailscale/preauth-kairos".file = /home/${vars.user}/secrets-sync/secrets/tailscale/preauth-kairos.age;
+  age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
   tailscale = {
     enable = false;
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;

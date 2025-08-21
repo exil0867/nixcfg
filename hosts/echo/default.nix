@@ -48,6 +48,13 @@ in
     }
   ];
 
+  syncSecrets = {
+    enable = true;
+    secretsDir = "/home/${vars.user}/nixcfg/secrets-sync";
+    user = vars.user;
+    group = "users";
+  };
+
   networking = {
     hostName = "echo";
   };
@@ -105,16 +112,16 @@ in
   };
 
   # Tailscale Configuration
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = /home/${vars.user}/secrets-sync/secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
-  age.secrets."reddit/reddit-cleaner".file = /home/${vars.user}/secrets-sync/secrets/reddit/reddit-cleaner.age;
+  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."reddit/reddit-cleaner".file = ../../secrets/secrets/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world" = {
-    file = /home/${vars.user}/secrets-sync/secrets/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
+    file = ../../secrets/secrets/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
     owner = vars.user;
     group = config.services.cloudflared.group;
     mode = "400";
   };
 
-  age.secrets."cloudflare/email".file = /home/${vars.user}/secrets-sync/secrets/cloudflare/email.age;
+  age.secrets."cloudflare/email".file = ../../secrets/secrets/cloudflare/email.age;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
 #   # ACME (Let's Encrypt) Configuration

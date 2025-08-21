@@ -55,6 +55,13 @@ in
     user = vars.user;
   };
 
+  syncSecrets = {
+    enable = true;
+    secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
+    user = vars.user;
+    group = "users";
+  };
+
   # age.secrets."deluge/auth" = {
   #   file = ../../secrets/deluge/auth.age;
   #   owner = vars.user;
@@ -154,7 +161,7 @@ in
     };
   };
 
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = /home/${vars.user}/secrets-sync/secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets/cloudflare/n0t3x1l.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
     config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
