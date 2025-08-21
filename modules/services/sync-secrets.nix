@@ -43,9 +43,9 @@ in {
 
       settings = {
         devices = {
-          "kairos" = { id = "DUQBDTY-4WU4CCG-LHSDWDI-4CDKWV6-33EASZF-IXKYI76-D6UXSHJ-SH7NLAG"; };
-          "echo"   = { id = "F43WVLP-HSNPB32-C7MWWI7-4EI2VT4-OZPOIBC-FWY5U5U-K3FN5R2-RKOBBA2"; };
-          "sky"    = { id = "DIENRLR-FB7OJ3S-XY7LQBE-GQWIK5L-YGYVSI7-FUD2GS4-FSNIQ4M-MGWBFQ6"; };
+          "kairos" = { id = "Y3R73CQ-XYQMSAZ-PC3LGFW-JYJNFRS-FXHSAIF-3TYPVMK-RLK7YZE-RFFUKQX"; };
+          "echo"   = { id = "Z5DKVKQ-WDXF2AD-VRFVHAD-Z3ZX5PM-VS57LJS-GL76DRQ-FHLPD2Q-HFBIVQE"; };
+          "sky"    = { id = "7YBYOQH-GC6R7LC-RE5L52D-FV2SDDQ-DLJC4FE-VIW3EJE-O4HRCQU-AVWC5QJ"; };
         };
 
         folders = {
