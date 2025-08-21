@@ -15,9 +15,9 @@ in {
     settings = {
       devices = {
         # Fill in your host device IDs here after first run
-        "kairos" = { id = "DHDQNH5-PEIDPD5-FBGQP3V-KUV3222-O3NJSV7-EFTUWGF-P4CF5TG-7T2RTQT"; };
-        "echo"   = { id = "GKU3ZWQ-EUXIRAP-275UCQ5-WUM3AEJ-6X6MXVW-VCNJYVP-G6AJTJH-URPCWQI"; };
-        "sky"    = { id = "QCARVYY-PU55ARQ-QSTEKHF-XAFAJUU-UXBLZZF-D3EMS2B-LWXIFLQ-ZTHS2A3"; };
+        "kairos" = { id = "DUQBDTY-4WU4CCG-LHSDWDI-4CDKWV6-33EASZF-IXKYI76-D6UXSHJ-SH7NLAG"; };
+        "echo"   = { id = "F43WVLP-HSNPB32-C7MWWI7-4EI2VT4-OZPOIBC-FWY5U5U-K3FN5R2-RKOBBA2"; };
+        "sky"    = { id = "DIENRLR-FB7OJ3S-XY7LQBE-GQWIK5L-YGYVSI7-FUD2GS4-FSNIQ4M-MGWBFQ6"; };
       };
       folders = {
         "secrets" = {
