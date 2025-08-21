@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, vars, ... }:
 
 let
-  secretsDir = "/var/lib/syncthing/secrets";
+  secretsDir = "/home/${vars.user}/secrets-sync";
 in {
   services.syncthing = {
     enable = true;
