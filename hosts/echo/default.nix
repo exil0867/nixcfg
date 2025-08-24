@@ -1,4 +1,4 @@
-{ config, vars, unstable, stable, system-definition, inputs, ... }:
+{ config, vars, unstable, stable, system-definition, lib, inputs, ... }:
 
 let
 in
@@ -7,6 +7,7 @@ in
     ./hardware-configuration.nix
     ../../modules/services/mounter.nix
     ../../modules/services/sync-secrets.nix
+    ../../modules/services/immich-oci.nix
     ../../modules/desktops/virtualisation/docker.nix
   ] ++
   (import ../../modules/desktops/virtualisation);
@@ -30,6 +31,14 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
     ];
   };
+
+  docker = {
+    enable = true;
+    dataRoot = "/var/lib/docker";
+  };
+
+  services.immich-oci.enable = true;
+
 
   mounter.mounts = [
     {
@@ -163,10 +172,10 @@ services.traefik = {
             forwardedHeaders = {
               trustedIPs = ["127.0.0.1/32" "::1/128" "192.168.1.0/24"];
             };
-            # http.tls = {
-            #   certResolver = "cloudflare";
-            #   domains = [{ main = "n0t3x1l.dev"; sans = [ "*.n0t3x1l.dev" ]; }];
-            # };
+            http.tls = {
+              certResolver = "cloudflare";
+              domains = [{ main = "n0t3x1l.dev"; sans = [ "*.n0t3x1l.dev" ]; }];
+            };
           };
         };
 
@@ -185,6 +194,14 @@ services.traefik = {
       dynamicConfigOptions = {
         http = {
           routers = {
+            immich = {
+              rule = "Host(`immich.n0t3x1l.dev`)";
+              entryPoints = ["websecure"];
+              service = "immich";
+              tls = {
+                certResolver = "cloudflare";
+              };
+            };
             jellyfin = {
               rule = "Host(`jellyfin.n0t3x1l.dev`)";
               entryPoints = ["websecure"];
@@ -209,6 +226,10 @@ services.traefik = {
               {
                 url = "http://127.0.0.1:8096";
               }
+            ];
+
+            immich.loadBalancer.servers = [
+              { url = "http://127.0.0.1:2284"; }
             ];
 
             transmission.loadBalancer.servers = [
@@ -278,10 +299,6 @@ services.traefik.environmentFiles = [
     enable = true;
   };
 
-  docker = {
-    enable = true;
-  };
-
   # System Packages
   environment.systemPackages = (with system-definition; [
     compose2nix
@@ -295,6 +312,8 @@ services.traefik.environmentFiles = [
     librewolf
     tailscale
     headscale
+    # postgresql_14
+    # postgresql14Packages.pgvecto-rs
   ]) ++ (with system-definition.kdePackages; [
     # kate
     # partitionmanager
