@@ -181,7 +181,7 @@ in
     git
     curl 
     wget
-    vim
+    # vim
     htop
     tmux
     traefik

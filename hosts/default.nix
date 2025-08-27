@@ -35,7 +35,7 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim-unstable.nixosModules.nixvim
+      # nixvim-unstable.nixosModules.nixvim
       ./kairos
       ./configuration.nix
 
@@ -60,7 +60,7 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim-unstable.nixosModules.nixvim
+      # nixvim-unstable.nixosModules.nixvim
       ./echo
       ./configuration.nix
 
@@ -85,7 +85,7 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      nixvim-unstable.nixosModules.nixvim
+      # nixvim-unstable.nixosModules.nixvim
       ./sky
       ./configuration.nix
 

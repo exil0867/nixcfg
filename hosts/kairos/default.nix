@@ -131,7 +131,7 @@ in
       bruno
       obs-studio
       bottles
-      neovide
+      # neovide
       handbrake
       tailscale
       krita
