@@ -238,6 +238,12 @@ in
         profiles.default.extensions = [system-definition.vscode-extensions.ms-vscode-remote.remote-ssh system-definition.vscode-extensions.ms-vscode-remote.remote-containers system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit system-definition.vscode-extensions.jnoortheen.nix-ide];
         profiles.default.userSettings = {
           "editor.wordWrap" = "on";
+          "github.copilot.enable" = {
+            "*" = false;
+          };
+          "github.copilot.advanced" = {
+            "enabled" = false;
+          };
         };
       };
     };
