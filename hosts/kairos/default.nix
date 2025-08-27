@@ -133,12 +133,12 @@ in
       bottles
       # neovide
       handbrake
-      tailscale
+      # tailscale
       krita
-      spotify
+      # spotify
       # firefox-devedition
       # audacity
-      scrcpy
+      # scrcpy
       # osu-lazer
       transmission_4-qt
       android-tools
