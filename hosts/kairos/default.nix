@@ -60,6 +60,7 @@ in
   networking = {
     hostName = "kairos";
     networkmanager.enable = true;
+    firewall.allowedTCPPorts = [ 3000 ];
   };
 
   services.libinput.mouse.accelProfile = "flat";
