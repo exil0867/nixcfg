@@ -229,7 +229,7 @@ services.traefik = {
             ];
 
             immich.loadBalancer.servers = [
-              { url = "http://127.0.0.1:2284"; }
+              { url = "http://127.0.0.1:2283"; }
             ];
 
             transmission.loadBalancer.servers = [
