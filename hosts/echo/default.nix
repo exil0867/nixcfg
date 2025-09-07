@@ -7,7 +7,7 @@ in
     ./hardware-configuration.nix
     ../../modules/services/mounter.nix
     ../../modules/services/sync-secrets.nix
-    ../../modules/services/immich-oci.nix
+    ../../modules/services/immich-oci
     ../../modules/desktops/virtualisation/docker.nix
   ] ++
   (import ../../modules/desktops/virtualisation);
