@@ -71,7 +71,7 @@ in
     enable = true;
     defaultSession = "plasma";
     lookAndFeel = "org.kde.breezedark.desktop";
-    plasmaManager = inputs.plasma-manager-unstable.homeManagerModules.plasma-manager;
+    plasmaManager = inputs.plasma-manager-unstable.homeModules.plasma-manager;
     panels = [
       {
         location = "top";
@@ -184,7 +184,7 @@ in
 
   home-manager.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager-unstable.homeManagerModules.plasma-manager
+      inputs.plasma-manager-unstable.homeModules.plasma-manager
     ../../modules/utilities/media-mime.nix
     ];
 
