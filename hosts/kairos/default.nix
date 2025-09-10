@@ -132,6 +132,7 @@ in
       bruno
       obs-studio
       bottles
+      dbeaver-bin
       # neovide
       handbrake
       # tailscale
