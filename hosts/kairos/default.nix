@@ -103,6 +103,7 @@ in
                 "applications:org.kde.dolphin.desktop"
                 "applications:librewolf.desktop"
               ];
+              showOnlyCurrentScreen = true;
             };
           }
           { name = "org.kde.plasma.marginsseparator"; }
