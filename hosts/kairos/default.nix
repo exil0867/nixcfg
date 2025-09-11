@@ -81,7 +81,24 @@ in
         widgets = [
           { name = "org.kde.plasma.kickoff"; }
           {
-            iconTasks = {
+            name = "org.kde.plasma.icontasks";
+            config.General = {
+              showOnlyCurrentScreen = true;
+            };
+          }
+          { name = "org.kde.plasma.marginsseparator"; }
+        ];
+      }
+      {
+        location = "top";
+        height = 48;
+        screen = 1;
+        floating = false;
+        widgets = [
+          { name = "org.kde.plasma.kickoff"; }
+          {
+            name = "org.kde.plasma.icontasks";
+            config.General = {
               launchers = [
                 "applications:org.kde.dolphin.desktop"
                 "applications:librewolf.desktop"
