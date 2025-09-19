@@ -118,7 +118,7 @@ in
       };
 
       certificatesResolvers.letsencrypt.acme = {
-        email = "exil@n0t3x1l.dev";
+        email = "exil@kyrena.dev";
         storage = "/var/lib/traefik/acme.json";
         httpChallenge = {
           entryPoint = "web";
@@ -130,7 +130,7 @@ in
       http = {
         routers = {
           jellyfin = {
-            rule = "Host(`jellysky.n0t3x1l.dev`)";
+            rule = "Host(`jellysky.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "jellyfin";
             tls = {
@@ -139,7 +139,7 @@ in
           };
           # Add Deluge router
           deluge = {
-            rule = "Host(`dlsky.n0t3x1l.dev`)";
+            rule = "Host(`dlsky.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "deluge";
             tls = {
@@ -161,10 +161,10 @@ in
     };
   };
 
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets-sync/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
-    config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
+    config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
   ];
 
   # Ensure the Traefik directory exists

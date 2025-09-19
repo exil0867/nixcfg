@@ -121,10 +121,10 @@ in
   };
 
   # Tailscale Configuration
-  age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".file = ../../secrets-sync/cloudflare/n0t3x1l.dev-DNS-RW.age;
+  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
   age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
-  age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world" = {
-    file = ../../secrets-sync/cloudflare/n0t3x1l.dev-tunnel-echo2world.age;
+  age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
+    file = ../../secrets-sync/cloudflare/kyrena.dev-tunnel-echo2world.age;
     owner = vars.user;
     group = config.services.cloudflared.group;
     mode = "400";
@@ -180,7 +180,7 @@ services.traefik = {
         };
 
         certificatesResolvers.cloudflare.acme = {
-          email = "exil@n0t3x1l.dev";
+          email = "exil@kyrena.dev";
           storage = "/var/lib/traefik/acme.json";
           dnsChallenge = {
             provider = "cloudflare";
@@ -203,7 +203,7 @@ services.traefik = {
               };
             };
             jellyfin = {
-              rule = "Host(`jellyfin.n0t3x1l.dev`)";
+              rule = "Host(`jellyfin.kyrena.dev`)";
               entryPoints = ["websecure"];
               service = "jellyfin";
               tls = {
@@ -212,7 +212,7 @@ services.traefik = {
             };
 
             transmission = {
-              rule = "Host(`dl.n0t3x1l.dev`)";
+              rule = "Host(`dl.kyrena.dev`)";
               entryPoints = ["websecure"];
               service = "transmission";
               tls = {
@@ -243,7 +243,7 @@ services.traefik = {
     };
 services.traefik.environmentFiles = [
         # config.age.secrets."cloudflare/email".path
-        config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path
+        config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
       ];
 
     # Ensure the Traefik directory exists
@@ -260,9 +260,9 @@ services.traefik.environmentFiles = [
         dns = {
           override_local_dns = true;
           nameservers.global = [ "1.1.1.1" ]; # TODO: and 100.100.100.100?
-          base_domain = "n0t3x1l.dev";
+          base_domain = "kyrena.dev";
         };
-        server_url = "https://headscale.n0t3x1l.dev";
+        server_url = "https://headscale.kyrena.dev";
         logtail.enabled = false;
         # log.level = "warn";
         # ip_prefixes
@@ -286,9 +286,9 @@ services.traefik.environmentFiles = [
     user = vars.user;
     tunnels = {
       "64911839-8e12-46f9-9f31-2e8a84fd5406" = {
-        credentialsFile = "${config.age.secrets."cloudflare/n0t3x1l.dev-tunnel-echo2world".path}";
+        credentialsFile = "${config.age.secrets."cloudflare/kyrena.dev-tunnel-echo2world".path}";
         ingress = {
-          "jellywrld.n0t3x1l.dev" = "http://localhost:8096";
+          "jellywrld.kyrena.dev" = "http://localhost:8096";
         };
         default = "http_status:404";
       };
