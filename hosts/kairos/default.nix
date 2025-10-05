@@ -264,6 +264,9 @@ in
           "github.copilot.advanced" = {
             "enabled" = false;
           };
+          "github.copilot.nextEditSuggestions" = {
+            "enabled" = false;
+          };
         };
       };
     };
