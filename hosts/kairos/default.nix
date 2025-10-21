@@ -134,6 +134,8 @@ in
 
   hardware = {};
 
+  flatpak.enable = true;
+
   environment = {
     systemPackages = (with system-definition; [
       ungoogled-chromium
