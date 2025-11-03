@@ -164,7 +164,7 @@ in
       # osu-lazer
       transmission_4-qt
       android-tools
-      android-udev-rules
+      # android-udev-rules
       aspell
       aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
@@ -194,7 +194,7 @@ in
     loginServer = "http://192.168.1.5:8181";
   };
 
-  services.udev.packages = [ system-definition.android-udev-rules ];
+  # services.udev.packages = [ system-definition.android-udev-rules ];
 
   programs.adb.enable = true;
 

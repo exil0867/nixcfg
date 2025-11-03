@@ -68,7 +68,7 @@ in
     corefonts # MS
     noto-fonts # Google + Unicode
     noto-fonts-cjk-sans
-    noto-fonts-emoji
+    noto-fonts-color-emoji
   ]) ++ (with unstable; [
     nerd-fonts.fira-mono
   ]) ++
