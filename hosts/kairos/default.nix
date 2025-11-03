@@ -154,6 +154,7 @@ in
       bottles
       dbeaver-bin
       # neovide
+      obsidian
       handbrake
       # tailscale
       krita
