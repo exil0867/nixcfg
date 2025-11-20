@@ -183,10 +183,10 @@ in
     ]);
   };
 
-  jellyfin-player = {
-    enable = true;
-    useXcb = true;
-  };
+  # jellyfin-player = {
+  #   enable = true;
+  #   useXcb = true;
+  # };
 
   age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
   tailscale = {
