@@ -201,8 +201,10 @@ in
     programs = {
       git = {
         enable = true;
-        userName = "Exil";
-        userEmail = "exil@kyrena.dev";
+        settings.user = {
+          name = "Exil";
+          email = "exil@kyrena.dev";
+        };
       };
       ssh = {
         extraConfig = ''

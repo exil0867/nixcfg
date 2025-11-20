@@ -27,8 +27,10 @@ with lib;
     home-manager.users.${vars.user} = {
       programs.git = {
         enable = true;
-        userName = "Exil";
-        userEmail = "exil@kyrena.dev";
+        settings.user = {
+          name = "Exil";
+          email = "exil@kyrena.dev";
+        };
       };
     };
   };
