@@ -84,7 +84,7 @@ in
     };
     systemPackages = (with system-definition; [
       age
-      inputs.agenix.packages.${system}.default
+      inputs.agenix.packages.${stdenv.hostPlatform.system}.default
       gnupg
       gh
       # devenv
