@@ -174,7 +174,7 @@ services.traefik = {
             };
             http.tls = {
               certResolver = "cloudflare";
-              domains = [{ main = "n0t3x1l.dev"; sans = [ "*.n0t3x1l.dev" ]; }];
+              domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
             };
           };
         };
@@ -195,7 +195,7 @@ services.traefik = {
         http = {
           routers = {
             immich = {
-              rule = "Host(`immich.n0t3x1l.dev`)";
+              rule = "Host(`immich.kyrena.dev`)";
               entryPoints = ["websecure"];
               service = "immich";
               tls = {
