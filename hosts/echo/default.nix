@@ -152,95 +152,93 @@ in
     enable = true;
   };
 
-services.traefik = {
-      enable = true;
-      
-
-      staticConfigOptions = {
-        entryPoints = {
-          web = {
-            address = ":80";
-            http.redirections.entryPoint = {
-              to = "websecure";
-              scheme = "https";
-              permanent = true;
-            };
-          };
-
-          websecure = {
-            address = ":443";
-            forwardedHeaders = {
-              trustedIPs = ["127.0.0.1/32" "::1/128" "192.168.1.0/24"];
-            };
-            http.tls = {
-              certResolver = "cloudflare";
-              domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
-            };
+  services.traefik = {
+    enable = true;
+    
+    staticConfigOptions = {
+      entryPoints = {
+        web = {
+          address = ":80";
+          http.redirections.entryPoint = {
+            to = "websecure";
+            scheme = "https";
+            permanent = true;
           };
         };
-
-        certificatesResolvers.cloudflare.acme = {
-          email = "exil@kyrena.dev";
-          storage = "/var/lib/traefik/acme.json";
-          dnsChallenge = {
-            provider = "cloudflare";
-            resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
+        websecure = {
+          address = ":443";
+          forwardedHeaders = {
+            trustedIPs = ["127.0.0.1/32" "::1/128" "192.168.1.0/24"];
           };
-          # Add the Cloudflare API token
-          # dnsChallenge.env.CF_DNS_API_TOKEN = "your-cloudflare-api-token";
+          # Add this transport section for Immich timeout handling
+          transport = {
+            respondingTimeouts = {
+              readTimeout = "600s";
+              writeTimeout = "600s";
+              idleTimeout = "600s";
+            };
+          };
+          http.tls = {
+            certResolver = "cloudflare";
+            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
+          };
         };
       };
-
-      dynamicConfigOptions = {
-        http = {
-          routers = {
-            immich = {
-              rule = "Host(`immich.kyrena.dev`)";
-              entryPoints = ["websecure"];
-              service = "immich";
-              tls = {
-                certResolver = "cloudflare";
-              };
-            };
-            jellyfin = {
-              rule = "Host(`jellyfin.kyrena.dev`)";
-              entryPoints = ["websecure"];
-              service = "jellyfin";
-              tls = {
-                certResolver = "cloudflare";
-              };
-            };
-
-            transmission = {
-              rule = "Host(`dl.kyrena.dev`)";
-              entryPoints = ["websecure"];
-              service = "transmission";
-              tls = {
-                certResolver = "cloudflare";
-              };
-            };
-          };
-
-          services = {
-            jellyfin.loadBalancer.servers = [
-              {
-                url = "http://127.0.0.1:8096";
-              }
-            ];
-
-            immich.loadBalancer.servers = [
-              { url = "http://127.0.0.1:2283"; }
-            ];
-
-            transmission.loadBalancer.servers = [
-              {
-                url = "http://127.0.0.1:9091";
-              }
-            ];
-          };
+      certificatesResolvers.cloudflare.acme = {
+        email = "exil@kyrena.dev";
+        storage = "/var/lib/traefik/acme.json";
+        dnsChallenge = {
+          provider = "cloudflare";
+          resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
         };
       };
     };
+    dynamicConfigOptions = {
+      http = {
+        routers = {
+          immich = {
+            rule = "Host(`immich.kyrena.dev`)";
+            entryPoints = ["websecure"];
+            service = "immich";
+            tls = {
+              certResolver = "cloudflare";
+            };
+          };
+          jellyfin = {
+            rule = "Host(`jellyfin.kyrena.dev`)";
+            entryPoints = ["websecure"];
+            service = "jellyfin";
+            tls = {
+              certResolver = "cloudflare";
+            };
+          };
+          transmission = {
+            rule = "Host(`dl.kyrena.dev`)";
+            entryPoints = ["websecure"];
+            service = "transmission";
+            tls = {
+              certResolver = "cloudflare";
+            };
+          };
+        };
+        services = {
+          jellyfin.loadBalancer.servers = [
+            {
+              url = "http://127.0.0.1:8096";
+            }
+          ];
+          immich.loadBalancer.servers = [
+            { url = "http://127.0.0.1:2283"; }
+          ];
+          transmission.loadBalancer.servers = [
+            {
+              url = "http://127.0.0.1:9091";
+            }
+          ];
+        };
+      };
+    };
+  };
 services.traefik.environmentFiles = [
         # config.age.secrets."cloudflare/email".path
         config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
