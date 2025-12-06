@@ -10,5 +10,5 @@ in {
   "system/echo-user-pwd.age".publicKeys = [echo_key];
   "reddit/reddit-cleaner.age".publicKeys = [echo_key];
   "deluge/auth.age".publicKeys = [sky_key];
-  "immich/index.age".publicKeys = [echo_key];
+  "immich/server.age".publicKeys = [echo_key];
 }
