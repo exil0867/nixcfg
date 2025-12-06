@@ -11,4 +11,5 @@ in {
   "reddit/reddit-cleaner.age".publicKeys = [echo_key];
   "deluge/auth.age".publicKeys = [sky_key];
   "immich/server.age".publicKeys = [echo_key];
+  "immich/sync.age".publicKeys = [personal_key];
 }

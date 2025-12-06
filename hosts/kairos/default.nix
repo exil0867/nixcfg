@@ -10,6 +10,7 @@ in
     ../../modules/programs/games.nix
     ../../modules/services/rclone-sftp.nix
     ../../modules/services/mounter.nix
+    ../../modules/services/immich-sync.nix
     ../../modules/services/sync-secrets.nix
     ../../modules/desktops/virtualisation/docker.nix
   ] ++
@@ -67,6 +68,21 @@ in
   services.libinput.mouse.accelProfile = "flat";
 
   services.pulseaudio.enable = false;
+  age.secrets."immich/sync" = {
+    file = ../../secrets-sync/immich/sync.age;
+    owner = "exil0681"; # Service user must own the secret file
+    mode = "0400";
+  };
+
+  services.immich-sync = {
+    enable = true;
+    user = "exil0681";
+    environmentFile = config.age.secrets."immich/sync".path;
+    paths = [ "/home/exil0681/Downloads/" ];
+    deleteUploaded = true;
+    deleteDuplicates = true;
+    concurrency = 5; 
+  };
 
   plasma = {
     enable = true;
