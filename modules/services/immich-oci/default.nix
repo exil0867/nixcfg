@@ -23,7 +23,7 @@ in {
   };
 
   config = lib.mkIf config.services.immich-oci.enable {
-    age.secrets."immich/index".file = ../../../secrets-sync/immich/index.age;
+    age.secrets."immich/server".file = ../../../secrets-sync/immich/server.age;
     systemd.tmpfiles.rules = map (x: "d ${x} 0775 exil0681 users - -") directories;
     
     # Create the dedicated network for the containers
@@ -47,7 +47,7 @@ in {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${immichVersion}";
         autoStart = true;
-        environmentFiles = [ config.age.secrets."immich/index".path ];
+        environmentFiles = [ config.age.secrets."immich/server".path ];
         user = "1001";
         environment = {
           TZ = "Africa/Tunis";
@@ -100,7 +100,7 @@ in {
         image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0";
         user = "1001";
         autoStart = true;
-        environmentFiles = [ config.age.secrets."immich/index".path ];
+        environmentFiles = [ config.age.secrets."immich/server".path ];
         environment = {
           POSTGRES_USER = "postgres";
           POSTGRES_DB = "immich";
