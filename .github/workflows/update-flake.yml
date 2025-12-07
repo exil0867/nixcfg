@@ -1,0 +1,95 @@
+name: Update Flake Lockfile
+
+on:
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-flake:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Configure Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v3
+
+      - name: Update flake lockfile
+        run: nix flake update
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet flake.lock; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get lockfile summary
+        if: steps.check_changes.outputs.has_changes == 'true'
+        id: lockfile_summary
+        run: |
+          echo "summary<<EOF" >> $GITHUB_OUTPUT
+          nix flake metadata --json | jq -r '.locks.nodes | to_entries | map(select(.key != "root")) | map("- **\(.key)**: \(.value.original.owner // "N/A")/\(.value.original.repo // .value.original.url // "N/A") (\(.value.locked.rev[0:7] // "N/A"))") | join("\n")' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update flake lockfile"
+          title: "🔄 Update NixOS Flake Dependencies"
+          body: |
+            ## Automated Flake Lockfile Update
+            
+            This PR updates the flake lockfile with the latest available versions.
+            
+            ### Updated Dependencies
+            ${{ steps.lockfile_summary.outputs.summary }}
+            
+            ### Testing Required ✅
+            
+            Before merging, please test this lockfile on **all hosts**:
+            
+            - [ ] **kairos** - `sudo nixos-rebuild switch --flake .#kairos`
+            - [ ] **echo** - `sudo nixos-rebuild switch --flake .#echo`
+            - [ ] **sky** - `sudo nixos-rebuild switch --flake .#sky`
+            
+            ### Testing Instructions
+            
+            1. Pull this branch locally:
+               ```bash
+               git fetch origin
+               git checkout update-flake-lockfile
+               ```
+            
+            2. Test on each machine:
+               ```bash
+               sudo nixos-rebuild switch --flake .#<hostname>
+               ```
+            
+            3. Verify all services and functionality work correctly
+            
+            4. Check the boxes above as you complete testing
+            
+            5. Merge when all hosts pass
+            
+            ---
+            
+            🤖 *This PR was automatically created by GitHub Actions*
+          branch: update-flake-lockfile
+          delete-branch: true
+          labels: |
+            automated
+            dependencies
