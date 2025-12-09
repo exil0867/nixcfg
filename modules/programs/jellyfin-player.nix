@@ -17,21 +17,21 @@ in {
       jellyfin-media-player
     ];
 
-    home-manager.users.${vars.user} = {
-      xdg.desktopEntries.jellyfin-media-player = {
-        name = "Jellyfin Media Player";
-        genericName = "Media Player";
-        exec = 
-          if cfg.useXcb 
-          then "jellyfinmediaplayer --platform=xcb %U"
-          else "jellyfinmediaplayer %U";
-        icon = "jellyfin-media-player";
-        comment = "Jellyfin Media Player";
-        categories = [ "AudioVideo" "Video" "Player" ];
-        settings = {
-          TryExec = "jellyfinmediaplayer";
-        };
-      };
-    };
+    # home-manager.users.${vars.user} = {
+    #   xdg.desktopEntries.jellyfin-media-player = {
+    #     name = "Jellyfin Media Player";
+    #     genericName = "Media Player";
+    #     exec = 
+    #       if cfg.useXcb 
+    #       then "jellyfinmediaplayer --platform=xcb %U"
+    #       else "jellyfinmediaplayer %U";
+    #     icon = "jellyfin-media-player";
+    #     comment = "Jellyfin Media Player";
+    #     categories = [ "AudioVideo" "Video" "Player" ];
+    #     settings = {
+    #       TryExec = "jellyfinmediaplayer";
+    #     };
+    #   };
+    # };
   };
 }

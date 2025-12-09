@@ -83,11 +83,11 @@ in
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
     # Jellyfin Configuration
@@ -109,7 +109,7 @@ in
 
   # Transmission Configuration
   services.transmission = {
-    enable = true;
+    enable = false;
     openRPCPort = true;
     package = system-definition.transmission_4-gtk;
     settings = {
@@ -126,7 +126,7 @@ in
   age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
     file = ../../secrets-sync/cloudflare/kyrena.dev-tunnel-echo2world.age;
     owner = vars.user;
-    group = config.services.cloudflared.group;
+    # group = config.services.cloudflared.group;
     mode = "400";
   };
 
@@ -274,14 +274,14 @@ services.traefik.environmentFiles = [
   };
 
   services.reddit-auto-delete = {
-    enable = true;
+    enable = false;
     interval = "72h";
     environmentFile = config.age.secrets."reddit/reddit-cleaner".path;
   };
 
   services.cloudflared = {
     enable = true;
-    user = vars.user;
+    # user = vars.user;
     tunnels = {
       "64911839-8e12-46f9-9f31-2e8a84fd5406" = {
         credentialsFile = "${config.age.secrets."cloudflare/kyrena.dev-tunnel-echo2world".path}";
@@ -294,7 +294,7 @@ services.traefik.environmentFiles = [
   };
 
   jellyfin-player = {
-    enable = true;
+    enable = false;
   };
 
   # System Packages
@@ -304,12 +304,12 @@ services.traefik.environmentFiles = [
     transmission_4-gtk
     git
     curl
-    nginx
+    # nginx
     bottles
     certbot
-    librewolf
-    tailscale
-    headscale
+    # librewolf
+    # tailscale
+    # headscale
     # postgresql_14
     # postgresql14Packages.pgvecto-rs
   ]) ++ (with system-definition.kdePackages; [
@@ -324,7 +324,7 @@ services.traefik.environmentFiles = [
   # Home Manager Configuration
   home-manager.users.${vars.user} = {
     imports = [
-      inputs.plasma-manager-stable.homeManagerModules.plasma-manager
+      inputs.plasma-manager-stable.homeModules.plasma-manager
     ];
   };
 }
