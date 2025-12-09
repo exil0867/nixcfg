@@ -6,6 +6,8 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules/services/sync-secrets.nix
+    ../../modules/services/transmission.nix
+    ../../modules/programs/htpc-downloader.nix
   ];
 
   # Boot Options
@@ -25,6 +27,7 @@ in
   programs.nix-ld.enable = true;
 
   users.users.${vars.user} = {
+    extraGroups = [ "transmission" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInjI+XzPKAmRH/S/zpx4XVusY8W0IbG6cithnOZBZJo exil@n0t3x1l.dev"
@@ -54,6 +57,18 @@ in
     dataDir = "/data/jellyfin";
     user = vars.user;
   };
+
+  services.transmission.settings = {
+    download-dir = "/home/${vars.user}/Data/downbox";
+    peer-limit-global = 200;
+  };
+
+  programs.htpc-downloader = {
+    enable = true;
+    mediaDir = "/home/${vars.user}/Data/downbox";
+    user = vars.user;
+  };
+
 
   syncSecrets = {
     enable = true;

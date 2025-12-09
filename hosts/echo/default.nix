@@ -9,6 +9,8 @@ in
     ../../modules/services/sync-secrets.nix
     ../../modules/services/immich-oci
     ../../modules/desktops/virtualisation/docker.nix
+    ../../modules/services/transmission.nix
+    ../../modules/programs/htpc-downloader.nix
   ] ++
   (import ../../modules/desktops/virtualisation);
 
@@ -27,6 +29,7 @@ in
   };
 
   users.users.${vars.user} = {
+    extraGroups = [ "transmission" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
     ];
@@ -107,17 +110,15 @@ in
   # OpenSSH
   services.openssh.enable = true;
 
-  # Transmission Configuration
-  services.transmission = {
-    enable = false;
-    openRPCPort = true;
-    package = system-definition.transmission_4-gtk;
-    settings = {
-      rpc-bind-address = "0.0.0.0";
-      rpc-whitelist-enable = false;
-      rpc-whitelist = "127.0.0.1,10.0.0.1,192.168.122.1";
-      download-dir = "/mnt/1TB-ST1000DM010-2EP102/downbox";
-    };
+  services.transmission.settings = {
+    download-dir = "/mnt/1TB-ST1000DM010-2EP102/downbox/htpc/other";
+    peer-limit-global = 200;
+  };
+
+  programs.htpc-downloader = {
+    enable = true;
+    mediaDir = "/mnt/1TB-ST1000DM010-2EP102/downbox";
+    user = vars.user;
   };
 
   # Tailscale Configuration
