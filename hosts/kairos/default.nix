@@ -13,7 +13,7 @@ in
     ../../modules/services/immich-sync.nix
     ../../modules/services/sync-secrets.nix
     ../../modules/desktops/virtualisation/docker.nix
-    ../../modules/services/metrics-agent.nix
+    ../../modules/services/metrics-agent
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
