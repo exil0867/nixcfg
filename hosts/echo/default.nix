@@ -11,6 +11,7 @@ in
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
+    ../../modules/services/metrics-agent.nix
   ] ++
   (import ../../modules/desktops/virtualisation);
 
@@ -113,6 +114,15 @@ in
   services.transmission.settings = {
     download-dir = "/mnt/1TB-ST1000DM010-2EP102/downbox/htpc/other";
     peer-limit-global = 200;
+  };
+
+  age.secrets."metrics/token".file = ../../secrets-sync/metrics/token.age;
+
+  services.metrics-agent = {
+    enable = true;
+    serverUrl = "https://exil.kyrena.dev";
+    authTokenFile = config.age.secrets."metrics/token".path;
+    interval = "5s";
   };
 
   programs.htpc-downloader = {
