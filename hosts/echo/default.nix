@@ -11,7 +11,7 @@ in
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
-    ../../modules/services/metrics-agent.nix
+    ../../modules/services/metrics-agent
   ] ++
   (import ../../modules/desktops/virtualisation);
 
