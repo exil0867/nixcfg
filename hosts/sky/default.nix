@@ -8,6 +8,7 @@ in
     ../../modules/services/sync-secrets.nix
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
+    ../../modules/services/personal-website
   ];
 
   # Boot Options
@@ -23,6 +24,13 @@ in
       timeout = 5;
     };
   };
+
+  # Personal Website Configuration
+  services.personal-website = {
+    enable = true;
+    domain = "exil.kyrena.dev";
+  };
+
 
   programs.nix-ld.enable = true;
 
@@ -152,24 +160,11 @@ in
               certResolver = "letsencrypt";
             };
           };
-          # Add Deluge router
-          deluge = {
-            rule = "Host(`dlsky.kyrena.dev`)";
-            entryPoints = ["websecure"];
-            service = "deluge";
-            tls = {
-              certResolver = "letsencrypt";
-            };
-          };
         };
 
         services = {
           jellyfin.loadBalancer.servers = [{
             url = "http://127.0.0.1:8096";
-          }];
-          # Add Deluge service
-          deluge.loadBalancer.servers = [{
-            url = "http://127.0.0.1:8112";
           }];
         };
       };

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="./exil - Personal page">
+    <title>./exil</title>
+    <link rel="icon" href="assets/avatar.jpeg">
+    <link rel="apple-touch-icon" href="assets/avatar.jpeg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #efff00;
+            --secondary-color: #fe00cf;
+            --tertiary-color: #7c87d2;
+            --quaternary-color: #656565;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow: scroll;
+            overflow-x: hidden;
+            scrollbar-width: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        body {
+            margin: 0;
+            background-color: #000;
+            font-weight: 400;
+            color: var(--primary-color);
+            padding: 75px 15px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            font-family: 'Inconsolata', monospace;
+            font-size: 1.070rem;
+            line-height: 1.65;
+        }
+
+        @media screen and (max-width:767.98px) {
+            body {
+                padding: 60px 15px;
+                font-size: 1rem;
+            }
+        }
+
+        pre {
+            font-size: 0.850em;
+            display: block;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        pre, code {
+            font-family: monospace, monospace;
+            color: var(--quaternary-color);
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+            margin-bottom: 1rem;
+        }
+
+        ul li {
+            list-style: none;
+            margin: 0;
+        }
+
+        ul li:not(:last-child) {
+            margin-bottom: 0.65em;
+        }
+
+        ul li > p {
+            margin: 0;
+        }
+
+        .small-header {
+            font-weight: bolder;
+            color: var(--secondary-color);
+        }
+
+        a {
+            color: var(--tertiary-color);
+        }
+
+        img {
+            height: auto;
+            max-width: 100%;
+            vertical-align: middle;
+        }
+
+        [hidden] {
+            display: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 0;
+            margin-bottom: 0.7rem;
+            font-weight: bolder;
+            line-height: 1.8;
+            color: var(--secondary-color);
+        }
+
+        h1 {
+            font-size: calc(1.375rem + 1.5vw);
+        }
+
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        h2 {
+            font-size: calc(1.325rem + 0.9vw);
+        }
+
+        @media (min-width: 1200px) {
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        h3 {
+            font-size: calc(1.3rem + 0.6vw);
+        }
+
+        @media (min-width: 1200px) {
+            h3 {
+                font-size: 1.75rem;
+            }
+        }
+
+        h4 {
+            font-size: calc(1.275rem + 0.3vw);
+        }
+
+        @media (min-width: 1200px) {
+            h4 {
+                font-size: 1.5rem;
+            }
+        }
+
+        p {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.75em;
+        }
+
+        small {
+            display: block;
+        }
+
+        section:not(:last-child) {
+            margin-bottom: 34px;
+        }
+
+        section > *:first-child {
+            margin-top: 0;
+        }
+
+        section > *:last-child {
+            margin-bottom: 0;
+        }
+
+        .avatar {
+            margin-top: 1rem;
+            margin-bottom: 1.7rem;
+            border-radius: 50%;
+            width: 150px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 390px;
+        }
+
+        .bio-padding {
+            padding: 0 38px;
+        }
+
+        .footer-section {
+            margin-top: 3rem;
+        }
+
+        .repo-link {
+            text-transform: uppercase;
+            color: #07d404;
+            text-decoration: none;
+        }
+
+        .second-bio {
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- About Me -->
+        <section>
+            <h1>
+                <a class="repo-link" target="_blank" title="The source code of this page" 
+                   href="https://github.com/exil0867/3x1l" rel="noreferrer">
+                    3x!1
+                </a>
+            </h1>
+            <img src="assets/avatar.jpeg" class="avatar" alt="Avatar" onclick="toggleBio()">
+            <h4>exiluuuuuuu</h4>
+            <div id="secondBio" class="second-bio" hidden>
+                <p><small>(・_・ヾ)</small></p>
+            </div>
+            <div class="bio-padding">
+                <p>__software_dev__</p>
+                <p>__sysadmin__</p>
+                <p>__ui/ux_design__</p>
+            </div>
+        </section>
+
+        <!-- Intro -->
+        <section>
+            <small class="small-header">~</small>
+            <p>
+                <a href="https://github.com/exil0867/nixcfg" target="_blank">My Homelab setup</a>
+            </p>
+        </section>
+
+        <!-- Socials -->
+        <section>
+            <h4>My @'s</h4>
+            <ul>
+                <li><p><a href="tg://resolve?domain=exil0967">Telegram</a></p></li>
+                <li><p><a href="https://github.com/exil0867" target="_blank">Github</a></p></li>
+                <li><p><a href="https://matrix.to/#/@exil0816:ira.moe" target="_blank">Matrix</a></p></li>
+                <li><p><a href="https://x.com/exil0867" target="_blank">X</a></p></li>
+                <li><p><a href="https://steamcommunity.com/id/exil0839" target="_blank">Steam</a></p></li>
+                <li><p><a href="https://anilist.co/user/exil0685" target="_blank">AniList</a></p></li>
+                <li><p><a href="https://last.fm/user/exil0908" target="_blank">Last.fm</a></p></li>
+            </ul>
+        </section>
+
+        <!-- Contact -->
+        <section>
+            <h4>Contact</h4>
+            <p>
+                Email: <a href="mailto:contact@n0t3x1l.dev">contact@n0t3x1l.dev</a>
+            </p>
+        </section>
+
+        <!-- Support -->
+        <section>
+            <h4>Support</h4>
+            <ul>
+                <li>
+                    <p>GitHub Sponsors:</p>
+                    <pre><a target="_blank" rel="noreferrer" href="https://github.com/sponsors/exil0867">sponsors/exil0867</a></pre>
+                </li>
+                <li>
+                    <p>BTC:</p>
+                    <pre>17nFjdytthofdha6aSmBDSHnb9NcSAhd8Z</pre>
+                </li>
+                <li>
+                    <p>BTC (Bech32):</p>
+                    <pre>bc1q0rhwyzc8upxjzn0qddz2rhv86xh3qvsydjn865</pre>
+                </li>
+                <li>
+                    <p>ETH:</p>
+                    <pre>0x677C5728D3E26152187Cc98E06CB47A58EF58eaA</pre>
+                </li>
+                <li>
+                    <p>XMR:</p>
+                    <pre>46SXLx7PGvm4u7FnDvNvoPYu48AP4fUfbHwCDw6koxbhUrT1bSYvuHe7et7q8uSJ52NJApxXUyLmX7AaJP7ysXcLRyeZaaz</pre>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Resources -->
+        <section>
+            <h4>Good resources</h4>
+            <ul>
+                <li><p><a href="https://igwiki.lyci.de/wiki/Main_Page" target="_blank">InstallGentoo Wiki</a></p></li>
+                <li><p><a href="https://boards.4channel.org/g/#catalog" target="_blank">/g/</a></p></li>
+                <li><p><a href="https://lainchan.org" target="_blank">LAINCHAN</a></p></li>
+                <li><p><a href="https://www.privacyguides.org" target="_blank">PrivacyGuides</a></p></li>
+                <li><p><a href="https://news.ycombinator.com" target="_blank">HackerNews</a></p></li>
+                <li><p><a href="https://wiki.archlinux.org/title/Table_of_contents" target="_blank">ArchWiki</a></p></li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <section class="footer-section">
+            <small>
+                Check out the 
+                <a href="https://github.com/exil0867/nixcfg/tree/master/modules/services/personal-website" target="_blank">source code</a>.
+            </small>
+        </section>
+    </div>
+
+    <script>
+        // Toggle bio easter egg
+        function toggleBio() {
+            const bio = document.getElementById('secondBio');
+            bio.hidden = !bio.hidden;
+        }
+    </script>
+</body>
+</html>
