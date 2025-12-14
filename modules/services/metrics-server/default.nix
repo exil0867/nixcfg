@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.metrics-server;
   
-  metricsServerScript = ./server.py;
+  serverScript = ./server.py;
 in
 {
   options.services.metrics-server = {
@@ -17,15 +17,10 @@ in
       description = "Port for HTTP metrics endpoint";
     };
     
-    wsPort = mkOption {
-      type = types.port;
-      default = 3002;
-      description = "Port for WebSocket server (unused, kept for compatibility)";
-    };
-    
     authTokenFile = mkOption {
       type = types.path;
       description = "Path to file containing authentication token";
+      default = config.age.secrets."metrics/token".path;
     };
   };
   
@@ -39,17 +34,17 @@ in
         Type = "simple";
         Restart = "always";
         RestartSec = "10s";
-        # 2. Run the external script with environment variables
-        ExecStart = "${pkgs.python3}/bin/python3 ${metricsServerScript}";
+        ExecStart = "${pkgs.python3}/bin/python ${serverScript}";
         Environment = [
           "SERVER_PORT=${toString cfg.port}"
           "AUTH_TOKEN_FILE=${cfg.authTokenFile}"
         ];
       };
+      
+      path = with pkgs; [ python3 ];
     };
     
-    # Add Traefik routes for Server-Sent Events
-    services.traefik.dynamicConfigOptions = {
+    services.traefik.dynamicConfigOptions = mkIf config.services.traefik.enable {
       http.routers.metrics-api = {
         rule = "Host(`exil.kyrena.dev`) && PathPrefix(`/api/metrics`)";
         entryPoints = [ "websecure" ];
@@ -60,11 +55,15 @@ in
       http.routers.metrics-sse = {
         rule = "Host(`exil.kyrena.dev`) && Path(`/ws/metrics`)";
         entryPoints = [ "websecure" ];
-        service = "metrics-api";
+        service = "metrics-sse";
         tls.certResolver = "letsencrypt";
       };
       
       http.services.metrics-api.loadBalancer.servers = [{
+        url = "http://127.0.0.1:${toString cfg.port}";
+      }];
+      
+      http.services.metrics-sse.loadBalancer.servers = [{
         url = "http://127.0.0.1:${toString cfg.port}";
       }];
     };

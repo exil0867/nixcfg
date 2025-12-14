@@ -219,11 +219,11 @@
         }
 
         .host-metrics {
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.8rem;
             text-align: left;
-            padding: 0.8rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 3px solid var(--tertiary-color);
+            padding: 0.5rem 0.6rem;
+            background: none;
+            border-left: 2px solid var(--tertiary-color);
         }
 
         .host-metrics:last-child {
@@ -240,12 +240,10 @@
         }
 
         .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-left: 8px;
+            width: 6px;
+            height: 6px;
         }
+
 
         .status-online {
             background-color: var(--green);
@@ -258,31 +256,16 @@
 
         .metric-line {
             font-family: 'Inconsolata', monospace;
-            font-size: 0.9rem;
-            margin: 0.3rem 0;
+            font-size: 0.85rem;
+            margin: 0.15rem 0;
             color: var(--primary-color);
+            letter-spacing: 0.02em;
         }
 
         .metric-label {
             display: inline-block;
             width: 45px;
             color: var(--quaternary-color);
-        }
-
-        .metric-bar {
-            display: inline-block;
-            background: rgba(124, 135, 210, 0.2);
-            height: 12px;
-            width: 150px;
-            vertical-align: middle;
-            margin: 0 8px;
-            border: 1px solid var(--tertiary-color);
-        }
-
-        .metric-fill {
-            height: 100%;
-            background: var(--tertiary-color);
-            transition: width 0.3s ease;
         }
 
         .metric-value {
@@ -423,116 +406,140 @@
     </div>
 
     <script>
-        // Toggle bio easter egg
-        function toggleBio() {
-            const bio = document.getElementById('secondBio');
-            bio.hidden = !bio.hidden;
+    // Toggle bio easter egg
+    function toggleBio() {
+        const bio = document.getElementById('secondBio');
+        bio.hidden = !bio.hidden;
+    }
+
+    // Server-Sent Events connection for real-time metrics
+    let eventSource = null;
+    let reconnectTimer = null;
+
+    function connectSSE() {
+        if (eventSource) {
+            eventSource.close();
         }
-
-        // Server-Sent Events connection for real-time metrics
-        let eventSource = null;
-
-        function connectSSE() {
-            const sseUrl = `${window.location.protocol}//${window.location.host}/ws/metrics`;
-            
-            eventSource = new EventSource(sseUrl);
-            
-            eventSource.onopen = () => {
-                console.log('SSE connected');
-                updateConnectionStatus(true);
-            };
-            
-            eventSource.onmessage = (event) => {
-                try {
-                    const metrics = JSON.parse(event.data);
-                    updateMetrics(metrics);
-                } catch (e) {
-                    console.error('Failed to parse metrics:', e);
+        
+        const sseUrl = `${window.location.protocol}//${window.location.host}/ws/metrics`;
+        console.log('Connecting to SSE:', sseUrl);
+        
+        eventSource = new EventSource(sseUrl);
+        
+        eventSource.onopen = () => {
+            console.log('SSE connected');
+            updateConnectionStatus(true);
+            if (reconnectTimer) {
+                clearTimeout(reconnectTimer);
+                reconnectTimer = null;
+            }
+        };
+        
+        eventSource.onmessage = (event) => {
+            try {
+                // Skip keep-alive comments
+                if (event.data.trim().startsWith(':')) {
+                    return;
                 }
-            };
+                
+                const metrics = JSON.parse(event.data);
+                updateMetrics(metrics);
+            } catch (e) {
+                console.error('Failed to parse metrics:', e, 'Data:', event.data);
+            }
+        };
+        
+        eventSource.onerror = (error) => {
+            console.error('SSE error:', error);
+            updateConnectionStatus(false);
             
-            eventSource.onerror = (error) => {
-                console.error('SSE error:', error);
-                updateConnectionStatus(false);
-                
-                // EventSource automatically reconnects, but we can force close/reopen
+            // Close and reconnect
+            if (eventSource) {
                 eventSource.close();
-                
-                // Reconnect after 5 seconds
-                setTimeout(() => {
+                eventSource = null;
+            }
+            
+            // Reconnect after 3 seconds
+            if (!reconnectTimer) {
+                reconnectTimer = setTimeout(() => {
                     console.log('Attempting to reconnect...');
                     connectSSE();
-                }, 5000);
-            };
-        }
-
-        function updateConnectionStatus(connected) {
-            const statusEl = document.getElementById('connection-status');
-            if (connected) {
-                statusEl.textContent = 'Connected';
-                statusEl.className = 'connection-status connected';
-            } else {
-                statusEl.textContent = 'Disconnected';
-                statusEl.className = 'connection-status disconnected';
+                }, 3000);
             }
-        }
+        };
+    }
 
-        function updateMetrics(metrics) {
-            const container = document.getElementById('metrics-container');
+    function updateConnectionStatus(connected) {
+        const statusEl = document.getElementById('connection-status');
+        if (connected) {
+            statusEl.textContent = 'Connected';
+            statusEl.className = 'connection-status connected';
+        } else {
+            statusEl.textContent = 'Disconnected - Reconnecting...';
+            statusEl.className = 'connection-status disconnected';
+        }
+    }
+
+    function updateMetrics(metrics) {
+        const container = document.getElementById('metrics-container');
+        
+        // Sort hosts: kairos, echo, sky
+        const hostOrder = ['kairos', 'echo', 'sky'];
+        const sortedHosts = Object.keys(metrics).sort((a, b) => {
+            const indexA = hostOrder.indexOf(a);
+            const indexB = hostOrder.indexOf(b);
+            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+        });
+        
+        if (sortedHosts.length === 0) {
+            container.innerHTML = '<p style="color: var(--quaternary-color); text-align: center;">No metrics available</p>';
+            return;
+        }
+        
+        container.innerHTML = sortedHosts.map(hostname => {
+            const data = metrics[hostname];
+            const isOnline = data.status === 'online';
             
-            // Sort hosts: kairos, echo, sky
-            const hostOrder = ['kairos', 'echo', 'sky'];
-            const sortedHosts = Object.keys(metrics).sort((a, b) => {
-                return hostOrder.indexOf(a) - hostOrder.indexOf(b);
-            });
-            
-            if (sortedHosts.length === 0) {
-                container.innerHTML = '<p style="color: var(--quaternary-color); text-align: center;">No metrics available</p>';
-                return;
-            }
-            
-            container.innerHTML = sortedHosts.map(hostname => {
-                const data = metrics[hostname];
-                const isOnline = data.status === 'online';
-                
-                return `
-                    <div class="host-metrics">
-                        <div class="host-name">
-                            <span>${hostname}</span>
-                            <span class="status-indicator ${isOnline ? 'status-online' : 'status-offline'}"></span>
-                        </div>
-                        ${isOnline ? `
-                            <div class="metric-line">
-                                <span class="metric-label">CPU:</span>
-                                <span class="metric-bar">
-                                    <span class="metric-fill" style="width: ${data.cpu}%"></span>
-                                </span>
-                                <span class="metric-value">${data.cpu.toFixed(1)}%</span>
-                            </div>
-                            <div class="metric-line">
-                                <span class="metric-label">RAM:</span>
-                                <span class="metric-bar">
-                                    <span class="metric-fill" style="width: ${data.ram}%"></span>
-                                </span>
-                                <span class="metric-value">${data.ram.toFixed(1)}%</span>
-                            </div>
-                            ${data.gpu !== null ? `
-                                <div class="metric-line">
-                                    <span class="metric-label">GPU:</span>
-                                    <span class="metric-bar">
-                                        <span class="metric-fill" style="width: ${data.gpu}%"></span>
-                                    </span>
-                                    <span class="metric-value">${data.gpu}%</span>
-                                </div>
-                            ` : ''}
-                        ` : '<p style="color: var(--red); margin: 0;">Offline</p>'}
+            return `
+                <div class="host-metrics">
+                    <div class="host-name">
+                        <span>${hostname}</span>
+                        <span style="color: ${isOnline ? 'var(--green)' : 'var(--red)'}">
+                            ${isOnline ? 'online' : 'offline'}
+                        </span>
                     </div>
-                `;
-            }).join('');
-        }
+                    ${isOnline ? `
+                        <div class="metric-line">
+                            <span style="color: var(--quaternary-color)">CPU</span> ${(data.cpu || 0).toFixed(1)}%
+                        </div>
+                        <div class="metric-line">
+                            <span style="color: var(--quaternary-color)">MEM</span> ${(data.ram || 0).toFixed(1)}%
+                        </div>
+                        ${data.gpu !== null && data.gpu !== 'null' ? `
+                        <div class="metric-line">
+                            <span style="color: var(--quaternary-color)">GPU</span> ${data.gpu}%
+                        </div>
+                        ` : ''}
+                    ` : '<p style="color: var(--red); margin: 0; font-size: 0.9rem;">Offline - No recent data</p>'}
+                </div>
+            `;
+        }).join('');
+    }
 
-        // Connect on page load
-        connectSSE();
-    </script>
+    // Connect on page load
+    window.addEventListener('load', () => {
+        setTimeout(connectSSE, 1000); // Small delay to ensure page is loaded
+    });
+
+    // Reconnect when page becomes visible
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !eventSource) {
+            connectSSE();
+        }
+    });
+</script>
 </body>
 </html>

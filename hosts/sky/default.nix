@@ -67,14 +67,13 @@ in
 
   services.metrics-server = {
     enable = true;
-    authTokenFile = config.age.secrets."metrics/token".path;
   };
 
   services.metrics-agent = {
     enable = true;
     serverUrl = "https://exil.kyrena.dev";
     authTokenFile = config.age.secrets."metrics/token".path;
-    interval = "5s";
+    interval = 5;
   };
 
   # Jellyfin Configuration
