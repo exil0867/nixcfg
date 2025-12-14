@@ -328,21 +328,6 @@
             </div>
         </section>
 
-        <!-- System Metrics -->
-        <section>
-            <h4>System Status</h4>
-            <div class="metrics-section">
-                <div id="metrics-container">
-                    <p style="color: var(--quaternary-color); text-align: center;">
-                        Connecting to metrics server...
-                    </p>
-                </div>
-                <div class="connection-status" id="connection-status">
-                    ⚡ Connecting...
-                </div>
-            </div>
-        </section>
-
         <!-- Intro -->
         <section>
             <small class="small-header">~</small>
@@ -413,6 +398,21 @@
             </ul>
         </section>
 
+        <!-- System Metrics -->
+        <section>
+            <h4>System Status</h4>
+            <div class="metrics-section">
+                <div id="metrics-container">
+                    <p style="color: var(--quaternary-color); text-align: center;">
+                        Connecting to metrics server...
+                    </p>
+                </div>
+                <div class="connection-status" id="connection-status">
+                    ⚡ Connecting...
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <section class="footer-section">
             <small>
@@ -469,10 +469,10 @@
         function updateConnectionStatus(connected) {
             const statusEl = document.getElementById('connection-status');
             if (connected) {
-                statusEl.textContent = '⚡ Connected';
+                statusEl.textContent = 'Connected';
                 statusEl.className = 'connection-status connected';
             } else {
-                statusEl.textContent = '⚠ Disconnected';
+                statusEl.textContent = 'Disconnected';
                 statusEl.className = 'connection-status disconnected';
             }
         }

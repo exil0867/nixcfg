@@ -9,8 +9,8 @@ in
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
     ../../modules/services/personal-website
-    ../../modules/services/metrics-server.nix
-    ../../modules/services/metrics-agent.nix
+    ../../modules/services/metrics-server
+    ../../modules/services/metrics-agent
   ];
 
   # Boot Options

@@ -5,16 +5,18 @@ with lib;
 let
   cfg = config.services.metrics-agent;
   
-  metricsScript = pkgs.writeShellScript "collect-metrics" ''
-    #!${pkgs.bash}/bin/bash
+  collectMetricsScript = pkgs.writeShellScriptBin "collect-metrics" ''
+    #!/usr/bin/env bash
     set -euo pipefail
     
-    # Add common utilities to PATH
-    export PATH="${pkgs.nettools}/bin:${pkgs.procps}/bin:${pkgs.gnugrep}/bin:${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.gawk}/bin:${pkgs.curl}/bin:$PATH"
+    HOSTNAME=$(cat /proc/sys/kernel/hostname)
+    AUTH_TOKEN_PATH="$1"
+    SERVER_URL="$2"
     
-    HOSTNAME=$(hostname)
+    # Read auth token
+    AUTH_TOKEN="$(cat "$AUTH_TOKEN_PATH")"
     
-    # CPU usage (1 second average)
+    # CPU usage
     CPU=$(top -bn2 -d 1 | grep "Cpu(s)" | tail -1 | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
     
     # RAM usage
@@ -39,13 +41,15 @@ let
     EOF
     )
     
-    # Send to metrics server with auth token
+    # Send to metrics server
     curl -X POST \
       -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $(cat ${cfg.authTokenFile})" \
+      -H "Authorization: Bearer $AUTH_TOKEN" \
       -d "$JSON" \
-      --max-time 5 \
-      "${cfg.serverUrl}/api/metrics" || true
+      --max-time 10 \
+      --silent \
+      --show-error \
+      "$SERVER_URL/api/metrics" 2>/dev/null || true
   '';
 in
 {
@@ -54,18 +58,18 @@ in
     
     serverUrl = mkOption {
       type = types.str;
+      default = "https://exil.kyrena.dev";
       description = "URL of the metrics server";
-      example = "https://exil.kyrena.dev";
     };
     
     authTokenFile = mkOption {
       type = types.path;
-      description = "Path to file containing authentication token (agenix secret)";
+      description = "Path to file containing authentication token";
     };
     
     interval = mkOption {
       type = types.str;
-      default = "5s";
+      default = "10s";
       description = "How often to send metrics";
     };
   };
@@ -81,11 +85,16 @@ in
         Type = "simple";
         Restart = "always";
         RestartSec = "10s";
+        Environment = [
+          "PATH=${lib.makeBinPath (with pkgs; [ coreutils curl procps gnugrep gnused gawk unixtools.top ])}"
+        ];
       };
       
       script = ''
         while true; do
-          ${metricsScript}
+          ${collectMetricsScript}/bin/collect-metrics \
+            "${cfg.authTokenFile}" \
+            "${cfg.serverUrl}"
           sleep ${cfg.interval}
         done
       '';
