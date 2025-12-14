@@ -9,6 +9,8 @@ in
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
     ../../modules/services/personal-website
+    ../../modules/services/metrics-server.nix
+    ../../modules/services/metrics-agent.nix
   ];
 
   # Boot Options
@@ -56,6 +58,23 @@ in
       PasswordAuthentication = false;
       PermitRootLogin = "no";
     };
+  };
+
+  age.secrets."metrics/token" = {
+    file = ../../secrets-sync/metrics/token.age;
+    mode = "0400";
+  };
+
+  services.metrics-server = {
+    enable = true;
+    authTokenFile = config.age.secrets."metrics/token".path;
+  };
+
+  services.metrics-agent = {
+    enable = true;
+    serverUrl = "https://exil.kyrena.dev";
+    authTokenFile = config.age.secrets."metrics/token".path;
+    interval = "5s";
   };
 
   # Jellyfin Configuration

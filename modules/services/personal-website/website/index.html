@@ -16,6 +16,8 @@
             --secondary-color: #fe00cf;
             --tertiary-color: #7c87d2;
             --quaternary-color: #656565;
+            --green: #07d404;
+            --red: #ff0000;
         }
 
         *, *::before, *::after {
@@ -200,12 +202,107 @@
 
         .repo-link {
             text-transform: uppercase;
-            color: #07d404;
+            color: var(--green);
             text-decoration: none;
         }
 
         .second-bio {
             font-weight: 300;
+        }
+
+        /* Metrics styles */
+        .metrics-section {
+            border: 1px solid var(--quaternary-color);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .host-metrics {
+            margin-bottom: 1.2rem;
+            text-align: left;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--tertiary-color);
+        }
+
+        .host-metrics:last-child {
+            margin-bottom: 0;
+        }
+
+        .host-name {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+
+        .status-online {
+            background-color: var(--green);
+            box-shadow: 0 0 5px var(--green);
+        }
+
+        .status-offline {
+            background-color: var(--red);
+        }
+
+        .metric-line {
+            font-family: 'Inconsolata', monospace;
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            display: inline-block;
+            width: 45px;
+            color: var(--quaternary-color);
+        }
+
+        .metric-bar {
+            display: inline-block;
+            background: rgba(124, 135, 210, 0.2);
+            height: 12px;
+            width: 150px;
+            vertical-align: middle;
+            margin: 0 8px;
+            border: 1px solid var(--tertiary-color);
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: var(--tertiary-color);
+            transition: width 0.3s ease;
+        }
+
+        .metric-value {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .connection-status {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--quaternary-color);
+            margin-top: 0.5rem;
+        }
+
+        .connection-status.connected {
+            color: var(--green);
+        }
+
+        .connection-status.disconnected {
+            color: var(--red);
         }
     </style>
 </head>
@@ -228,6 +325,21 @@
                 <p>__software_dev__</p>
                 <p>__sysadmin__</p>
                 <p>__ui/ux_design__</p>
+            </div>
+        </section>
+
+        <!-- System Metrics -->
+        <section>
+            <h4>System Status</h4>
+            <div class="metrics-section">
+                <div id="metrics-container">
+                    <p style="color: var(--quaternary-color); text-align: center;">
+                        Connecting to metrics server...
+                    </p>
+                </div>
+                <div class="connection-status" id="connection-status">
+                    ⚡ Connecting...
+                </div>
             </div>
         </section>
 
@@ -316,6 +428,111 @@
             const bio = document.getElementById('secondBio');
             bio.hidden = !bio.hidden;
         }
+
+        // Server-Sent Events connection for real-time metrics
+        let eventSource = null;
+
+        function connectSSE() {
+            const sseUrl = `${window.location.protocol}//${window.location.host}/ws/metrics`;
+            
+            eventSource = new EventSource(sseUrl);
+            
+            eventSource.onopen = () => {
+                console.log('SSE connected');
+                updateConnectionStatus(true);
+            };
+            
+            eventSource.onmessage = (event) => {
+                try {
+                    const metrics = JSON.parse(event.data);
+                    updateMetrics(metrics);
+                } catch (e) {
+                    console.error('Failed to parse metrics:', e);
+                }
+            };
+            
+            eventSource.onerror = (error) => {
+                console.error('SSE error:', error);
+                updateConnectionStatus(false);
+                
+                // EventSource automatically reconnects, but we can force close/reopen
+                eventSource.close();
+                
+                // Reconnect after 5 seconds
+                setTimeout(() => {
+                    console.log('Attempting to reconnect...');
+                    connectSSE();
+                }, 5000);
+            };
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusEl = document.getElementById('connection-status');
+            if (connected) {
+                statusEl.textContent = '⚡ Connected';
+                statusEl.className = 'connection-status connected';
+            } else {
+                statusEl.textContent = '⚠ Disconnected';
+                statusEl.className = 'connection-status disconnected';
+            }
+        }
+
+        function updateMetrics(metrics) {
+            const container = document.getElementById('metrics-container');
+            
+            // Sort hosts: kairos, echo, sky
+            const hostOrder = ['kairos', 'echo', 'sky'];
+            const sortedHosts = Object.keys(metrics).sort((a, b) => {
+                return hostOrder.indexOf(a) - hostOrder.indexOf(b);
+            });
+            
+            if (sortedHosts.length === 0) {
+                container.innerHTML = '<p style="color: var(--quaternary-color); text-align: center;">No metrics available</p>';
+                return;
+            }
+            
+            container.innerHTML = sortedHosts.map(hostname => {
+                const data = metrics[hostname];
+                const isOnline = data.status === 'online';
+                
+                return `
+                    <div class="host-metrics">
+                        <div class="host-name">
+                            <span>${hostname}</span>
+                            <span class="status-indicator ${isOnline ? 'status-online' : 'status-offline'}"></span>
+                        </div>
+                        ${isOnline ? `
+                            <div class="metric-line">
+                                <span class="metric-label">CPU:</span>
+                                <span class="metric-bar">
+                                    <span class="metric-fill" style="width: ${data.cpu}%"></span>
+                                </span>
+                                <span class="metric-value">${data.cpu.toFixed(1)}%</span>
+                            </div>
+                            <div class="metric-line">
+                                <span class="metric-label">RAM:</span>
+                                <span class="metric-bar">
+                                    <span class="metric-fill" style="width: ${data.ram}%"></span>
+                                </span>
+                                <span class="metric-value">${data.ram.toFixed(1)}%</span>
+                            </div>
+                            ${data.gpu !== null ? `
+                                <div class="metric-line">
+                                    <span class="metric-label">GPU:</span>
+                                    <span class="metric-bar">
+                                        <span class="metric-fill" style="width: ${data.gpu}%"></span>
+                                    </span>
+                                    <span class="metric-value">${data.gpu}%</span>
+                                </div>
+                            ` : ''}
+                        ` : '<p style="color: var(--red); margin: 0;">Offline</p>'}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Connect on page load
+        connectSSE();
     </script>
 </body>
 </html>

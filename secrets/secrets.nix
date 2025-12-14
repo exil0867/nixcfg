@@ -12,4 +12,5 @@ in {
   "deluge/auth.age".publicKeys = [sky_key];
   "immich/server.age".publicKeys = [echo_key];
   "immich/sync.age".publicKeys = [personal_key];
+  "metrics/token.age".publicKeys = [personal_key echo_key sky_key];
 }
