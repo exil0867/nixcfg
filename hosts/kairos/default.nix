@@ -44,7 +44,7 @@ in
     enable = true;
     serverUrl = "https://exil.kyrena.dev";
     authTokenFile = config.age.secrets."metrics/token".path;
-    interval = "5s";
+    interval = 5;
   };
 
   mounter.mounts = [
