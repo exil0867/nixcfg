@@ -13,6 +13,7 @@ in
     ../../modules/services/immich-sync.nix
     ../../modules/services/sync-secrets.nix
     ../../modules/desktops/virtualisation/docker.nix
+    ../../modules/services/metrics-agent.nix
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -35,6 +36,15 @@ in
   users.users.${vars.user} = {
     extraGroups = [ "adbusers" ];
     # openssh.authorizedKeys.keys = [];
+  };
+
+  age.secrets."metrics/token".file = ../../secrets-sync/metrics/token.age;
+
+  services.metrics-agent = {
+    enable = true;
+    serverUrl = "https://exil.kyrena.dev";
+    authTokenFile = config.age.secrets."metrics/token".path;
+    interval = "5s";
   };
 
   mounter.mounts = [
