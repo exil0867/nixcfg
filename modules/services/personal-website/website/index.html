@@ -482,7 +482,7 @@
 
     function updateMetrics(metrics) {
         const container = document.getElementById('metrics-container');
-        
+
         // Sort hosts: kairos, echo, sky
         const hostOrder = ['kairos', 'echo', 'sky'];
         const sortedHosts = Object.keys(metrics).sort((a, b) => {
@@ -493,22 +493,27 @@
             if (indexB === -1) return -1;
             return indexA - indexB;
         });
-        
+
         if (sortedHosts.length === 0) {
             container.innerHTML = '<p style="color: var(--quaternary-color); text-align: center;">No metrics available</p>';
             return;
         }
-        
+
         container.innerHTML = sortedHosts.map(hostname => {
             const data = metrics[hostname];
             const isOnline = data.status === 'online';
-            
+            const lastSeen = data.last_update ? ` (last seen: ${data.last_update})` : '';
+
             return `
                 <div class="host-metrics">
                     <div class="host-name">
-                        <span>${hostname}</span>
+                        <a href="https://github.com/exil0867/nixcfg/tree/master/hosts/${hostname}" 
+                        target="_blank" 
+                        title="host source code">
+                            ${hostname}
+                        </a>
                         <span style="color: ${isOnline ? 'var(--green)' : 'var(--red)'}">
-                            ${isOnline ? 'online' : 'offline'}
+                            ${isOnline ? 'online' : 'offline'}${isOnline ? '' : lastSeen}
                         </span>
                     </div>
                     ${isOnline ? `
