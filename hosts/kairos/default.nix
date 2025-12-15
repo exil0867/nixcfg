@@ -195,6 +195,7 @@ in
       # android-udev-rules
       aspell
       aspellDicts.en
+      config.hardware.nvidia.package
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
