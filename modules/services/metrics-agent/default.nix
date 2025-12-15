@@ -46,12 +46,41 @@ in
           # Get CPU usage (simple method that always works)
           CPU=0
           if [[ -f /proc/stat ]]; then
-            # Read first line of /proc/stat and calculate CPU usage
-            read cpu user nice system idle iowait irq softirq steal guest guest_nice < /proc/stat
-            TOTAL=$((user + nice + system + idle + iowait + irq + softirq + steal))
-            IDLE=$((idle + iowait))
-            CPU_PERCENT=$((100 * (TOTAL - IDLE) / TOTAL))
-            CPU=$CPU_PERCENT
+            # Read first sample
+            read cpu user_1 nice_1 system_1 idle_1 iowait_1 irq_1 softirq_1 steal_1 guest_1 guest_nice_1 < /proc/stat
+            
+            # Wait 1 second for the change in Jiffies
+            sleep 1
+            
+            # Read second sample
+            read cpu user_2 nice_2 system_2 idle_2 iowait_2 irq_2 softirq_2 steal_2 guest_2 guest_nice_2 < /proc/stat
+            
+            # Calculate total and idle time differences using awk for float precision
+            CPU=$(awk -v u1="$user_1" -v n1="$nice_1" -v s1="$system_1" -v i1="$idle_1" -v io1="$iowait_1" \
+                       -v u2="$user_2" -v n2="$nice_2" -v s2="$system_2" -v i2="$idle_2" -v io2="$iowait_2" \
+                       'BEGIN {
+                            # Calculate total time in first and second sample
+                            TOTAL_1 = u1 + n1 + s1 + i1 + io1
+                            TOTAL_2 = u2 + n2 + s2 + i2 + io2
+                            
+                            # Calculate idle time (idle + iowait) in first and second sample
+                            IDLE_1 = i1 + io1
+                            IDLE_2 = i2 + io2
+                            
+                            # Calculate differences
+                            DELTA_TOTAL = TOTAL_2 - TOTAL_1
+                            DELTA_IDLE = IDLE_2 - IDLE_1
+                            
+                            # Calculate usage percentage
+                            if (DELTA_TOTAL > 0) {
+                                USAGE = 100 * (1.0 - (DELTA_IDLE / DELTA_TOTAL))
+                                printf "%.1f", USAGE
+                            } else {
+                                # Avoid division by zero if system is somehow stuck
+                                printf "0.0" 
+                            }
+                        }'
+            )
           fi
           
           # Get RAM usage (simple method)
