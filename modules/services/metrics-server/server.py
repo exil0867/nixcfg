@@ -206,9 +206,9 @@ def main():
     print(f"Health: http://localhost:{PORT}/health")
     print("=" * 50)
     
-    # Start cleanup thread
-    cleanup_thread = threading.Thread(target=cleanup_stale_metrics, daemon=True)
-    cleanup_thread.start()
+    # # Start cleanup thread
+    # cleanup_thread = threading.Thread(target=cleanup_stale_metrics, daemon=True)
+    # cleanup_thread.start()
     
     # Create and start server
     server = ThreadingHTTPServer(('127.0.0.1', PORT), MetricsHandler)
