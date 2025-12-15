@@ -109,6 +109,7 @@ in
         gnugrep
         gawk
         coreutils
+        config.hardware.nvidia.package
       ];
     };
   };
