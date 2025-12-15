@@ -502,7 +502,7 @@
         container.innerHTML = sortedHosts.map(hostname => {
             const data = metrics[hostname];
             const isOnline = data.status === 'online';
-            const lastSeen = data.last_update ? ` (last seen: ${data.last_update})` : '';
+            const lastSeen = data.last_update ? data.last_update : 'N/A';
 
             return `
                 <div class="host-metrics">
@@ -512,9 +512,6 @@
                         title="host source code">
                             ${hostname}
                         </a>
-                        <span style="color: ${isOnline ? 'var(--green)' : 'var(--red)'}">
-                            ${isOnline ? 'online' : 'offline'}${isOnline ? '' : lastSeen}
-                        </span>
                     </div>
                     ${isOnline ? `
                         <div class="metric-line">
@@ -528,7 +525,7 @@
                             <span style="color: var(--quaternary-color)">GPU</span> ${data.gpu}%
                         </div>
                         ` : ''}
-                    ` : '<p style="color: var(--red); margin: 0; font-size: 0.9rem;">Offline - No recent data</p>'}
+                    ` : `<div style="color: var(--red); font-size: 0.9rem;">Offline (last seen: ${lastSeen})</div>`}
                 </div>
             `;
         }).join('');
