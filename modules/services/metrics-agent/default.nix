@@ -8,6 +8,12 @@ in
 {
   options.services.metrics-agent = {
     enable = mkEnableOption "System metrics collection agent";
+
+    gpu = mkOption {
+      type = types.enum [ "nvidia" "intel" "none" ];
+      default = "none";
+      description = "Type of GPU to monitor. Only 'nvidia' adds nvidia-smi to path.";
+    };
     
     serverUrl = mkOption {
       type = types.str;
@@ -138,7 +144,7 @@ in
         gnugrep
         gawk
         coreutils
-      ];
+      ] ++ lib.optional (cfg.gpu == "nvidia") config.hardware.nvidia.package;
     };
   };
 }

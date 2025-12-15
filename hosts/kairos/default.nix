@@ -45,6 +45,7 @@ in
     serverUrl = "https://exil.kyrena.dev";
     authTokenFile = config.age.secrets."metrics/token".path;
     interval = 5;
+    gpu = "nvidia";
   };
 
   mounter.mounts = [
@@ -195,7 +196,6 @@ in
       # android-udev-rules
       aspell
       aspellDicts.en
-      config.hardware.nvidia.package
     ]) ++ (with system-definition.kdePackages; [
       kate
       partitionmanager
