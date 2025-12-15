@@ -123,6 +123,7 @@ in
     serverUrl = "https://exil.kyrena.dev";
     authTokenFile = config.age.secrets."metrics/token".path;
     interval = 5;
+    gpu = "intel";
   };
 
   programs.htpc-downloader = {
