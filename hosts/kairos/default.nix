@@ -14,6 +14,7 @@ in
     ../../modules/services/sync-secrets.nix
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/metrics-agent
+    ../../modules/programs/backup-android
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
@@ -70,6 +71,8 @@ in
     group = "users";
   };
 
+  programs.backup-android.enable = true;
+  
   networking = {
     hostName = "kairos";
     networkmanager.enable = true;
