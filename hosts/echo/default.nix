@@ -12,6 +12,7 @@ in
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
     ../../modules/services/metrics-agent
+    ../../modules/services/myexpenses-upload.nix
   ] ++
   (import ../../modules/desktops/virtualisation);
 
@@ -42,6 +43,13 @@ in
   };
 
   services.immich-oci.enable = true;
+
+  services.myexpenses-upload = {
+    enable = true;
+    host = "myexpenses.kyrena.dev";
+    path = "/upload";
+    finalDir = "/mnt/1TB-ST1000DM010-2EP102/databox/other/MyExpenses";
+  };
 
 
   mounter.mounts = [
