@@ -12,7 +12,7 @@ in
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
     ../../modules/services/metrics-agent
-    ../../modules/services/myexpenses-upload.nix
+    ../../modules/services/myexpenses-upload
   ] ++
   (import ../../modules/desktops/virtualisation);
 
