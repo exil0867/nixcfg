@@ -1,8 +1,6 @@
-#
-#  KDE Plasma 6 Configuration
-#  Enable with "kde.enable = true;"
-#  Get the plasma configs in a file with $ nix run github:pjones/plasma-manager > <file>
-#
+#  GNOME Configuration Module
+#  Enable with "gnome.enable = true;"
+#  Customize behavior with gnome.* options
 
 { config, lib, pkgs, vars, inputs, ... }:
 
@@ -13,66 +11,212 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
+        description = "Enable GNOME desktop environment";
+      };
+
+      # Display manager options
+      displayManager = {
+        defaultSession = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Default session to use (e.g., 'gnome', 'plasma')";
+        };
+      };
+
+      # Night light (blue light filter)
+      nightLight = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable night light (reduces blue light at night)";
+        };
+        temperature = mkOption {
+          type = types.int;
+          default = 4000;
+          description = "Color temperature for night light (lower = warmer)";
+        };
+      };
+
+      # Interface preferences
+      interface = {
+        colorScheme = mkOption {
+          type = types.enum [ "default" "prefer-dark" "prefer-light" ];
+          default = "prefer-dark";
+          description = "Color scheme preference";
+        };
+        
+        clockShowDate = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Show date in top bar clock";
+        };
+
+        clockShowSeconds = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Show seconds in top bar clock";
+        };
+      };
+
+      # File manager (Nautilus) settings
+      fileManager = {
+        confirmTrash = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Ask for confirmation before moving files to trash";
+        };
+
+        defaultView = mkOption {
+          type = types.enum [ "icon-view" "list-view" ];
+          default = "list-view";
+          description = "Default view mode for file manager";
+        };
+
+        useTreeView = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable tree view in list mode";
+        };
+
+        sortDirectoriesFirst = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Sort directories before files";
+        };
+
+        showCreateLink = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Show option to create symbolic links";
+        };
+      };
+
+      # Window manager behavior
+      wm = {
+        focusMode = mkOption {
+          type = types.enum [ "click" "sloppy" "mouse" ];
+          default = "click";
+          description = "Window focus mode";
+        };
+
+        buttonLayout = mkOption {
+          type = types.str;
+          default = "appmenu:minimize,maximize,close";
+          description = "Window button layout";
+        };
+      };
+
+      # Extensions to enable
+      extensions = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "List of GNOME extensions to enable";
+        example = [ "appindicatorsupport@rgcjonas.gmail.com" ];
+      };
+
+      # Additional dconf settings
+      extraDconfSettings = mkOption {
+        type = types.attrs;
+        default = { };
+        description = "Additional dconf settings to apply";
+        example = {
+          "org/gnome/desktop/input-sources" = {
+            sources = [ (mkTuple [ "xkb" "us" ]) ];
+          };
+        };
       };
     };
   };
 
   config = mkIf (config.gnome.enable) {
     services = {
-      # displayManager = {
-      #   sddm.enable = true;
-      #   # defaultSession = "plasmawayland";
-      # };
-      # desktopManager = {
-      #   plasma6 = {
-      #     enable = true;
-      #   };
-      # };
-      # libinput = {
-      #   enable = true;
-      #   mouse = {
-      #     accelProfile = "flat";
-      #   };
-      # };
       xserver = {
         enable = true;
-        displayManager.gdm.enable = true;
+        displayManager.gdm = {
+          enable = true;
+          wayland = mkDefault true;
+        };
         desktopManager.gnome.enable = true;
         xkb = {
-          layout = "us";
-          options = "eurosign:e";
+          layout = mkDefault "us";
+          options = mkDefault "eurosign:e";
         };
       };
     };
 
+    # Set default session if specified
+    services.displayManager.defaultSession = mkIf (config.gnome.displayManager.defaultSession != null) 
+      config.gnome.displayManager.defaultSession;
+
+    # Install useful GNOME apps
+    environment.systemPackages = with pkgs; [
+      gnome-tweaks
+      dconf-editor
+    ] ++ (with pkgs.gnomeExtensions; 
+      # Map extension names to packages if needed
+      [ ]
+    );
+
+    # Exclude some default GNOME apps
+    environment.gnome.excludePackages = with pkgs; [
+      epiphany # web browser
+      gnome-tour
+      gnome-music
+      geary # email
+    ];
+
     home-manager.users.${vars.user} = {
-      dconf.settings =
-          {
-            "org/gnome/settings-daemon/plugins/color" = {
-              night-light-enabled = true;
-            };
-
-            "org/gnome/desktop/interface" = {
-              color-scheme = "prefer-dark";
-            };
-
-
-            # File browser (nautilus) settings
-            "org/gnome/nautilus/settings" = {
-              confirm-trash = false;
-              default-folder-viewer = "list-view";
-              # default-sort-order = "type";
-              show-create-link = true;
-            };
-            "org/gnome/nautilus/list-view" = {
-              use-tree-view = true;
-            };
-
-            "org/gtk/Settings/FileChooser" = {
-              sort-directories-first = true;
-              sort-column = "type";
-            };
+      dconf.settings = mkMerge [
+        # Base settings
+        {
+          # Night light
+          "org/gnome/settings-daemon/plugins/color" = {
+            night-light-enabled = config.gnome.nightLight.enable;
+            night-light-temperature = mkIf config.gnome.nightLight.enable 
+              config.gnome.nightLight.temperature;
           };
+
+          # Interface
+          "org/gnome/desktop/interface" = {
+            color-scheme = config.gnome.interface.colorScheme;
+            clock-show-date = config.gnome.interface.clockShowDate;
+            clock-show-seconds = config.gnome.interface.clockShowSeconds;
+          };
+
+          # Window manager
+          "org/gnome/desktop/wm/preferences" = {
+            button-layout = config.gnome.wm.buttonLayout;
+            focus-mode = config.gnome.wm.focusMode;
+          };
+
+          # File manager (nautilus)
+          "org/gnome/nautilus/preferences" = {
+            default-folder-viewer = config.gnome.fileManager.defaultView;
+            show-create-link = config.gnome.fileManager.showCreateLink;
+          };
+
+          "org/gnome/nautilus/list-view" = {
+            use-tree-view = config.gnome.fileManager.useTreeView;
+          };
+
+          "org/gtk/settings/file-chooser" = {
+            sort-directories-first = config.gnome.fileManager.sortDirectoriesFirst;
+          };
+
+          "org/gtk/gtk4/settings/file-chooser" = {
+            sort-directories-first = config.gnome.fileManager.sortDirectoriesFirst;
+          };
+        }
+
+        # User-provided extra settings
+        config.gnome.extraDconfSettings
+      ];
+
+      # Enable extensions if specified
+      home.packages = with pkgs.gnomeExtensions; 
+        (if builtins.elem "appindicatorsupport@rgcjonas.gmail.com" config.gnome.extensions 
+         then [ appindicator ] 
+         else [ ]);
     };
   };
 }

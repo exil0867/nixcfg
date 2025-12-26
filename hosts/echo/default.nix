@@ -17,7 +17,7 @@ in
   (import ../../modules/desktops/virtualisation);
 
   # Boot Options
-  boot = {
+    boot = {
     loader = {
       systemd-boot = {
         enable = true;
@@ -78,32 +78,50 @@ in
 
   networking = {
     hostName = "echo";
+    networkmanager.enable = true;
+    firewall.allowedTCPPorts = [ 80 443 ];
   };
-
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   programs.nix-ld.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  gnome = {
+    enable = true;
+    
+    displayManager.defaultSession = "gnome";
+    
+    nightLight = {
+      enable = true;
+      temperature = 4000;
+    };
 
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+    interface = {
+      colorScheme = "prefer-dark";
+      clockShowDate = true;
+      clockShowSeconds = false;
+    };
 
-  # Enable sound with pipewire.
+    fileManager = {
+      confirmTrash = false;
+      defaultView = "list-view";
+      useTreeView = true;
+      sortDirectoriesFirst = true;
+      showCreateLink = true;
+    };
+
+    wm = {
+      focusMode = "click";
+      buttonLayout = "appmenu:minimize,maximize,close";
+    };
+
+    # Echo-specific settings
+    extraDconfSettings = {};
+  };
+
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
     # Jellyfin Configuration
-  services.jellyfin = {
+    services.jellyfin = {
     enable = true;
     openFirewall = true;
     dataDir = "/mnt/1TB-ST1000DM010-2EP102/data/jellyfin";
@@ -151,24 +169,23 @@ in
   };
 
   age.secrets."cloudflare/email".file = ../../secrets-sync/cloudflare/email.age;
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-#   # ACME (Let's Encrypt) Configuration
-#  security.acme = {
-#    acceptTerms = true;
-#    defaults.email = "exiL@n0t3x1l.dev";
-#    certs."n0t3x1l.dev" = {
-#      group = config.services.caddy.group;
-#      domain = "n0t3x1l.dev";
-#      extraDomainNames = [ "*.n0t3x1l.dev" ];
-#      dnsProvider = "cloudflare";
-#      dnsResolver = "1.1.1.1:53";
-#      dnsPropagationCheck = true;
-#      environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
-#    };
-#  };
+  #   # ACME (Let's Encrypt) Configuration
+  #  security.acme = {
+  #    acceptTerms = true;
+  #    defaults.email = "exiL@n0t3x1l.dev";
+  #    certs."n0t3x1l.dev" = {
+  #      group = config.services.caddy.group;
+  #      domain = "n0t3x1l.dev";
+  #      extraDomainNames = [ "*.n0t3x1l.dev" ];
+  #      dnsProvider = "cloudflare";
+  #      dnsResolver = "1.1.1.1:53";
+  #      dnsPropagationCheck = true;
+  #      environmentFile = config.age.secrets."cloudflare/n0t3x1l.dev-DNS-RW".path;
+  #    };
+  #  };
 
- git = {
+  git = {
     enable = true;
   };
 
@@ -259,16 +276,16 @@ in
       };
     };
   };
-services.traefik.environmentFiles = [
+  services.traefik.environmentFiles = [
         # config.age.secrets."cloudflare/email".path
-        config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
-      ];
+    config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
+  ];
 
     # Ensure the Traefik directory exists
     systemd.services.traefik.preStart = ''
-      mkdir -p /var/lib/traefik
-      chown -R traefik:traefik /var/lib/traefik
-    '';
+    mkdir -p /var/lib/traefik
+    chown -R traefik:traefik /var/lib/traefik
+  '';
   services = {
     headscale = {
       enable = false;
@@ -324,21 +341,10 @@ services.traefik.environmentFiles = [
     transmission_4-gtk
     git
     curl
-    # nginx
     bottles
     certbot
-    # librewolf
-    # tailscale
-    # headscale
-    # postgresql_14
-    # postgresql14Packages.pgvecto-rs
   ]) ++ (with system-definition.kdePackages; [
-    # kate
-    # partitionmanager
-    # kdenlive
   ]) ++ (with unstable; [
-    # firefox
-    # image-roll
   ]);
 
   # Home Manager Configuration

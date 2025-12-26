@@ -1,4 +1,4 @@
-{  config, vars, unstable, stable, system-definition, inputs, ... }:
+{  config, lib, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
   plasmaConfig = import ../../modules/desktops/plasma-prefs.nix;
@@ -99,7 +99,7 @@ in
   };
 
   plasma = {
-    enable = true;
+    enable = false;
     defaultSession = "plasma";
     lookAndFeel = "org.kde.breezedark.desktop";
     plasmaManager = inputs.plasma-manager-unstable.homeModules.plasma-manager;
@@ -157,6 +157,66 @@ in
     dataFile = plasmaConfig.dataFile;
   };
 
+
+  programs.ssh.askPassword = lib.mkForce "${unstable.seahorse}/libexec/seahorse/ssh-askpass";
+  services.displayManager.sddm.enable = lib.mkForce false;
+  
+  gnome = {
+    enable = true;
+    
+    displayManager.defaultSession = "gnome";
+
+    nightLight = {
+      enable = true;
+      temperature = 4000;
+    };
+
+    interface = {
+      colorScheme = "prefer-dark";
+      clockShowDate = true;
+      clockShowSeconds = false;
+    };
+
+    fileManager = {
+      confirmTrash = false;
+      defaultView = "list-view";
+      useTreeView = true;
+      sortDirectoriesFirst = true;
+      showCreateLink = true;
+    };
+
+    wm = {
+      focusMode = "click";
+      buttonLayout = "appmenu:minimize,maximize,close";
+    };
+
+    extraDconfSettings = {
+      "org/gnome/desktop/peripherals/mouse" = {
+        accel-profile = "flat";
+        speed = 0.0;
+      };
+
+      "org/gnome/mutter" = {
+        workspaces-only-on-primary = false;
+      };
+
+      "org/gnome/desktop/wm/keybindings" = {
+        close = [ "<Alt>F4" ];
+        toggle-maximized = [ "<Super>Page_Up" ];
+        minimize = [ "<Super>Page_Down" ];
+        switch-to-workspace-1 = [ "<Control>F1" ];
+        switch-to-workspace-2 = [ "<Control>F2" ];
+        switch-to-workspace-3 = [ "<Control>F3" ];
+        switch-to-workspace-4 = [ "<Control>F4" ];
+      };
+
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        screensaver = [ "<Super>l" ];
+        home = [ "<Super>e" ];
+      };
+    };
+  };
+
   git = {
     enable = true;
   };
@@ -170,7 +230,6 @@ in
       ungoogled-chromium
       git
       ollama
-      # zed-editor
       vscode
       keepassxc
       libreoffice
@@ -182,19 +241,11 @@ in
       obs-studio
       bottles
       dbeaver-bin
-      # neovide
       obsidian
       handbrake
-      # tailscale
       krita
-      # spotify
-      # firefox-devedition
-      # audacity
-      # scrcpy
-      # osu-lazer
       transmission_4-qt
       android-tools
-      # android-udev-rules
       aspell
       aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
@@ -207,15 +258,8 @@ in
     ]) ++
     (with stable; [
       # Apps
-      # firefox # Browser
-      # image-roll # Image Viewer
     ]);
   };
-
-  # jellyfin-player = {
-  #   enable = true;
-  #   useXcb = true;
-  # };
 
   age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
   tailscale = {
@@ -223,8 +267,6 @@ in
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
     loginServer = "http://192.168.1.5:8181";
   };
-
-  # services.udev.packages = [ system-definition.android-udev-rules ];
 
   programs.adb.enable = true;
 
@@ -236,7 +278,7 @@ in
   home-manager.users.${vars.user} = {
     imports = [
       inputs.plasma-manager-unstable.homeModules.plasma-manager
-    ../../modules/utilities/media-mime.nix
+      ../../modules/utilities/media-mime.nix
     ];
 
     mediaMime = "mpv.desktop";
@@ -287,7 +329,12 @@ in
       };
       vscode = {
         enable = true;
-        profiles.default.extensions = [system-definition.vscode-extensions.ms-vscode-remote.remote-ssh system-definition.vscode-extensions.ms-vscode-remote.remote-containers system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit system-definition.vscode-extensions.jnoortheen.nix-ide];
+        profiles.default.extensions = [
+          system-definition.vscode-extensions.ms-vscode-remote.remote-ssh 
+          system-definition.vscode-extensions.ms-vscode-remote.remote-containers 
+          system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit 
+          system-definition.vscode-extensions.jnoortheen.nix-ide
+        ];
         profiles.default.userSettings = {
           "editor.wordWrap" = "on";
           "github.copilot.enable" = {
@@ -303,4 +350,4 @@ in
       };
     };
   };
- }
+}
