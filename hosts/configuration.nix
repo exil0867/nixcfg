@@ -128,9 +128,7 @@ in
 
   programs = {
     dconf.enable = true;
-    gnupg.agent = {
-      enable = true;
-    };
+    ssh.startAgent = true;
   };
 
   services = {
@@ -209,11 +207,33 @@ in
         };
       };
       ssh = {
-        extraConfig = ''
-          Host n0t3x1l
-            HostName server.n0t3x1l.ovh
-            User exilvm
-        '';
+        enable = true;
+        enableDefaultConfig = false;
+
+        matchBlocks = {
+          "*" = {
+            forwardAgent = false;
+            serverAliveInterval = 0;
+            serverAliveCountMax = 3;
+            compression = false;
+            addKeysToAgent = "no";
+            hashKnownHosts = false;
+            userKnownHostsFile = "~/.ssh/known_hosts";
+            controlMaster = "no";
+            controlPath = "~/.ssh/master-%r@%n:%p";
+            controlPersist = null;
+          };
+
+          sky = {
+            hostname = "37.120.187.211";
+            user = vars.user;
+          };
+
+          echo = {
+            hostname = "192.168.1.5";
+            user = vars.user;
+          };
+        };
       };
       home-manager.enable = true;
       zsh = {

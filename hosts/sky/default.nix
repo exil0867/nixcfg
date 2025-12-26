@@ -220,9 +220,6 @@ in
   # Home Manager Configuration
   home-manager.users.${vars.user} = {
     programs = {
-      ssh = {
-        enable = true;
-      };
       zsh = {
         enable = true;
         enableCompletion = true;
