@@ -160,8 +160,6 @@ in
   git = {
     enable = true;
   };
-  
-  programs.ssh.startAgent = true;
 
   hardware = {};
 
