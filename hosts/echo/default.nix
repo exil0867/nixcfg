@@ -8,6 +8,7 @@ in
     ../../modules/services/mounter.nix
     ../../modules/services/sync-secrets.nix
     ../../modules/services/immich-oci
+    ../../modules/services/immich-backup
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
