@@ -152,6 +152,7 @@ with lib;
     environment.systemPackages = with pkgs; [
       gnome-tweaks
       dconf-editor
+      (import ./extensions/clipboard-history.nix { inherit pkgs; })
     ] ++ (with pkgs.gnomeExtensions; 
       # Map extension names to packages if needed
       [ ]
@@ -224,13 +225,36 @@ with lib;
             idle-dim = false;
           };
 
-
           "org/gnome/desktop/input-sources" = {
             sources = [
               (lib.gvariant.mkTuple [ "xkb" "us" ])
               (lib.gvariant.mkTuple [ "xkb" "fr+azerty" ])
               (lib.gvariant.mkTuple [ "xkb" "ara" ])
             ];
+          };
+
+          "org/gnome/shell" = {
+            enabled-extensions = [
+              "clipboard-history@alexsaveau.dev"
+            ];
+          };
+
+          "org/gnome/shell/extensions/clipboard-history" = {
+            history-size = 200;
+            window-width-percentage = 50;
+            cache-size = 10;
+            cache-only-favorites = false;
+            notify-on-copy = false;
+            confirm-clear = true;
+            move-item-first = true;
+            enable-keybindings = true;
+            display-mode = 0;
+            disable-down-arrow = false;
+            strip-text = false;
+            private-mode = false;
+            paste-on-selection = false;
+            process-primary-selection = false;
+            ignore-password-mimes = true;
           };
         }
 

@@ -1,6 +1,6 @@
 
 [
   ./plasma.nix
-  ./gnome.nix
+  ./gnome
   ./options.nix
 ]
