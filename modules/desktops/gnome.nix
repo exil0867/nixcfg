@@ -206,6 +206,32 @@ with lib;
           "org/gtk/gtk4/settings/file-chooser" = {
             sort-directories-first = config.gnome.fileManager.sortDirectoriesFirst;
           };
+
+          "org/gnome/shell/keybindings" = {
+            screenshot = [ "<Super>c" ];
+            show-screenshot-ui = [ "<Shift><Super>s" ];
+            switch-to-workspace-1 = [ "<Control>F1" ];
+            switch-to-workspace-2 = [ "<Control>F2" ];
+            switch-to-workspace-3 = [ "<Control>F3" ];
+            switch-to-workspace-4 = [ "<Control>F4" ];
+          };
+
+          "org/gnome/settings-daemon/plugins/power" = {
+            sleep-inactive-ac-type = "nothing";
+            sleep-inactive-battery-type = "nothing";
+            sleep-inactive-ac-timeout = 0;
+            sleep-inactive-battery-timeout = 0;
+            idle-dim = false;
+          };
+
+
+          "org/gnome/desktop/input-sources" = {
+            sources = [
+              (lib.gvariant.mkTuple [ "xkb" "us" ])
+              (lib.gvariant.mkTuple [ "xkb" "fr+azerty" ])
+              (lib.gvariant.mkTuple [ "xkb" "ara" ])
+            ];
+          };
         }
 
         # User-provided extra settings

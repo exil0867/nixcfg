@@ -199,21 +199,6 @@ in
       "org/gnome/mutter" = {
         workspaces-only-on-primary = false;
       };
-
-      "org/gnome/desktop/wm/keybindings" = {
-        close = [ "<Alt>F4" ];
-        toggle-maximized = [ "<Super>Page_Up" ];
-        minimize = [ "<Super>Page_Down" ];
-        switch-to-workspace-1 = [ "<Control>F1" ];
-        switch-to-workspace-2 = [ "<Control>F2" ];
-        switch-to-workspace-3 = [ "<Control>F3" ];
-        switch-to-workspace-4 = [ "<Control>F4" ];
-      };
-
-      "org/gnome/settings-daemon/plugins/media-keys" = {
-        screensaver = [ "<Super>l" ];
-        home = [ "<Super>e" ];
-      };
     };
   };
 
