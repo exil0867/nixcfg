@@ -202,6 +202,10 @@ in
     };
   };
 
+  jellyfin-player = {
+    enable = true;
+  };
+
   git = {
     enable = true;
   };
