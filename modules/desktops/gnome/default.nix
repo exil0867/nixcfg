@@ -152,10 +152,11 @@ with lib;
     environment.systemPackages = with pkgs; [
       gnome-tweaks
       dconf-editor
-      (import ./extensions/clipboard-history.nix { inherit pkgs; })
     ] ++ (with pkgs.gnomeExtensions; 
       # Map extension names to packages if needed
-      [ ]
+      [ 
+        clipboard-history
+      ]
     );
 
     # Exclude some default GNOME apps
@@ -234,8 +235,9 @@ with lib;
           };
 
           "org/gnome/shell" = {
+            disable-user-extensions = false;
             enabled-extensions = [
-              "clipboard-history@alexsaveau.dev"
+              pkgs.gnomeExtensions.clipboard-history.extensionUuid
             ];
           };
 
