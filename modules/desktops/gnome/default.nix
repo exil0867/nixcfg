@@ -259,6 +259,7 @@ with lib;
             paste-on-selection = false;
             process-primary-selection = false;
             ignore-password-mimes = true;
+            toggle-menu = [ "<Super>v" ];
           };
 
           "org/gnome/shell/extensions/emoji-copy" = {
@@ -266,7 +267,7 @@ with lib;
               paste-on-select = true;
               active-keybind = true;
               emoji-keybind = [ "<Super>period" ];
-            };
+           };
         }
 
         # User-provided extra settings
