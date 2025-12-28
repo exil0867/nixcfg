@@ -130,13 +130,19 @@ with lib;
 
   config = mkIf (config.gnome.enable) {
     services = {
-      xserver = {
-        enable = true;
-        displayManager.gdm = {
+      desktopManager = {
+        gnome = {
+          enable = true;
+        };
+      };
+      displayManager = {
+        gdm = {
           enable = true;
           wayland = mkDefault true;
         };
-        desktopManager.gnome.enable = true;
+      };
+      xserver = {
+        enable = true;
         xkb = {
           layout = mkDefault "us";
           options = mkDefault "eurosign:e";
