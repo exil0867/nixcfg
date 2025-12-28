@@ -332,7 +332,7 @@ in
   };
 
   jellyfin-player = {
-    enable = false;
+    enable = true;
   };
 
   # System Packages
