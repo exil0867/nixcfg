@@ -156,6 +156,7 @@ with lib;
       # Map extension names to packages if needed
       [ 
         clipboard-history
+        emoji-copy
       ]
     );
 
@@ -238,6 +239,7 @@ with lib;
             disable-user-extensions = false;
             enabled-extensions = [
               pkgs.gnomeExtensions.clipboard-history.extensionUuid
+              pkgs.gnomeExtensions.emoji-copy.extensionUuid
             ];
           };
 
@@ -258,6 +260,13 @@ with lib;
             process-primary-selection = false;
             ignore-password-mimes = true;
           };
+
+          "org/gnome/shell/extensions/emoji-copy" = {
+              always-show = false;
+              paste-on-select = true;
+              active-keybind = true;
+              emoji-keybind = [ "<Super>period" ];
+            };
         }
 
         # User-provided extra settings
