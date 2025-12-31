@@ -235,8 +235,8 @@ in
       krita
       transmission_4-qt
       # android-tools
-      aspell
-      aspellDicts.en
+      # aspell
+      # aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
       kate
       # partitionmanager
