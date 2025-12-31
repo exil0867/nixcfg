@@ -234,16 +234,16 @@ in
       handbrake
       krita
       transmission_4-qt
-      android-tools
+      # android-tools
       aspell
       aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
       kate
-      partitionmanager
+      # partitionmanager
       kdenlive
-      kcalc
-      sonnet
-      plasma-systemmonitor
+      # kcalc
+      # sonnet
+      # plasma-systemmonitor
     ]) ++
     (with stable; [
       # Apps
