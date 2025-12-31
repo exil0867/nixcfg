@@ -163,6 +163,7 @@ with lib;
       [ 
         clipboard-history
         emoji-copy
+        dash-to-dock
       ]
     );
 
@@ -246,6 +247,7 @@ with lib;
             enabled-extensions = [
               pkgs.gnomeExtensions.clipboard-history.extensionUuid
               pkgs.gnomeExtensions.emoji-copy.extensionUuid
+              pkgs.gnomeExtensions.dash-to-dock.extensionUuid
             ];
           };
 
@@ -274,6 +276,31 @@ with lib;
               active-keybind = true;
               emoji-keybind = [ "<Super>period" ];
            };
+
+           "org/gnome/shell/extensions/dash-to-dock" = {
+              apply-custom-theme = true;
+              custom-theme-shrink = false;
+
+              dock-position = 2;
+              multi-monitor = false;
+
+              dock-fixed = false;
+              intellihide = true;
+              autohide-in-fullscreen = true;
+
+              click-action = 1;
+              scroll-action = 1;
+
+              show-running = true;
+              isolate-monitors = false;
+              isolate-workspaces = false;
+
+              show-trash = false;
+
+              show-mounts = false;
+              show-mounts-only-mounted = false;
+              show-mounts-network = false;
+            };
         }
 
         # User-provided extra settings
