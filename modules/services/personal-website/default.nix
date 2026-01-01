@@ -157,7 +157,7 @@ in
         entryPoints = [ cfg.traefik.entryPoint ];
         service = "personal-website";
         tls = mkIf cfg.enableSSL {
-          certResolver = "letsencrypt";
+          certResolver = "cloudflare";
         };
       };
       

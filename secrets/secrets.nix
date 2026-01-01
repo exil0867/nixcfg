@@ -13,4 +13,5 @@ in {
   "immich/server.age".publicKeys = [echo_key];
   "immich/sync.age".publicKeys = [personal_key];
   "metrics/token.age".publicKeys = [personal_key echo_key sky_key];
+  "trena/main.age".publicKeys = [sky_key];
 }

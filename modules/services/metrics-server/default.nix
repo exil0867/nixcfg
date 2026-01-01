@@ -49,14 +49,14 @@ in
         rule = "Host(`exil.kyrena.dev`) && PathPrefix(`/api/metrics`)";
         entryPoints = [ "websecure" ];
         service = "metrics-api";
-        tls.certResolver = "letsencrypt";
+        tls.certResolver = "cloudflare";
       };
       
       http.routers.metrics-sse = {
         rule = "Host(`exil.kyrena.dev`) && Path(`/ws/metrics`)";
         entryPoints = [ "websecure" ];
         service = "metrics-sse";
-        tls.certResolver = "letsencrypt";
+        tls.certResolver = "cloudflare";
       };
       
       http.services.metrics-api.loadBalancer.servers = [{

@@ -11,6 +11,7 @@ in
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
+    ../../modules/services/trena-backend
   ];
 
   # Boot Options
@@ -104,6 +105,13 @@ in
     group = "users";
   };
 
+  services.trena-backend = {
+    enable = true;
+    domain = "trena-api.kyrena.dev";
+    secretFile = ../../secrets-sync/trena/main.age; 
+  };
+
+
   # age.secrets."deluge/auth" = {
   #   file = ../../secrets/deluge/auth.age;
   #   owner = vars.user;
@@ -156,14 +164,18 @@ in
           forwardedHeaders = {
             trustedIPs = ["127.0.0.1/32" "::1/128"];
           };
+          http.tls = {
+            certResolver = "cloudflare";
+            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
+          };
         };
       };
-
-      certificatesResolvers.letsencrypt.acme = {
+      certificatesResolvers.cloudflare.acme = {
         email = "exil@kyrena.dev";
         storage = "/var/lib/traefik/acme.json";
-        httpChallenge = {
-          entryPoint = "web";
+        dnsChallenge = {
+          provider = "cloudflare";
+          resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
         };
       };
     };
@@ -176,7 +188,7 @@ in
             entryPoints = ["websecure"];
             service = "jellyfin";
             tls = {
-              certResolver = "letsencrypt";
+              certResolver = "cloudflare";
             };
           };
         };
