@@ -167,6 +167,13 @@ with lib;
       ]
     );
 
+    # xdg.portal = {
+    #   enable = true;
+    #   extraPortals = with pkgs; [
+    #     xdg-desktop-portal-gnome
+    #   ];
+    # };
+
     # Exclude some default GNOME apps
     environment.gnome.excludePackages = with pkgs; [
       epiphany # web browser
@@ -300,6 +307,34 @@ with lib;
               show-mounts = false;
               show-mounts-only-mounted = false;
               show-mounts-network = false;
+            };
+            "org/gnome/settings-daemon/plugins/media-keys" = {
+              screenshot = [];
+              screenshot-window = [];
+              screenshot-area = [];
+              custom-keybindings = [
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region/"
+                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/"
+              ];
+            };
+
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full" = {
+              name = "Flameshot Full Screen";
+              binding = "<Super>c";
+              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot screen --clipboard'";
+            };
+
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region" = {
+              name = "Flameshot Region";
+              binding = "<Super>x";
+              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui --clipboard'";
+            };
+
+            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui" = {
+              name = "Flameshot GUI";
+              binding = "<Super><Shift>s";
+              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui'";
             };
         }
 

@@ -268,6 +268,7 @@ in
     imports = [
       inputs.plasma-manager-unstable.homeModules.plasma-manager
       ../../modules/utilities/media-mime.nix
+      # ../../modules/services/flameshot.nix
     ];
 
     mediaMime = "mpv.desktop";
