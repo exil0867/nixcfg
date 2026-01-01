@@ -226,7 +226,7 @@ in
       sshpass
       gimp
       discord
-      bruno
+      # bruno
       obs-studio
       bottles
       dbeaver-bin
