@@ -267,7 +267,7 @@ with lib;
             paste-on-selection = false;
             process-primary-selection = false;
             ignore-password-mimes = true;
-            toggle-menu = [ "<Super>v" ];
+            toggle-menu = [ "<Super>b" ];
           };
 
           "org/gnome/shell/extensions/emoji-copy" = {
