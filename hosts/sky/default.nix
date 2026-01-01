@@ -7,7 +7,7 @@ in
     ./hardware-configuration.nix
     ../../modules/services/sync-secrets.nix
     ../../modules/services/transmission.nix
-    ../../modules/programs/htpc-downloader.nix
+    ../../modules/services/htpc-downloader
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
