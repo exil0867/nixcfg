@@ -234,6 +234,7 @@ in
       handbrake
       krita
       transmission_4-qt
+      zed-editor
       # android-tools
       # aspell
       # aspellDicts.en
