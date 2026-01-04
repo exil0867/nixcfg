@@ -35,7 +35,6 @@ in
     };
     modules = [
       nur.modules.nixos.default
-      # nixvim-unstable.nixosModules.nixvim
       ./kairos
       ./configuration.nix
 

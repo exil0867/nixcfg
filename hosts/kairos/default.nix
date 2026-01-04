@@ -7,6 +7,8 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    inputs.nixvim-unstable.nixosModules.nixvim
+    ../../modules/programs/neovim
     ../../modules/programs/games.nix
     ../../modules/services/rclone-sftp.nix
     ../../modules/services/mounter.nix
@@ -18,6 +20,7 @@ in
   ] ++
   (import ../../modules/hardware/kairos) ++
   (import ../../modules/desktops/virtualisation);
+      
 
   # Boot Options
   boot = {
@@ -235,6 +238,7 @@ in
       krita
       transmission_4-qt
       zed-editor
+      nerd-fonts.jetbrains-mono
       # android-tools
       # aspell
       # aspellDicts.en

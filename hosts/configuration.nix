@@ -6,7 +6,6 @@ let
   moduleImports = import ../modules/desktops ++
                   import ../modules/hardware ++
                   import ../modules/programs ++
-                  import ../modules/editors ++
                   import ../modules/services ++
                   import ../modules/shell ++
                   import ../modules/theming;
