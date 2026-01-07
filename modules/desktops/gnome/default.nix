@@ -225,12 +225,15 @@ with lib;
           };
 
           "org/gnome/shell/keybindings" = {
-            screenshot = [ "<Super>c" ];
-            show-screenshot-ui = [ "<Shift><Super>s" ];
-            switch-to-workspace-1 = [ "<Control>F1" ];
-            switch-to-workspace-2 = [ "<Control>F2" ];
-            switch-to-workspace-3 = [ "<Control>F3" ];
-            switch-to-workspace-4 = [ "<Control>F4" ];
+            screenshot = ["<Super>c"];
+            show-screenshot-ui = ["<Shift><Super>s"];
+          };
+
+          "org/gnome/desktop/wm/keybindings" = {
+            switch-to-workspace-1 = ["<Super>F1"];
+            switch-to-workspace-2 = ["<Super>F2"];
+            switch-to-workspace-3 = ["<Super>F3"];
+            switch-to-workspace-4 = ["<Super>F4"];
           };
 
           "org/gnome/settings-daemon/plugins/power" = {
