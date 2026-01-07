@@ -69,9 +69,13 @@
         inputs.nixpkgs.follows = "nixpkgs-unstable";
         inputs.home-manager.follows = "nixpkgs-unstable";
       };
+      
+      nix-vscode-extensions = {
+        url = "github:nix-community/nix-vscode-extensions";
+      };
     };
 
-  outputs = inputs @ { self, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixgl-stable, nixgl-unstable, nixvim-stable, nixvim-unstable, plasma-manager-stable, plasma-manager-unstable, agenix, ... }: # Function telling flake which inputs to use
+  outputs = inputs @ { self, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, home-manager-stable, nur, nixgl-stable, nixgl-unstable, nixvim-stable, nixvim-unstable, plasma-manager-stable, plasma-manager-unstable, agenix, nix-vscode-extensions, ... }: # Function telling flake which inputs to use
     let
       # Variables Used In Flake
       vars = {
@@ -85,14 +89,14 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs-unstable) lib;
-          inherit inputs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix vars; # Inherit inputs
+          inherit inputs nixpkgs-stable nixpkgs-unstable nixos-hardware home-manager-unstable home-manager-stable nur nixvim-stable nixvim-unstable plasma-manager-stable plasma-manager-unstable agenix nix-vscode-extensions vars; # Inherit inputs
         }
       );
 
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs-unstable) lib;
-          inherit inputs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable plasma-manager-stable plasma-manager-unstable nixgl-stable nixgl-unstable agenix vars;
+          inherit inputs nixpkgs-stable nixpkgs-unstable home-manager-stable home-manager-unstable plasma-manager-stable plasma-manager-unstable nixgl-stable nixgl-unstable agenix nix-vscode-extensions vars;
         }
       );
     };

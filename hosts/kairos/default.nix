@@ -271,7 +271,7 @@ in
       inputs.plasma-manager-unstable.homeModules.plasma-manager
       ../../modules/utilities/media-mime.nix
       # ../../modules/services/flameshot.nix
-      ../../modules/services/vscodium
+      ../../modules/services/code-boxes
     ];
 
     mediaMime = "mpv.desktop";
