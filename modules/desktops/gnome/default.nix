@@ -1,11 +1,15 @@
 #  GNOME Configuration Module
 #  Enable with "gnome.enable = true;"
 #  Customize behavior with gnome.* options
-
-{ config, lib, pkgs, vars, inputs, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  pkgs,
+  vars,
+  inputs,
+  ...
+}:
+with lib; {
   options = {
     gnome = {
       enable = mkOption {
@@ -40,11 +44,11 @@ with lib;
       # Interface preferences
       interface = {
         colorScheme = mkOption {
-          type = types.enum [ "default" "prefer-dark" "prefer-light" ];
+          type = types.enum ["default" "prefer-dark" "prefer-light"];
           default = "prefer-dark";
           description = "Color scheme preference";
         };
-        
+
         clockShowDate = mkOption {
           type = types.bool;
           default = true;
@@ -67,7 +71,7 @@ with lib;
         };
 
         defaultView = mkOption {
-          type = types.enum [ "icon-view" "list-view" ];
+          type = types.enum ["icon-view" "list-view"];
           default = "list-view";
           description = "Default view mode for file manager";
         };
@@ -94,7 +98,7 @@ with lib;
       # Window manager behavior
       wm = {
         focusMode = mkOption {
-          type = types.enum [ "click" "sloppy" "mouse" ];
+          type = types.enum ["click" "sloppy" "mouse"];
           default = "click";
           description = "Window focus mode";
         };
@@ -109,19 +113,19 @@ with lib;
       # Extensions to enable
       extensions = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
         description = "List of GNOME extensions to enable";
-        example = [ "appindicatorsupport@rgcjonas.gmail.com" ];
+        example = ["appindicatorsupport@rgcjonas.gmail.com"];
       };
 
       # Additional dconf settings
       extraDconfSettings = mkOption {
         type = types.attrs;
-        default = { };
+        default = {};
         description = "Additional dconf settings to apply";
         example = {
           "org/gnome/desktop/input-sources" = {
-            sources = [ (mkTuple [ "xkb" "us" ]) ];
+            sources = [(mkTuple ["xkb" "us"])];
           };
         };
       };
@@ -151,21 +155,25 @@ with lib;
     };
 
     # Set default session if specified
-    services.displayManager.defaultSession = mkIf (config.gnome.displayManager.defaultSession != null) 
+    services.displayManager.defaultSession =
+      mkIf (config.gnome.displayManager.defaultSession != null)
       config.gnome.displayManager.defaultSession;
 
     # Install useful GNOME apps
-    environment.systemPackages = with pkgs; [
-      gnome-tweaks
-      dconf-editor
-    ] ++ (with pkgs.gnomeExtensions; 
-      # Map extension names to packages if needed
-      [ 
-        clipboard-history
-        emoji-copy
-        dash-to-dock
+    environment.systemPackages = with pkgs;
+      [
+        gnome-tweaks
+        dconf-editor
       ]
-    );
+      ++ (
+        with pkgs.gnomeExtensions;
+        # Map extension names to packages if needed
+          [
+            clipboard-history
+            emoji-copy
+            dash-to-dock
+          ]
+      );
 
     # xdg.portal = {
     #   enable = true;
@@ -189,7 +197,8 @@ with lib;
           # Night light
           "org/gnome/settings-daemon/plugins/color" = {
             night-light-enabled = config.gnome.nightLight.enable;
-            night-light-temperature = mkIf config.gnome.nightLight.enable 
+            night-light-temperature =
+              mkIf config.gnome.nightLight.enable
               config.gnome.nightLight.temperature;
           };
 
@@ -246,9 +255,9 @@ with lib;
 
           "org/gnome/desktop/input-sources" = {
             sources = [
-              (lib.gvariant.mkTuple [ "xkb" "us" ])
-              (lib.gvariant.mkTuple [ "xkb" "fr+azerty" ])
-              (lib.gvariant.mkTuple [ "xkb" "ara" ])
+              (lib.gvariant.mkTuple ["xkb" "us"])
+              (lib.gvariant.mkTuple ["xkb" "fr+azerty"])
+              (lib.gvariant.mkTuple ["xkb" "ara"])
             ];
           };
 
@@ -277,68 +286,68 @@ with lib;
             paste-on-selection = false;
             process-primary-selection = false;
             ignore-password-mimes = true;
-            toggle-menu = [ "<Super>b" ];
+            toggle-menu = ["<Super>b"];
           };
 
           "org/gnome/shell/extensions/emoji-copy" = {
-              always-show = false;
-              paste-on-select = true;
-              active-keybind = true;
-              emoji-keybind = [ "<Super>period" ];
-           };
+            always-show = false;
+            paste-on-select = true;
+            active-keybind = true;
+            emoji-keybind = ["<Super>period"];
+          };
 
-           "org/gnome/shell/extensions/dash-to-dock" = {
-              apply-custom-theme = true;
-              custom-theme-shrink = false;
+          "org/gnome/shell/extensions/dash-to-dock" = {
+            apply-custom-theme = true;
+            custom-theme-shrink = false;
 
-              dock-position = 2;
-              multi-monitor = false;
+            dock-position = 2;
+            multi-monitor = false;
 
-              dock-fixed = false;
-              intellihide = true;
-              autohide-in-fullscreen = true;
+            dock-fixed = false;
+            intellihide = true;
+            autohide-in-fullscreen = true;
 
-              click-action = 1;
-              scroll-action = 1;
+            click-action = 1;
+            scroll-action = 1;
 
-              show-running = true;
-              isolate-monitors = false;
-              isolate-workspaces = false;
+            show-running = true;
+            isolate-monitors = false;
+            isolate-workspaces = false;
 
-              show-trash = false;
+            show-trash = false;
 
-              show-mounts = false;
-              show-mounts-only-mounted = false;
-              show-mounts-network = false;
-            };
-            "org/gnome/settings-daemon/plugins/media-keys" = {
-              screenshot = [];
-              screenshot-window = [];
-              screenshot-area = [];
-              custom-keybindings = [
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region/"
-                "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/"
-              ];
-            };
+            show-mounts = false;
+            show-mounts-only-mounted = false;
+            show-mounts-network = false;
+          };
+          "org/gnome/settings-daemon/plugins/media-keys" = {
+            screenshot = [];
+            screenshot-window = [];
+            screenshot-area = [];
+            custom-keybindings = [
+              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full/"
+              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region/"
+              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/"
+            ];
+          };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full" = {
-              name = "Flameshot Full Screen";
-              binding = "<Super>c";
-              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot screen --clipboard'";
-            };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full" = {
+            name = "Flameshot Full Screen";
+            binding = "<Super>c";
+            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot screen --clipboard'";
+          };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region" = {
-              name = "Flameshot Region";
-              binding = "<Super>x";
-              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui --clipboard'";
-            };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region" = {
+            name = "Flameshot Region";
+            binding = "<Super>x";
+            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui --clipboard'";
+          };
 
-            "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui" = {
-              name = "Flameshot GUI";
-              binding = "<Super><Shift>s";
-              command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui'";
-            };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui" = {
+            name = "Flameshot GUI";
+            binding = "<Super><Shift>s";
+            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui'";
+          };
           "org/gnome/desktop/interface" = {
             monospace-font-name = "Inconsolata 11";
           };
@@ -349,10 +358,11 @@ with lib;
       ];
 
       # Enable extensions if specified
-      home.packages = with pkgs.gnomeExtensions; 
-        (if builtins.elem "appindicatorsupport@rgcjonas.gmail.com" config.gnome.extensions 
-         then [ appindicator ] 
-         else [ ]);
+      home.packages = with pkgs.gnomeExtensions; (
+        if builtins.elem "appindicatorsupport@rgcjonas.gmail.com" config.gnome.extensions
+        then [appindicator]
+        else []
+      );
     };
   };
 }

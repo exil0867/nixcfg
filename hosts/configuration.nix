@@ -1,22 +1,31 @@
-
-{ lib, config, nixpkgs-channel, system-definition, stable, unstable, inputs, vars, ... }:
-
-let
-  terminal = system-definition.${vars.terminal};
-  moduleImports = import ../modules/desktops ++
-                  import ../modules/hardware ++
-                  import ../modules/programs ++
-                  import ../modules/services ++
-                  import ../modules/shell ++
-                  import ../modules/theming;
-in
 {
-
-  imports = moduleImports ++ [ inputs.agenix.nixosModules.default {
-          age.identityPaths = [ "/home/${vars.user}/.ssh/id_ed25519" ];
-        } ];
-
-
+  lib,
+  config,
+  nixpkgs-channel,
+  system-definition,
+  stable,
+  unstable,
+  inputs,
+  vars,
+  ...
+}: let
+  terminal = system-definition.${vars.terminal};
+  moduleImports =
+    import ../modules/desktops
+    ++ import ../modules/hardware
+    ++ import ../modules/programs
+    ++ import ../modules/services
+    ++ import ../modules/shell
+    ++ import ../modules/theming;
+in {
+  imports =
+    moduleImports
+    ++ [
+      inputs.agenix.nixosModules.default
+      {
+        age.identityPaths = ["/home/${vars.user}/.ssh/id_ed25519"];
+      }
+    ];
 
   boot = {
     tmp = {
@@ -28,7 +37,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "camera" "networkmanager" ];
+    extraGroups = ["wheel" "video" "audio" "camera" "networkmanager"];
   };
 
   time.timeZone = "Africa/Tunis";
@@ -60,24 +69,24 @@ in
 
   fonts.packages =
     (with system-definition; [
-    carlito # NixOS
-    vegur # NixOS
-    source-code-pro
-    jetbrains-mono
-    font-awesome # Icons
-    corefonts # MS
-    noto-fonts # Google + Unicode
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
+      carlito # NixOS
+      vegur # NixOS
+      source-code-pro
+      jetbrains-mono
+      font-awesome # Icons
+      corefonts # MS
+      noto-fonts # Google + Unicode
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
       nerd-fonts.jetbrains-mono
       inconsolata
     ])
     ++ (with unstable; [
-    nerd-fonts.fira-mono
+      nerd-fonts.fira-mono
     ])
     ++ (with stable; [
-    fira-mono
-  ]);
+      fira-mono
+    ]);
 
   fonts.fontconfig = {
     enable = true;
@@ -95,48 +104,49 @@ in
       EDITOR = "${vars.editor}";
       VISUAL = "${vars.editor}";
     };
-    systemPackages = (with system-definition; [
-      age
-      inputs.agenix.packages.${stdenv.hostPlatform.system}.default
-      gnupg
-      gh
-      # devenv
-      btop # Resource Manager
-      # cifs-utils # Samba
-      coreutils # GNU Utilities
-      git # Version Control
-      # gvfs # Samba
-      killall # Process Killer
-      lshw # Hardware Config
-      nano # Text Editor
-      nix-tree # Browse Nix Store
-      pciutils # Manage PCI
-      # ranger # File Manager
-      # smartmontools # Disk Health
-      tldr # Helper
-      # usbutils # Manage USB
-      wget # Retriever
-      xdg-utils # Environment integration
+    systemPackages =
+      (with system-definition; [
+        age
+        inputs.agenix.packages.${stdenv.hostPlatform.system}.default
+        gnupg
+        gh
+        # devenv
+        btop # Resource Manager
+        # cifs-utils # Samba
+        coreutils # GNU Utilities
+        git # Version Control
+        # gvfs # Samba
+        killall # Process Killer
+        lshw # Hardware Config
+        nano # Text Editor
+        nix-tree # Browse Nix Store
+        pciutils # Manage PCI
+        # ranger # File Manager
+        # smartmontools # Disk Health
+        tldr # Helper
+        # usbutils # Manage USB
+        wget # Retriever
+        xdg-utils # Environment integration
 
-      # Video/Audio
-      alsa-utils # Audio Control
-      linux-firmware # Proprietary Hardware Blob
-      mpv # Media Player
-      pavucontrol # Audio Control
-      pipewire # Audio Server/Control
-      pulseaudio # Audio Server/Control
-      qpwgraph # Pipewire Graph Manager
-      remmina # XRDP & VNC Client
+        # Video/Audio
+        alsa-utils # Audio Control
+        linux-firmware # Proprietary Hardware Blob
+        mpv # Media Player
+        pavucontrol # Audio Control
+        pipewire # Audio Server/Control
+        pulseaudio # Audio Server/Control
+        qpwgraph # Pipewire Graph Manager
+        remmina # XRDP & VNC Client
 
-      # neovim
+        # neovim
 
-      # Other Packages Found @
-      # - ./<host>/default.nix
-      # - ../modules
-    ])
-    ++ (with unstable; [
-      devenv
-    ]);
+        # Other Packages Found @
+        # - ./<host>/default.nix
+        # - ../modules
+      ])
+      ++ (with unstable; [
+        devenv
+      ]);
   };
 
   programs = {
@@ -263,7 +273,7 @@ in
         };
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" ];
+          plugins = ["git"];
           theme = "robbyrussell";
         };
       };
@@ -273,27 +283,27 @@ in
       mimeApps = {
         enable = true;
         defaultApplications = {
-          "application/pdf" = [  "librewolf.desktop" ];
-          "x-scheme-handler/http" = [ "librewolf.desktop"  ];
-          "x-scheme-handler/https" = [ "librewolf.desktop"  ];
-          "x-scheme-handler/about" = [ "librewolf.desktop" ];
-          "x-scheme-handler/unknown" = [ "librewolf.desktop" ];
-      #     # "image/jpeg" = [ "image-roll.desktop" "feh.desktop" ];
-      #     # "image/png" = [ "image-roll.desktop" "feh.desktop" ];
-      #     # "text/plain" = "nvim.desktop";
-      #     # "text/html" = "nvim.desktop";
-      #     # "text/csv" = "nvim.desktop";
-      #     # "application/zip" = "org.gnome.FileRoller.desktop";
-      #     # "application/x-tar" = "org.gnome.FileRoller.desktop";
-      #     # "application/x-bzip2" = "org.gnome.FileRoller.desktop";
-      #     # "application/x-gzip" = "org.gnome.FileRoller.desktop";
-      #     # "x-scheme-handler/mailto" = [ "gmail.desktop" ];
-      #     "audio/mp3" = "mpv.desktop";
-      #     "audio/x-matroska" = "mpv.desktop";
-      #     "video/webm" = "mpv.desktop";
-      #     "video/mp4" = "mpv.desktop";
-      #     "video/x-matroska" = "mpv.desktop";
-      #     # "inode/directory" = "pcmanfm.desktop";
+          "application/pdf" = ["librewolf.desktop"];
+          "x-scheme-handler/http" = ["librewolf.desktop"];
+          "x-scheme-handler/https" = ["librewolf.desktop"];
+          "x-scheme-handler/about" = ["librewolf.desktop"];
+          "x-scheme-handler/unknown" = ["librewolf.desktop"];
+          #     # "image/jpeg" = [ "image-roll.desktop" "feh.desktop" ];
+          #     # "image/png" = [ "image-roll.desktop" "feh.desktop" ];
+          #     # "text/plain" = "nvim.desktop";
+          #     # "text/html" = "nvim.desktop";
+          #     # "text/csv" = "nvim.desktop";
+          #     # "application/zip" = "org.gnome.FileRoller.desktop";
+          #     # "application/x-tar" = "org.gnome.FileRoller.desktop";
+          #     # "application/x-bzip2" = "org.gnome.FileRoller.desktop";
+          #     # "application/x-gzip" = "org.gnome.FileRoller.desktop";
+          #     # "x-scheme-handler/mailto" = [ "gmail.desktop" ];
+          #     "audio/mp3" = "mpv.desktop";
+          #     "audio/x-matroska" = "mpv.desktop";
+          #     "video/webm" = "mpv.desktop";
+          #     "video/mp4" = "mpv.desktop";
+          #     "video/x-matroska" = "mpv.desktop";
+          #     # "inode/directory" = "pcmanfm.desktop";
         };
       };
       # desktopEntries.image-roll = {

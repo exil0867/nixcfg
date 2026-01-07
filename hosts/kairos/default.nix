@@ -1,26 +1,31 @@
-{  config, lib, vars, unstable, stable, system-definition, inputs, ... }:
-
-let
-  plasmaConfig = import ../../modules/desktops/plasma-prefs.nix;
-in
-
 {
-  imports = [
-    ./hardware-configuration.nix
-    inputs.nixvim-unstable.nixosModules.nixvim
-    ../../modules/programs/neovim
-    ../../modules/programs/games.nix
-    ../../modules/services/rclone-sftp.nix
-    ../../modules/services/mounter.nix
-    ../../modules/services/immich-sync.nix
-    ../../modules/services/sync-secrets.nix
-    ../../modules/desktops/virtualisation/docker.nix
-    ../../modules/services/metrics-agent
-    ../../modules/programs/backup-android
-  ] ++
-  (import ../../modules/hardware/kairos) ++
-  (import ../../modules/desktops/virtualisation);
-      
+  config,
+  lib,
+  vars,
+  unstable,
+  stable,
+  system-definition,
+  inputs,
+  ...
+}: let
+  plasmaConfig = import ../../modules/desktops/plasma-prefs.nix;
+in {
+  imports =
+    [
+      ./hardware-configuration.nix
+      inputs.nixvim-unstable.nixosModules.nixvim
+      ../../modules/programs/neovim
+      ../../modules/programs/games.nix
+      ../../modules/services/rclone-sftp.nix
+      ../../modules/services/mounter.nix
+      ../../modules/services/immich-sync.nix
+      ../../modules/services/sync-secrets.nix
+      ../../modules/desktops/virtualisation/docker.nix
+      ../../modules/services/metrics-agent
+      ../../modules/programs/backup-android
+    ]
+    ++ (import ../../modules/hardware/kairos)
+    ++ (import ../../modules/desktops/virtualisation);
 
   # Boot Options
   boot = {
@@ -74,11 +79,11 @@ in
   };
 
   programs.backup-android.enable = true;
-  
+
   networking = {
     hostName = "kairos";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 3000 ];
+    firewall.allowedTCPPorts = [3000];
   };
 
   services.libinput.mouse.accelProfile = "flat";
@@ -94,10 +99,10 @@ in
     enable = true;
     user = "exil0681";
     environmentFile = config.age.secrets."immich/sync".path;
-    paths = [ "/home/exil0681/Downloads/" ];
+    paths = ["/home/exil0681/Downloads/"];
     deleteUploaded = true;
     deleteDuplicates = true;
-    concurrency = 5; 
+    concurrency = 5;
   };
 
   plasma = {
@@ -112,14 +117,14 @@ in
         screen = 0;
         floating = false;
         widgets = [
-          { name = "org.kde.plasma.kickoff"; }
+          {name = "org.kde.plasma.kickoff";}
           {
             name = "org.kde.plasma.icontasks";
             config.General = {
               showOnlyCurrentScreen = true;
             };
           }
-          { name = "org.kde.plasma.marginsseparator"; }
+          {name = "org.kde.plasma.marginsseparator";}
         ];
       }
       {
@@ -128,7 +133,7 @@ in
         screen = 1;
         floating = false;
         widgets = [
-          { name = "org.kde.plasma.kickoff"; }
+          {name = "org.kde.plasma.kickoff";}
           {
             name = "org.kde.plasma.icontasks";
             config.General = {
@@ -139,7 +144,7 @@ in
               showOnlyCurrentScreen = true;
             };
           }
-          { name = "org.kde.plasma.marginsseparator"; }
+          {name = "org.kde.plasma.marginsseparator";}
           {
             systemTray.items = {
               shown = [
@@ -147,10 +152,10 @@ in
                 "org.kde.plasma.volume"
                 "org.kde.plasma.bluetooth"
               ];
-              hidden = [ "org.kde.plasma.networkmanagement" ];
+              hidden = ["org.kde.plasma.networkmanagement"];
             };
           }
-          { digitalClock = { }; }
+          {digitalClock = {};}
         ];
       }
     ];
@@ -159,13 +164,12 @@ in
     dataFile = plasmaConfig.dataFile;
   };
 
-
   programs.ssh.askPassword = lib.mkForce "${unstable.seahorse}/libexec/seahorse/ssh-askpass";
   services.displayManager.sddm.enable = lib.mkForce false;
-  
+
   gnome = {
     enable = true;
-    
+
     displayManager.defaultSession = "gnome";
 
     nightLight = {
@@ -217,41 +221,42 @@ in
   flatpak.enable = true;
 
   environment = {
-    systemPackages = (with system-definition; [
-      ungoogled-chromium
-      git
-      ollama
-      vscode
-      keepassxc
-      libreoffice
-      librewolf
-      sshpass
-      gimp
-      discord
-      # bruno
-      obs-studio
-      bottles
-      dbeaver-bin
-      obsidian
-      handbrake
-      krita
-      transmission_4-qt
-      zed-editor
-      nerd-fonts.jetbrains-mono
-      android-tools
-      # aspell
-      # aspellDicts.en
-    ]) ++ (with system-definition.kdePackages; [
-      kate
-      # partitionmanager
-      kdenlive
-      # kcalc
-      # sonnet
-      # plasma-systemmonitor
-    ]) ++
-    (with stable; [
-      # Apps
-    ]);
+    systemPackages =
+      (with system-definition; [
+        ungoogled-chromium
+        git
+        ollama
+        vscode
+        keepassxc
+        libreoffice
+        librewolf
+        sshpass
+        gimp
+        discord
+        # bruno
+        obs-studio
+        bottles
+        dbeaver-bin
+        obsidian
+        handbrake
+        krita
+        transmission_4-qt
+        zed-editor
+        android-tools
+        # aspell
+        # aspellDicts.en
+      ])
+      ++ (with system-definition.kdePackages; [
+        kate
+        # partitionmanager
+        kdenlive
+        # kcalc
+        # sonnet
+        # plasma-systemmonitor
+      ])
+      ++ (with stable; [
+        # Apps
+      ]);
   };
 
   age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
@@ -323,9 +328,9 @@ in
       # vscode = {
       #   enable = true;
       #   profiles.default.extensions = [
-      #     system-definition.vscode-extensions.ms-vscode-remote.remote-ssh 
-      #     system-definition.vscode-extensions.ms-vscode-remote.remote-containers 
-      #     system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit 
+      #     system-definition.vscode-extensions.ms-vscode-remote.remote-ssh
+      #     system-definition.vscode-extensions.ms-vscode-remote.remote-containers
+      #     system-definition.vscode-extensions.ms-vscode-remote.remote-ssh-edit
       #     system-definition.vscode-extensions.jnoortheen.nix-ide
       #   ];
       #   profiles.default.userSettings = {
