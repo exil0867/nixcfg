@@ -58,7 +58,8 @@ in
     sudo.wheelNeedsPassword = false;
   };
 
-  fonts.packages =( with system-definition; [
+  fonts.packages =
+    (with system-definition; [
     carlito # NixOS
     vegur # NixOS
     source-code-pro
@@ -68,12 +69,25 @@ in
     noto-fonts # Google + Unicode
     noto-fonts-cjk-sans
     noto-fonts-color-emoji
-  ]) ++ (with unstable; [
+      nerd-fonts.jetbrains-mono
+      inconsolata
+    ])
+    ++ (with unstable; [
     nerd-fonts.fira-mono
-  ]) ++
-  (with stable; [
+    ])
+    ++ (with stable; [
     fira-mono
   ]);
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      monospace = ["Inconsolata" "JetBrains Mono" "Source Code Pro"];
+      sansSerif = ["Noto Sans" "Carlito"];
+      serif = ["Noto Serif"];
+      emoji = ["Noto Color Emoji"];
+    };
+  };
 
   environment = {
     variables = {

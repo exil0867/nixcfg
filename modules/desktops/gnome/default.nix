@@ -336,6 +336,9 @@ with lib;
               binding = "<Super><Shift>s";
               command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui'";
             };
+          "org/gnome/desktop/interface" = {
+            monospace-font-name = "Inconsolata 11";
+          };
         }
 
         # User-provided extra settings
