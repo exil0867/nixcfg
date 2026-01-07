@@ -38,7 +38,6 @@ in
   };
 
   users.users.${vars.user} = {
-    extraGroups = [ "adbusers" ];
     # openssh.authorizedKeys.keys = [];
   };
 
@@ -239,7 +238,7 @@ in
       transmission_4-qt
       zed-editor
       nerd-fonts.jetbrains-mono
-      # android-tools
+      android-tools
       # aspell
       # aspellDicts.en
     ]) ++ (with system-definition.kdePackages; [
@@ -261,8 +260,6 @@ in
     authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
     loginServer = "http://192.168.1.5:8181";
   };
-
-  programs.adb.enable = true;
 
   docker = {
     enable = true;
