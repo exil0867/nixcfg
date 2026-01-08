@@ -12,6 +12,7 @@ in
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/transmission.nix
     ../../modules/programs/htpc-downloader.nix
+    ../../modules/programs/jellyfin.nix
     ../../modules/services/metrics-agent
     ../../modules/services/myexpenses-upload
   ] ++
@@ -122,7 +123,7 @@ in
   security.rtkit.enable = true;
   
     # Jellyfin Configuration
-    services.jellyfin = {
+  services.jellyfin = {
     enable = true;
     openFirewall = true;
     dataDir = "/mnt/1TB-ST1000DM010-2EP102/data/jellyfin";
@@ -161,7 +162,7 @@ in
 
   # Tailscale Configuration
   age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
-  age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
+  # age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
     file = ../../secrets-sync/cloudflare/kyrena.dev-tunnel-echo2world.age;
     owner = vars.user;
@@ -311,11 +312,11 @@ in
     };
   };
 
-  services.reddit-auto-delete = {
-    enable = false;
-    interval = "72h";
-    environmentFile = config.age.secrets."reddit/reddit-cleaner".path;
-  };
+  # services.reddit-auto-delete = {
+  #   enable = false;
+  #   interval = "72h";
+  #   environmentFile = config.age.secrets."reddit/reddit-cleaner".path;
+  # };
 
   services.cloudflared = {
     enable = true;

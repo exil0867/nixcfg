@@ -11,6 +11,7 @@ in
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
+    ../../modules/programs/jellyfin.nix
   ];
 
   # Boot Options

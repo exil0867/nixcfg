@@ -11,10 +11,7 @@
 #
 
 [
-  ./flatpak.nix
-  ./games.nix
+  # ./flatpak.nix
+  # ./games.nix
   ./kitty.nix
-  ./obs.nix
-  ./jellyfin.nix
-  ./jellyfin-player.nix
 ]

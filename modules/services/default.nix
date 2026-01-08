@@ -1,5 +1,5 @@
 
 [
-  ./tailscale.nix
-  ./reddit-cleaner.nix
+  # ./tailscale.nix
+  # ./reddit-cleaner.nix
 ]

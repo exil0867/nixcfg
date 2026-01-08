@@ -15,6 +15,7 @@ in {
       ./hardware-configuration.nix
       inputs.nixvim-unstable.nixosModules.nixvim
       ../../modules/programs/neovim
+      ../../modules/programs/flatpak.nix
       ../../modules/programs/games.nix
       ../../modules/services/rclone-sftp.nix
       ../../modules/services/mounter.nix
@@ -23,6 +24,8 @@ in {
       ../../modules/desktops/virtualisation/docker.nix
       ../../modules/services/metrics-agent
       ../../modules/programs/backup-android
+      ../../modules/programs/jellyfin-player.nix
+      ../../modules/programs/obs.nix
     ]
     ++ (import ../../modules/hardware/kairos)
     ++ (import ../../modules/desktops/virtualisation);
@@ -259,12 +262,12 @@ in {
       ]);
   };
 
-  age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
-  tailscale = {
-    enable = false;
-    authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
-    loginServer = "http://192.168.1.5:8181";
-  };
+  # age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
+  # tailscale = {
+  #   enable = false;
+  #   authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;
+  #   loginServer = "http://192.168.1.5:8181";
+  # };
 
   docker = {
     enable = true;
