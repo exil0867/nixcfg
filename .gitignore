@@ -14,3 +14,11 @@ secrets/*
 secrets-sync/*
 !secrets-sync/*.nix
 
+# Host-local private overlays
+hosts/**/private.nix
+hosts/**/private/
+
+# Module-local private implementations
+modules/**/private/
+modules/**/private.nix
+

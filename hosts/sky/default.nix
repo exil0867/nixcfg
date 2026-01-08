@@ -11,7 +11,6 @@ in
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
-    ../../modules/services/trena-backend
   ];
 
   # Boot Options
@@ -103,12 +102,6 @@ in
     secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
-  };
-
-  services.trena-backend = {
-    enable = true;
-    domain = "trena-api.kyrena.dev";
-    secretFile = ../../secrets-sync/trena/main.age; 
   };
 
 

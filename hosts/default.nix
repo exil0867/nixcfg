@@ -88,21 +88,25 @@ in
         hostName = "sky";
       };
     };
-    modules = [
-      nur.modules.nixos.default
-      # nixvim-unstable.nixosModules.nixvim
-      ./sky
-      ./configuration.nix
-
-      home-manager-stable.nixosModules.home-manager
-      {
-        home-manager.backupFileExtension = "backup";
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = {
+    modules =
+      [
+        nur.modules.nixos.default
+        ./sky
+        ./configuration.nix
+      ]
+      ++ stable-lib.optional
+          (builtins.pathExists ./sky/private.nix)
+          ./sky/private.nix
+      ++ [
+        home-manager-stable.nixosModules.home-manager
+        {
+          home-manager.backupFileExtension = "backup";
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {
           inherit inputs;
         };
       }
-    ];
+      ];
   };
 }
