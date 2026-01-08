@@ -11,7 +11,6 @@ in
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
-    ../../modules/services/trena-backend
   ];
 
   # Boot Options
@@ -104,13 +103,6 @@ in
     user = vars.user;
     group = "users";
   };
-
-  services.trena-backend = {
-    enable = true;
-    domain = "trena-api.kyrena.dev";
-    secretFile = ../../secrets-sync/trena/main.age; 
-  };
-
 
   # age.secrets."deluge/auth" = {
   #   file = ../../secrets/deluge/auth.age;
