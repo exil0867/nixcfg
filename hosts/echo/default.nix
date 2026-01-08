@@ -11,8 +11,9 @@ in
     ../../modules/services/immich-backup
     ../../modules/desktops/virtualisation/docker.nix
     ../../modules/services/transmission.nix
-    ../../modules/programs/htpc-downloader.nix
+    ../../modules/services/htpc-downloader
     ../../modules/programs/jellyfin.nix
+    ../../modules/programs/jellyfin-player.nix
     ../../modules/services/metrics-agent
     ../../modules/services/myexpenses-upload
   ] ++
