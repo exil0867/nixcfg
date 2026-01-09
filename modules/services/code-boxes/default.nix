@@ -1,6 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
   openVsx = inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system}.open-vsx;
   baseSettings = {
     "workbench.colorTheme" = "Catppuccin Mocha";
@@ -40,12 +44,11 @@ let
 
   codeBox = pkgs.writeShellApplication {
     name = "code-box";
-    runtimeInputs = [ pkgs.coreutils pkgs.vscodium ];
+    runtimeInputs = [pkgs.coreutils pkgs.vscodium];
     text = builtins.readFile ./code-box.sh;
   };
-in
-{
-  home.packages = [ codeBox ];
+in {
+  home.packages = [codeBox];
 
   programs.vscode = {
     enable = true;
@@ -72,65 +75,86 @@ in
       userSettings =
         baseSettings
         // {
-        "editor.formatOnSave" = true;
-        "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
           "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
-        "prettier.requireConfig" = true;
-      };
+          "prettier.requireConfig" = true;
+        };
       extensions = coreExtensions ++ jsExtensions;
     };
 
     profiles.kitspark-nextjs-supabase = {
-      userSettings = baseSettings // {
-        "editor.formatOnSave" = true;
-        "editor.defaultFormatter" = "esbenp.prettier-vscode";
-        "eslint.validate" = [ "javascript" "typescript" "typescriptreact" ];
-        "prettier.requireConfig" = true;
-      };
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
+          "prettier.requireConfig" = true;
+        };
       extensions = coreExtensions ++ jsExtensions;
     };
 
     profiles.kitspark-specs = {
-      userSettings = baseSettings // {
-        "editor.wordWrap" = "on";
-        "editor.quickSuggestions" = {
-          "comments" = "off";
-          "strings" = "off";
-          "other"= "off";
+      userSettings =
+        baseSettings
+        // {
+          "editor.wordWrap" = "on";
+          "editor.quickSuggestions" = {
+            "comments" = "off";
+            "strings" = "off";
+            "other" = "off";
+          };
+          "markdownlint.config" = {
+            "MD013" = false;
+          };
         };
-        "markdownlint.config" = {
-          "MD013" = false;
-        };
-      };
       extensions = coreExtensions ++ markdownExtensions;
     };
 
     profiles.nix = {
-      userSettings = baseSettings // {
-        "editor.formatOnSave" = true;
-      };
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+        };
       extensions = coreExtensions ++ nixExtensions;
     };
 
     profiles.ravage-unweave = {
-      userSettings = baseSettings // {
-        "editor.formatOnSave" = true;
-        "editor.defaultFormatter" = "esbenp.prettier-vscode";
-        "eslint.validate" = [ "javascript" "typescript" "typescriptreact" ];
-        "prettier.requireConfig" = true;
-      };
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
+          "prettier.requireConfig" = true;
+        };
       extensions = coreExtensions ++ jsExtensions;
     };
 
     profiles.ravage-bonded = {
-      userSettings = baseSettings // {
-        "editor.formatOnSave" = true;
-        "editor.defaultFormatter" = "esbenp.prettier-vscode";
-        "eslint.validate" = [ "javascript" "typescript" "typescriptreact" ];
-        "prettier.requireConfig" = true;
-      };
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
+          "prettier.requireConfig" = true;
+        };
       extensions = coreExtensions ++ jsExtensions;
     };
 
+    profiles.trena = {
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
+          "prettier.requireConfig" = true;
+        };
+      extensions = coreExtensions ++ jsExtensions;
+    };
   };
 }
