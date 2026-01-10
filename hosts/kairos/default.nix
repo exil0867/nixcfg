@@ -229,7 +229,7 @@ in {
         ungoogled-chromium
         git
         ollama
-        vscode
+        # vscode
         keepassxc
         libreoffice
         librewolf
@@ -244,7 +244,7 @@ in {
         handbrake
         krita
         transmission_4-qt
-        zed-editor
+        # zed-editor
         android-tools
         # aspell
         # aspellDicts.en

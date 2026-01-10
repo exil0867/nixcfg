@@ -3,11 +3,11 @@ set -euo pipefail
 
 case "$#" in
   0)
-    exec codium
+    exec code
     ;;
   1)
     BOX="$1"
-    exec codium --profile "$BOX" "$HOME/Develop"
+    exec code --profile "$BOX" "$HOME/Develop"
     ;;
   2)
     BOX="$1"
@@ -19,7 +19,7 @@ case "$#" in
       PATH_RESOLVED="$(realpath "$HOME/Develop/$TARGET")"
     fi
 
-    exec codium --profile "$BOX" "$PATH_RESOLVED"
+    exec code --profile "$BOX" "$PATH_RESOLVED"
     ;;
   *)
     echo "usage: code-box [box] [path]"

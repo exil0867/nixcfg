@@ -5,7 +5,8 @@
   inputs,
   ...
 }: let
-  openVsx = inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system}.open-vsx;
+  openVsx = pkgs.open-vsx;
+  marketplace = pkgs.vscode-marketplace;
   baseSettings = {
     "workbench.colorTheme" = "Catppuccin Mocha";
     "editor.fontLigatures" = true;
@@ -18,36 +19,48 @@
     "security.workspace.trust.enabled" = false;
     "remote.SSH.useLocalServer" = true;
     "remote.SSH.connectTimeout" = 60;
+    "github.copilot.inlineSuggest.enable" = false;
+    "github.copilot.editor.enableAutoCompletions" = false;
+    "settingsSync.enabled" = false;
+    "github.copilot.enable" = {
+      "*" = false;
+    };
+    "github.copilot.editor.enableCodeActions" = false;
+    "chat.agent.enabled" = false;
+    "chat.disableAIFeatures" = true;
   };
 
-  nixExtensions = with pkgs.vscode-extensions; [
+  nixExtensions = with marketplace; [
     bbenoist.nix
     jnoortheen.nix-ide
     kamadorueda.alejandra
   ];
 
-  coreExtensions = with pkgs.vscode-extensions;
+  coreExtensions = with marketplace;
     [
       catppuccin.catppuccin-vsc
       editorconfig.editorconfig
-      openVsx.jeanp413.open-remote-ssh
-      openVsx.antfu.browse-lite
+      ms-vscode-remote.remote-ssh
+      github.vscode-github-actions
+      github.vscode-pull-request-github
+      github.remotehub
+      antfu.browse-lite
     ]
     ++ nixExtensions;
 
-  jsExtensions = with pkgs.vscode-extensions; [
+  jsExtensions = with marketplace; [
     dbaeumer.vscode-eslint
     esbenp.prettier-vscode
   ];
 
-  markdownExtensions = with pkgs.vscode-extensions; [
+  markdownExtensions = with marketplace; [
     yzhang.markdown-all-in-one
     davidanson.vscode-markdownlint
   ];
 
   codeBox = pkgs.writeShellApplication {
     name = "code-box";
-    runtimeInputs = [pkgs.coreutils pkgs.vscodium];
+    runtimeInputs = [pkgs.coreutils pkgs.vscode];
     text = builtins.readFile ./code-box.sh;
   };
 in {
@@ -55,7 +68,7 @@ in {
 
   programs.vscode = {
     enable = true;
-    package = pkgs.vscodium;
+    package = pkgs.vscode;
 
     profiles.default = {
       userSettings = baseSettings;

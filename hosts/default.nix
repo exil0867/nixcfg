@@ -1,10 +1,20 @@
-
-
-{ inputs, nixpkgs-stable, nixpkgs-unstable, nixos-hardware, home-manager-unstable, agenix, home-manager-stable, nur, nixvim-unstable, nixvim-stable, plasma-manager-unstable, plasma-manager-stable, vars, ... }:
-
-let
+{
+  inputs,
+  nixpkgs-stable,
+  nixpkgs-unstable,
+  nixos-hardware,
+  home-manager-unstable,
+  agenix,
+  home-manager-stable,
+  nur,
+  nixvim-unstable,
+  nixvim-stable,
+  plasma-manager-unstable,
+  plasma-manager-stable,
+  vars,
+  ...
+}: let
   system = "x86_64-linux";
-
 
   stable = import nixpkgs-stable {
     inherit system;
@@ -14,12 +24,13 @@ let
   unstable = import nixpkgs-unstable {
     inherit system;
     config.allowUnfree = true;
+    overlays = [inputs.nix-vscode-extensions.overlays.default];
   };
 
   stable-lib = nixpkgs-stable.lib;
   unstable-lib = nixpkgs-unstable.lib;
-in
-{
+  overlays = [inputs.nix-vscode-extensions.overlays.default];
+in {
   # Desktop Profile
   kairos = unstable-lib.nixosSystem {
     inherit system;
@@ -29,14 +40,18 @@ in
       system-definition = unstable;
       host = {
         hostName = "kairos";
-        # mainMonitor = "HDMI-A-2";
-        # secondMonitor = "HDMI-A-1";
       };
     };
     modules = [
       nur.modules.nixos.default
       ./kairos
       ./configuration.nix
+
+      {
+        nixpkgs.overlays = [
+          inputs.nix-vscode-extensions.overlays.default
+        ];
+      }
 
       home-manager-unstable.nixosModules.home-manager
       {
@@ -66,6 +81,12 @@ in
       ./echo
       ./configuration.nix
 
+      {
+        nixpkgs.overlays = [
+          inputs.nix-vscode-extensions.overlays.default
+        ];
+      }
+
       home-manager-stable.nixosModules.home-manager
       {
         home-manager.backupFileExtension = "backup";
@@ -93,10 +114,16 @@ in
         nur.modules.nixos.default
         ./sky
         ./configuration.nix
+
+        {
+          nixpkgs.overlays = [
+            inputs.nix-vscode-extensions.overlays.default
+          ];
+        }
       ]
       ++ stable-lib.optional
-          (builtins.pathExists ./sky/private.nix)
-          ./sky/private.nix
+      (builtins.pathExists ./sky/private.nix)
+      ./sky/private.nix
       ++ [
         home-manager-stable.nixosModules.home-manager
         {
@@ -104,9 +131,9 @@ in
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-          inherit inputs;
-        };
-      }
+            inherit inputs;
+          };
+        }
       ];
   };
 }
