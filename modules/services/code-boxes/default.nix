@@ -20,11 +20,20 @@
     "remote.SSH.connectTimeout" = 60;
   };
 
-  coreExtensions = with pkgs.vscode-extensions; [
-    catppuccin.catppuccin-vsc
-    editorconfig.editorconfig
-    openVsx.jeanp413.open-remote-ssh
+  nixExtensions = with pkgs.vscode-extensions; [
+    bbenoist.nix
+    jnoortheen.nix-ide
+    kamadorueda.alejandra
   ];
+
+  coreExtensions = with pkgs.vscode-extensions;
+    [
+      catppuccin.catppuccin-vsc
+      editorconfig.editorconfig
+      openVsx.jeanp413.open-remote-ssh
+      openVsx.antfu.browse-lite
+    ]
+    ++ nixExtensions;
 
   jsExtensions = with pkgs.vscode-extensions; [
     dbaeumer.vscode-eslint
@@ -34,12 +43,6 @@
   markdownExtensions = with pkgs.vscode-extensions; [
     yzhang.markdown-all-in-one
     davidanson.vscode-markdownlint
-  ];
-
-  nixExtensions = with pkgs.vscode-extensions; [
-    bbenoist.nix
-    jnoortheen.nix-ide
-    kamadorueda.alejandra
   ];
 
   codeBox = pkgs.writeShellApplication {
@@ -118,7 +121,7 @@ in {
         // {
           "editor.formatOnSave" = true;
         };
-      extensions = coreExtensions ++ nixExtensions;
+      extensions = coreExtensions;
     };
 
     profiles.ravage-unweave = {
