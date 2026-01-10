@@ -8,7 +8,7 @@
   openVsx = pkgs.open-vsx;
   marketplace = pkgs.vscode-marketplace;
   baseSettings = {
-    "workbench.colorTheme" = "Catppuccin Mocha";
+    "workbench.colorTheme" = "One Dark Pro Night Flat";
     "editor.fontLigatures" = true;
     "editor.wordWrap" = "on";
     "editor.minimap.enabled" = false;
@@ -38,7 +38,7 @@
 
   coreExtensions = with marketplace;
     [
-      catppuccin.catppuccin-vsc
+      zhuangtongfa.material-theme
       editorconfig.editorconfig
       ms-vscode-remote.remote-ssh
       github.vscode-github-actions
