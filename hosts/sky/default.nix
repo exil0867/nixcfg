@@ -47,10 +47,33 @@ in
 
   networking = {
     hostName = "sky";
-    networkmanager.enable = true;
-    # Open firewall ports for HTTP/HTTPS
+
+    networkmanager.enable = false;
+    useNetworkd = true;
+
     firewall.allowedTCPPorts = [ 80 443 ];
+    enableIPv6 = true;
+
+    interfaces.ens3.ipv4.addresses = [{
+      address = "37.120.187.211";
+      prefixLength = 22;
+    }];
+
+    interfaces.ens3.ipv6.addresses = [{
+      address = "2a03:4000:f:ce4::1";
+      prefixLength = 64;
+    }];
+
+    defaultGateway = {
+      address = "37.120.184.1";
+      interface = "ens3";
+    };
+    defaultGateway6 = {
+      address = "fe80::1";
+      interface = "ens3";
+    };
   };
+
 
   # Enable SSH for remote management
   services.openssh = {
