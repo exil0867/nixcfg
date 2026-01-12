@@ -35,6 +35,14 @@ in {
     # kernelPackages = pkgs.linuxPackages_latest;
   };
 
+  users.users.root = {
+    hashedPassword = "!"; # "!" means account is locked
+  };
+
+  services.displayManager = {
+    hiddenUsers = ["root"];
+  };
+
   users.users.${vars.user} = {
     isNormalUser = true;
     extraGroups = ["wheel" "video" "audio" "camera" "networkmanager"];

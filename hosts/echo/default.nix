@@ -1,26 +1,33 @@
-{ config, vars, unstable, stable, system-definition, lib, inputs, ... }:
-
-let
-in
 {
-  imports = [
-    ./hardware-configuration.nix
-    ../../modules/services/mounter.nix
-    ../../modules/services/sync-secrets.nix
-    ../../modules/services/immich-oci
-    ../../modules/services/immich-backup
-    ../../modules/desktops/virtualisation/docker.nix
-    ../../modules/services/transmission.nix
-    ../../modules/services/htpc-downloader
-    ../../modules/programs/jellyfin.nix
-    ../../modules/programs/jellyfin-player.nix
-    ../../modules/services/metrics-agent
-    ../../modules/services/myexpenses-upload
-  ] ++
-  (import ../../modules/desktops/virtualisation);
+  config,
+  vars,
+  unstable,
+  stable,
+  system-definition,
+  lib,
+  inputs,
+  ...
+}: let
+in {
+  imports =
+    [
+      ./hardware-configuration.nix
+      ../../modules/services/mounter.nix
+      ../../modules/services/sync-secrets.nix
+      ../../modules/services/immich-oci
+      ../../modules/services/immich-backup
+      ../../modules/desktops/virtualisation/docker.nix
+      ../../modules/services/transmission.nix
+      ../../modules/services/htpc-downloader
+      ../../modules/programs/jellyfin.nix
+      ../../modules/programs/jellyfin-player.nix
+      ../../modules/services/metrics-agent
+      ../../modules/services/myexpenses-upload
+    ]
+    ++ (import ../../modules/desktops/virtualisation);
 
   # Boot Options
-    boot = {
+  boot = {
     loader = {
       systemd-boot = {
         enable = true;
@@ -34,7 +41,7 @@ in
   };
 
   users.users.${vars.user} = {
-    extraGroups = [ "transmission" ];
+    extraGroups = ["transmission"];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
     ];
@@ -53,7 +60,6 @@ in
     path = "/upload";
     finalDir = "/mnt/1TB-ST1000DM010-2EP102/databox/other/MyExpenses";
   };
-
 
   mounter.mounts = [
     {
@@ -82,16 +88,16 @@ in
   networking = {
     hostName = "echo";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [80 443];
   };
 
   programs.nix-ld.enable = true;
 
   gnome = {
     enable = true;
-    
+
     displayManager.defaultSession = "gnome";
-    
+
     nightLight = {
       enable = true;
       temperature = 4000;
@@ -122,8 +128,8 @@ in
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  
-    # Jellyfin Configuration
+
+  # Jellyfin Configuration
   services.jellyfin = {
     enable = true;
     openFirewall = true;
@@ -138,7 +144,13 @@ in
   hardware = {};
 
   # OpenSSH
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
 
   services.transmission.settings = {
     download-dir = "/mnt/1TB-ST1000DM010-2EP102/downbox/htpc/other";
@@ -194,7 +206,7 @@ in
 
   services.traefik = {
     enable = true;
-    
+
     staticConfigOptions = {
       entryPoints = {
         web = {
@@ -220,7 +232,12 @@ in
           };
           http.tls = {
             certResolver = "cloudflare";
-            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
+            domains = [
+              {
+                main = "kyrena.dev";
+                sans = ["*.kyrena.dev"];
+              }
+            ];
           };
         };
       };
@@ -268,7 +285,7 @@ in
             }
           ];
           immich.loadBalancer.servers = [
-            { url = "http://127.0.0.1:2283"; }
+            {url = "http://127.0.0.1:2283";}
           ];
           transmission.loadBalancer.servers = [
             {
@@ -280,12 +297,12 @@ in
     };
   };
   services.traefik.environmentFiles = [
-        # config.age.secrets."cloudflare/email".path
+    # config.age.secrets."cloudflare/email".path
     config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
   ];
 
-    # Ensure the Traefik directory exists
-    systemd.services.traefik.preStart = ''
+  # Ensure the Traefik directory exists
+  systemd.services.traefik.preStart = ''
     mkdir -p /var/lib/traefik
     chown -R traefik:traefik /var/lib/traefik
   '';
@@ -297,7 +314,7 @@ in
       settings = {
         dns = {
           override_local_dns = true;
-          nameservers.global = [ "1.1.1.1" ]; # TODO: and 100.100.100.100?
+          nameservers.global = ["1.1.1.1"]; # TODO: and 100.100.100.100?
           base_domain = "kyrena.dev";
         };
         server_url = "https://headscale.kyrena.dev";
@@ -338,17 +355,20 @@ in
   };
 
   # System Packages
-  environment.systemPackages = (with system-definition; [
-    compose2nix
-    cloudflared
-    transmission_4-gtk
-    git
-    curl
-    bottles
-    certbot
-  ]) ++ (with system-definition.kdePackages; [
-  ]) ++ (with unstable; [
-  ]);
+  environment.systemPackages =
+    (with system-definition; [
+      compose2nix
+      cloudflared
+      transmission_4-gtk
+      git
+      curl
+      bottles
+      certbot
+    ])
+    ++ (with system-definition.kdePackages; [
+      ])
+    ++ (with unstable; [
+      ]);
 
   # Home Manager Configuration
   home-manager.users.${vars.user} = {
