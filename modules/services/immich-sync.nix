@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.immich-sync;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.immich-sync;
+in {
   options.services.immich-sync = {
     enable = mkEnableOption "Immich Sync Service";
 
@@ -45,7 +46,7 @@ in
       default = true;
       description = "Pass --delete-duplicates flag: Delete local assets that are already on the server.";
     };
-    
+
     concurrency = mkOption {
       type = types.int;
       default = 5;
@@ -56,9 +57,9 @@ in
   config = mkIf cfg.enable {
     systemd.services.immich-sync = {
       description = "Immich Sync Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
 
       serviceConfig = {
         User = cfg.user;
@@ -70,13 +71,19 @@ in
 
       script = ''
         ${cfg.package}/bin/immich upload \
-          --watch \
           --recursive \
           ${optionalString cfg.deleteUploaded "--delete"} \
           ${optionalString cfg.deleteDuplicates "--delete-duplicates"} \
           --concurrency ${toString cfg.concurrency} \
           ${concatStringsSep " " (map (p: "\"${p}\"") cfg.paths)}
       '';
+    };
+    systemd.timers.immich-sync = {
+      wantedBy = ["timers.target"];
+      timerConfig = {
+        OnBootSec = "5m";
+        OnUnitActiveSec = "30m";
+      };
     };
   };
 }
