@@ -20,31 +20,30 @@ in {
       type = types.path;
       description = ''
         Path to file containing env vars IMMICH_INSTANCE_URL and IMMICH_API_KEY.
-        Usually provided by agenix config.age.secrets."...".path
       '';
     };
 
     user = mkOption {
       type = types.str;
       default = "exil0681";
-      description = "The user to run the service as (must have write access to the paths to delete files).";
+      description = "User to run the service as.";
     };
 
     paths = mkOption {
       type = types.listOf types.path;
-      description = "List of directories to watch and upload.";
+      description = "Directories to upload.";
     };
 
     deleteUploaded = mkOption {
       type = types.bool;
       default = true;
-      description = "Pass --delete flag: Delete local assets after upload.";
+      description = "Delete local assets after upload.";
     };
 
     deleteDuplicates = mkOption {
       type = types.bool;
       default = true;
-      description = "Pass --delete-duplicates flag: Delete local assets that are already on the server.";
+      description = "Delete duplicate assets.";
     };
 
     concurrency = mkOption {
@@ -56,16 +55,14 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.immich-sync = {
-      description = "Immich Sync Service";
-      wantedBy = ["multi-user.target"];
+      description = "Immich Sync (batch upload)";
+
       after = ["network-online.target"];
       wants = ["network-online.target"];
 
       serviceConfig = {
+        Type = "oneshot";
         User = cfg.user;
-        # Restart helps if the network drops or server is temporarily unreachable
-        Restart = "always";
-        RestartSec = "10s";
         EnvironmentFile = cfg.environmentFile;
       };
 
@@ -78,8 +75,10 @@ in {
           ${concatStringsSep " " (map (p: "\"${p}\"") cfg.paths)}
       '';
     };
+
     systemd.timers.immich-sync = {
       wantedBy = ["timers.target"];
+
       timerConfig = {
         OnBootSec = "5m";
         OnUnitActiveSec = "30m";
