@@ -248,6 +248,7 @@ in {
         android-tools
         # aspell
         # aspellDicts.en
+        wl-clipboard
       ])
       ++ (with system-definition.kdePackages; [
         kate
