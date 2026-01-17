@@ -14,7 +14,7 @@ in {
     [
       ./hardware-configuration.nix
       inputs.nixvim-unstable.nixosModules.nixvim
-      ../../modules/programs/neovim
+      # ../../modules/programs/neovim
       ../../modules/programs/flatpak.nix
       ../../modules/programs/games.nix
       ../../modules/services/rclone-sftp.nix
