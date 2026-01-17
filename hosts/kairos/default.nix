@@ -249,6 +249,7 @@ in {
         # aspell
         # aspellDicts.en
         wl-clipboard
+        antigravity-fhs
       ])
       ++ (with system-definition.kdePackages; [
         kate
