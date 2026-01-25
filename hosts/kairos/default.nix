@@ -76,7 +76,7 @@ in {
 
   syncSecrets = {
     enable = true;
-    secretsDir = "/mnt/TOSHIBA-MQ04ABF100-1TB/Develop/nixcfg/secrets-sync";
+    secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
   };
