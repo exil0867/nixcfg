@@ -23,6 +23,7 @@ in {
       ../../modules/programs/jellyfin-player.nix
       ../../modules/services/metrics-agent
       ../../modules/services/myexpenses-upload
+      ../../modules/services/excalidraw.nix
     ]
     ++ (import ../../modules/desktops/virtualisation);
 
@@ -60,6 +61,8 @@ in {
     path = "/upload";
     finalDir = "/mnt/1TB-ST1000DM010-2EP102/databox/other/MyExpenses";
   };
+
+  services.excalidraw.enable = true;
 
   mounter.mounts = [
     {
@@ -277,6 +280,14 @@ in {
               certResolver = "cloudflare";
             };
           };
+          excalidraw = {
+            rule = "Host(`draw.kyrena.dev`)";
+            entryPoints = ["websecure"];
+            service = "excalidraw";
+            tls = {
+              certResolver = "cloudflare";
+            };
+          };
         };
         services = {
           jellyfin.loadBalancer.servers = [
@@ -290,6 +301,11 @@ in {
           transmission.loadBalancer.servers = [
             {
               url = "http://127.0.0.1:9091";
+            }
+          ];
+          excalidraw.loadBalancer.servers = [
+            {
+              url = "http://127.0.0.1:8081";
             }
           ];
         };
