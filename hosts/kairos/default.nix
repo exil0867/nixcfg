@@ -180,6 +180,32 @@ in {
       temperature = 4000;
     };
 
+    favorites = [
+      "librewolf.desktop"
+      "org.gnome.Nautilus.desktop"
+      "org.gnome.Console.desktop"
+    ];
+
+    webShortcuts = {
+      github = {
+        name = "GitHub";
+        url = "https://github.com";
+        icon = "github";
+      };
+
+      nixpkgs = {
+        name = "Nix Packages";
+        url = "https://search.nixos.org/packages";
+        icon = "nix-snowflake";
+      };
+
+      nixos-options = {
+        name = "NixOS Options";
+        url = "https://search.nixos.org/options";
+        icon = "nix-snowflake";
+      };
+    };
+
     interface = {
       colorScheme = "prefer-dark";
       clockShowDate = true;

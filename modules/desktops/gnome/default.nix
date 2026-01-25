@@ -129,6 +129,40 @@ with lib; {
           };
         };
       };
+
+      # Application menu (favorites)
+      favorites = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "org.gnome.Calendar.desktop"
+          "org.gnome.Nautilus.desktop"
+          "org.gnome.TextEditor.desktop"
+        ];
+        description = "List of .desktop files to show in the dock favorites";
+      };
+
+      # Web shortcuts (bookmarks in the dock)
+      webShortcuts = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            url = mkOption {
+              type = types.str;
+              description = "URL to open";
+            };
+            icon = mkOption {
+              type = types.str;
+              default = "librewolf";
+              description = "Icon name for the shortcut";
+            };
+            name = mkOption {
+              type = types.str;
+              description = "Friendly name for the shortcut";
+            };
+          };
+        });
+        default = {};
+        description = "Attribute set of web shortcuts to create as .desktop files";
+      };
     };
   };
 
@@ -233,10 +267,10 @@ with lib; {
             sort-directories-first = config.gnome.fileManager.sortDirectoriesFirst;
           };
 
-          "org/gnome/shell/keybindings" = {
-            screenshot = ["<Super>c"];
-            show-screenshot-ui = ["<Shift><Super>s"];
-          };
+          # "org/gnome/shell/keybindings" = {
+          #   screenshot = ["<Super>c"];
+          #   show-screenshot-ui = ["<Shift><Super>s"];
+          # };
 
           "org/gnome/desktop/wm/keybindings" = {
             switch-to-workspace-1 = ["<Super>F1"];
@@ -268,6 +302,10 @@ with lib; {
               pkgs.gnomeExtensions.emoji-copy.extensionUuid
               pkgs.gnomeExtensions.dash-to-dock.extensionUuid
             ];
+
+            favorite-apps =
+              config.gnome.favorites
+              ++ (map (name: "web-shortcut-${name}.desktop") (attrNames config.gnome.webShortcuts));
           };
 
           "org/gnome/shell/extensions/clipboard-history" = {
@@ -320,34 +358,6 @@ with lib; {
             show-mounts-only-mounted = false;
             show-mounts-network = false;
           };
-          "org/gnome/settings-daemon/plugins/media-keys" = {
-            screenshot = [];
-            screenshot-window = [];
-            screenshot-area = [];
-            custom-keybindings = [
-              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full/"
-              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region/"
-              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui/"
-            ];
-          };
-
-          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-full" = {
-            name = "Flameshot Full Screen";
-            binding = "<Super>c";
-            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot screen --clipboard'";
-          };
-
-          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-region" = {
-            name = "Flameshot Region";
-            binding = "<Super>x";
-            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui --clipboard'";
-          };
-
-          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot-gui" = {
-            name = "Flameshot GUI";
-            binding = "<Super><Shift>s";
-            command = "bash -c 'QT_QPA_PLATFORM=wayland flameshot gui'";
-          };
           "org/gnome/desktop/interface" = {
             monospace-font-name = "Inconsolata 11";
           };
@@ -363,6 +373,18 @@ with lib; {
         then [appindicator]
         else []
       );
+
+      # Web shortcuts
+      xdg.desktopEntries = mapAttrs' (name: value:
+        nameValuePair "web-shortcut-${name}" {
+          name = value.name;
+          exec = "librewolf ${value.url}";
+          icon = value.icon;
+          categories = ["Network" "WebBrowser"];
+          terminal = false;
+          type = "Application";
+        })
+      config.gnome.webShortcuts;
     };
   };
 }
