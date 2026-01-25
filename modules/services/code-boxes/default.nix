@@ -45,6 +45,21 @@
       github.vscode-pull-request-github
       github.remotehub
       antfu.browse-lite
+      nickdemayo.vscode-json-editor
+      kisstkondoros.vscode-gutter-preview
+      gruntfuggly.todo-tree
+      yzhang.markdown-all-in-one
+      davidanson.vscode-markdownlint
+
+      vitaliymaz.vscode-svg-previewer
+      arthurlobo.easy-codesnap
+      eamodio.gitlens
+      codezombiech.gitignore
+
+      mechatroner.rainbow-csv
+      quicktype.quicktype
+
+      johnpapa.vscode-peacock
     ]
     ++ nixExtensions;
 
