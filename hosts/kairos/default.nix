@@ -258,7 +258,7 @@ in {
         # vscode
         keepassxc
         libreoffice
-        librewolf
+        # librewolf
         sshpass
         gimp
         discord
@@ -267,7 +267,7 @@ in {
         bottles
         dbeaver-bin
         obsidian
-        handbrake
+        # handbrake
         krita
         transmission_4-qt
         # zed-editor
@@ -280,7 +280,7 @@ in {
       ++ (with system-definition.kdePackages; [
         kate
         # partitionmanager
-        kdenlive
+        # kdenlive
         # kcalc
         # sonnet
         # plasma-systemmonitor
@@ -349,6 +349,7 @@ in {
       };
       librewolf = {
         enable = true;
+        package = system-definition.librewolf-bin;
         settings = {
           "webgl.disabled" = false;
           "privacy.clearOnShutdown.history" = false;

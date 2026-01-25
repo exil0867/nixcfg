@@ -23,7 +23,13 @@
 
   unstable = import nixpkgs-unstable {
     inherit system;
-    config.allowUnfree = true;
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "librewolf-bin-unwrapped-146.0.1-1"
+        "librewolf-bin-146.0.1-1"
+      ];
+    };
     overlays = [inputs.nix-vscode-extensions.overlays.default];
   };
 
