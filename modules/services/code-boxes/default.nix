@@ -111,6 +111,18 @@ in {
       extensions = coreExtensions ++ jsExtensions;
     };
 
+    profiles.kitspark-nextjs-supabase-source = {
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          "eslint.validate" = ["javascript" "typescript" "typescriptreact"];
+          "prettier.requireConfig" = true;
+        };
+      extensions = coreExtensions ++ jsExtensions;
+    };
+
     profiles.kitspark-specs = {
       userSettings =
         baseSettings
