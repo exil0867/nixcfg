@@ -68,6 +68,10 @@
     esbenp.prettier-vscode
   ];
 
+  csharpExtensions = with marketplace; [
+    ms-dotnettools.csdevkit
+  ];
+
   markdownExtensions = with marketplace; [
     yzhang.markdown-all-in-one
     davidanson.vscode-markdownlint
@@ -198,6 +202,15 @@ in {
           "prettier.requireConfig" = true;
         };
       extensions = coreExtensions ++ jsExtensions;
+    };
+
+    profiles.crested = {
+      userSettings =
+        baseSettings
+        // {
+          "editor.formatOnSave" = true;
+        };
+      extensions = coreExtensions ++ csharpExtensions;
     };
   };
 }
