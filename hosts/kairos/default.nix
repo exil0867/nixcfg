@@ -308,6 +308,7 @@ in {
       ../../modules/utilities/media-mime.nix
       # ../../modules/services/flameshot.nix
       ../../modules/services/code-boxes
+      ../../modules/services/gradia.nix
     ];
 
     mediaMime = "mpv.desktop";
