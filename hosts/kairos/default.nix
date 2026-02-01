@@ -255,6 +255,8 @@ in {
         ungoogled-chromium
         git
         ollama
+        jetbrains.rider
+        jetbrains.webstorm
         # vscode
         keepassxc
         libreoffice
