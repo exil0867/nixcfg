@@ -72,6 +72,25 @@ in {
   security = {
     rtkit.enable = true;
     polkit.enable = true;
+    polkit.extraConfig = ''
+      polkit.addRule(function (action, subject) {
+        if (
+          subject.isInGroup("wheel") &&
+          (
+            action.id == "org.freedesktop.login1.power-off" ||
+            action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.reboot" ||
+            action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.suspend" ||
+            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.hibernate" ||
+            action.id == "org.freedesktop.login1.hibernate-multiple-sessions"
+          )
+        ) {
+          return polkit.Result.AUTH_SELF_KEEP;
+        }
+      });
+    '';
     sudo.wheelNeedsPassword = false;
   };
 
