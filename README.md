@@ -116,6 +116,7 @@ tar -czf - -C /home/you/nixcfg secrets \
 
 ### Secrets and agenix workflow
 
+* Canonical encrypted secrets live in `secrets/`; only public keys live in `secrets/secrets.nix`.
 * Keep private keys local; only public keys in `secrets/secrets.nix`.
 * Encrypt files before committing:
 

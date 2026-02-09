@@ -49,7 +49,7 @@ in {
     # openssh.authorizedKeys.keys = [];
   };
 
-  age.secrets."metrics/token".file = ../../secrets-sync/metrics/token.age;
+  age.secrets."metrics/token".file = ../../secrets/metrics/token.age;
 
   services.metrics-agent = {
     enable = true;
@@ -76,7 +76,6 @@ in {
 
   syncSecrets = {
     enable = true;
-    secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
   };
@@ -93,7 +92,7 @@ in {
 
   services.pulseaudio.enable = false;
   age.secrets."immich/sync" = {
-    file = ../../secrets-sync/immich/sync.age;
+    file = ../../secrets/immich/sync.age;
     owner = "exil0681"; # Service user must own the secret file
     mode = "0400";
   };
@@ -292,7 +291,7 @@ in {
       ]);
   };
 
-  # age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
+  # age.secrets."tailscale/preauth-kairos".file = ../../secrets/tailscale/preauth-kairos.age;
   # tailscale = {
   #   enable = false;
   #   authKeyFile = config.age.secrets."tailscale/preauth-kairos".path;

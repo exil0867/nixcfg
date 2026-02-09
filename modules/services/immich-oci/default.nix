@@ -23,7 +23,7 @@ in {
   };
 
   config = lib.mkIf config.services.immich-oci.enable {
-    age.secrets."immich/server".file = ../../../secrets-sync/immich/server.age;
+    age.secrets."immich/server".file = ../../../secrets/immich/server.age;
     systemd.tmpfiles.rules = map (x: "d ${x} 0775 exil0681 users - -") directories;
     
     # Create the dedicated network for the containers
