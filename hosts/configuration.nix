@@ -174,13 +174,12 @@ in {
       pulse.enable = true;
       jack.enable = true;
     };
-    # openssh = {
-    #   enable = true;
-    #   allowSFTP = true;
-    #   extraConfig = ''
-    #     HostKeyAlgorithms +ssh-rsa
-    #   '';
-    # };
+    openssh.settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      X11Forwarding = false;
+    };
   };
 
   # flatpak.enable = true;
