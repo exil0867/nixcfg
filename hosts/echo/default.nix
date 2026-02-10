@@ -105,14 +105,8 @@ in {
   networking = {
     hostName = "echo";
     networkmanager.enable = true;
-    # Allow 80/443 only from LAN/ULA ranges (no public ingress).
-    firewall.extraInputRules = let
-      v4 = lib.concatStringsSep ", " privateIPv4;
-      v6 = lib.concatStringsSep ", " privateIPv6;
-    in ''
-      ip saddr { ${v4} } tcp dport { 80, 443 } accept
-      ip6 saddr { ${v6} } tcp dport { 80, 443 } accept
-    '';
+    # Simple allowlist for 80/443; Traefik middleware enforces LAN-only access.
+    firewall.allowedTCPPorts = [ 80 443 ];
   };
 
   traefikOrigin = {

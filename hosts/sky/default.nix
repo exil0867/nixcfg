@@ -92,14 +92,8 @@ in
     networkmanager.enable = false;
     useNetworkd = true;
 
-    # Restrict public 80/443 to Cloudflare only to prevent origin bypass.
-    firewall.extraInputRules = let
-      v4 = lib.concatStringsSep ", " cloudflareIPv4;
-      v6 = lib.concatStringsSep ", " cloudflareIPv6;
-    in ''
-      ip saddr { ${v4} } tcp dport { 80, 443 } accept
-      ip6 saddr { ${v6} } tcp dport { 80, 443 } accept
-    '';
+    # Simple allowlist for 80/443; Traefik middleware enforces Cloudflare-only access.
+    firewall.allowedTCPPorts = [ 80 443 ];
     enableIPv6 = true;
 
     interfaces.ens3.ipv4.addresses = [{
