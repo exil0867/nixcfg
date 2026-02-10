@@ -1,6 +1,47 @@
-{ config, vars, unstable, stable, system-definition, inputs, ... }:
+{ config, lib, vars, unstable, stable, system-definition, inputs, ... }:
 
 let
+  # Cloudflare IP ranges for origin allowlisting (v4/v6).
+  cloudflareIPv4 = [
+    "173.245.48.0/20"
+    "103.21.244.0/22"
+    "103.22.200.0/22"
+    "103.31.4.0/22"
+    "141.101.64.0/18"
+    "108.162.192.0/18"
+    "190.93.240.0/20"
+    "188.114.96.0/20"
+    "197.234.240.0/22"
+    "198.41.128.0/17"
+    "162.158.0.0/15"
+    "104.16.0.0/13"
+    "104.24.0.0/14"
+    "172.64.0.0/13"
+    "131.0.72.0/22"
+  ];
+
+  cloudflareIPv6 = [
+    "2400:cb00::/32"
+    "2606:4700::/32"
+    "2803:f800::/32"
+    "2405:b500::/32"
+    "2405:8100::/32"
+    "2a06:98c0::/29"
+    "2c0f:f248::/32"
+  ];
+
+  # Syncthing should be reachable only from private networks.
+  syncthingAllowedV4 = [
+    "10.0.0.0/8"
+    "172.16.0.0/12"
+    "192.168.0.0/16"
+    "100.64.0.0/10"
+  ];
+
+  syncthingAllowedV6 = [
+    "fc00::/7"
+  ];
+
 in
 {
   imports = [
@@ -51,7 +92,14 @@ in
     networkmanager.enable = false;
     useNetworkd = true;
 
-    firewall.allowedTCPPorts = [ 80 443 ];
+    # Restrict public 80/443 to Cloudflare only to prevent origin bypass.
+    firewall.extraInputRules = let
+      v4 = lib.concatStringsSep ", " cloudflareIPv4;
+      v6 = lib.concatStringsSep ", " cloudflareIPv6;
+    in ''
+      ip saddr { ${v4} } tcp dport { 80, 443 } accept
+      ip6 saddr { ${v6} } tcp dport { 80, 443 } accept
+    '';
     enableIPv6 = true;
 
     interfaces.ens3.ipv4.addresses = [{
@@ -72,6 +120,11 @@ in
       address = "fe80::1";
       interface = "ens3";
     };
+  };
+
+  traefikOrigin = {
+    middlewareName = "cloudflare-only";
+    sourceRange = cloudflareIPv4 ++ cloudflareIPv6;
   };
 
 
@@ -104,7 +157,7 @@ in
   # Jellyfin Configuration
   services.jellyfin = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     dataDir = "/data/jellyfin";
     user = vars.user;
   };
@@ -126,6 +179,8 @@ in
     secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
+    firewallAllowedCidrs = syncthingAllowedV4;
+    firewallAllowedCidrs6 = syncthingAllowedV6;
   };
 
 
@@ -179,7 +234,8 @@ in
         websecure = {
           address = ":443";
           forwardedHeaders = {
-            trustedIPs = ["127.0.0.1/32" "::1/128"];
+            # Trust Cloudflare IPs for client IP forwarding.
+            trustedIPs = ["127.0.0.1/32" "::1/128"] ++ cloudflareIPv4 ++ cloudflareIPv6;
           };
           http.tls = {
             certResolver = "cloudflare";
@@ -204,6 +260,7 @@ in
             rule = "Host(`jellysky.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "jellyfin";
+            middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
             tls = {
               certResolver = "cloudflare";
             };

@@ -66,7 +66,7 @@ in {
           "${oldImmichGalleryDir}:/mnt/media/immich-gallery:ro"
           "/etc/localtime:/etc/localtime:ro"
         ];
-        ports = ["0.0.0.0:2283:2283"];
+        ports = ["127.0.0.1:2283:2283"];
         dependsOn = ["immich_postgres" "immich_valkey" "immich_ml"];
         extraOptions = [ 
           "--network=immich-net"

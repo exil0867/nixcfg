@@ -28,6 +28,18 @@ in {
       default = "users";
       description = "Group to run Syncthing as.";
     };
+
+    firewallAllowedCidrs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "IPv4 CIDRs allowed to reach Syncthing (22000/8384 TCP, 21027 UDP). Empty disables firewall openings.";
+    };
+
+    firewallAllowedCidrs6 = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "IPv6 CIDRs allowed to reach Syncthing (22000/8384 TCP, 21027 UDP). Empty disables firewall openings.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -61,7 +73,23 @@ in {
       "d ${cfg.secretsDir} 0700 ${cfg.user} ${cfg.group} -"
     ];
 
-    networking.firewall.allowedTCPPorts = [ 22000 8384 ];
-    networking.firewall.allowedUDPPorts = [ 21027 ];
+    # Optional: restrict Syncthing ports to allowed CIDRs only.
+    networking.firewall.extraInputRules = lib.mkIf (cfg.firewallAllowedCidrs != [] || cfg.firewallAllowedCidrs6 != []) (
+      let
+        v4 = lib.concatStringsSep ", " cfg.firewallAllowedCidrs;
+        v6 = lib.concatStringsSep ", " cfg.firewallAllowedCidrs6;
+        v4Rules = lib.optionalString (cfg.firewallAllowedCidrs != []) ''
+          ip saddr { ${v4} } tcp dport { 22000, 8384 } accept
+          ip saddr { ${v4} } udp dport 21027 accept
+        '';
+        v6Rules = lib.optionalString (cfg.firewallAllowedCidrs6 != []) ''
+          ip6 saddr { ${v6} } tcp dport { 22000, 8384 } accept
+          ip6 saddr { ${v6} } udp dport 21027 accept
+        '';
+      in ''
+        ${v4Rules}
+        ${v6Rules}
+      ''
+    );
   };
 }

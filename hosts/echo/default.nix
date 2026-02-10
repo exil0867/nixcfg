@@ -8,6 +8,18 @@
   inputs,
   ...
 }: let
+  # LAN-only allowlists for a home server.
+  privateIPv4 = [
+    "10.0.0.0/8"
+    "172.16.0.0/12"
+    "192.168.0.0/16"
+    "100.64.0.0/10"
+  ];
+
+  privateIPv6 = [
+    "fc00::/7"
+    "fe80::/10"
+  ];
 in {
   imports =
     [
@@ -86,12 +98,26 @@ in {
     secretsDir = "/home/${vars.user}/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
+    firewallAllowedCidrs = privateIPv4;
+    firewallAllowedCidrs6 = privateIPv6;
   };
 
   networking = {
     hostName = "echo";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [80 443];
+    # Allow 80/443 only from LAN/ULA ranges (no public ingress).
+    firewall.extraInputRules = let
+      v4 = lib.concatStringsSep ", " privateIPv4;
+      v6 = lib.concatStringsSep ", " privateIPv6;
+    in ''
+      ip saddr { ${v4} } tcp dport { 80, 443 } accept
+      ip6 saddr { ${v6} } tcp dport { 80, 443 } accept
+    '';
+  };
+
+  traefikOrigin = {
+    middlewareName = "lan-only";
+    sourceRange = privateIPv4 ++ privateIPv6;
   };
 
   programs.nix-ld.enable = true;
@@ -135,7 +161,7 @@ in {
   # Jellyfin Configuration
   services.jellyfin = {
     enable = true;
-    openFirewall = true;
+    openFirewall = false;
     dataDir = "/mnt/1TB-ST1000DM010-2EP102/data/jellyfin";
     user = vars.user;
   };
@@ -223,7 +249,8 @@ in {
         websecure = {
           address = ":443";
           forwardedHeaders = {
-            trustedIPs = ["127.0.0.1/32" "::1/128" "192.168.1.0/24"];
+            # Trust LAN/ULA addresses for client IP forwarding.
+            trustedIPs = ["127.0.0.1/32" "::1/128"] ++ privateIPv4 ++ privateIPv6;
           };
           # Add this transport section for Immich timeout handling
           transport = {
@@ -260,6 +287,7 @@ in {
             rule = "Host(`immich.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "immich";
+            middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
             tls = {
               certResolver = "cloudflare";
             };
@@ -268,6 +296,7 @@ in {
             rule = "Host(`jellyfin.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "jellyfin";
+            middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
             tls = {
               certResolver = "cloudflare";
             };
@@ -276,6 +305,7 @@ in {
             rule = "Host(`dl.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "transmission";
+            middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
             tls = {
               certResolver = "cloudflare";
             };
@@ -284,6 +314,7 @@ in {
             rule = "Host(`draw.kyrena.dev`)";
             entryPoints = ["websecure"];
             service = "excalidraw";
+            middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
             tls = {
               certResolver = "cloudflare";
             };

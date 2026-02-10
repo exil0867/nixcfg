@@ -49,6 +49,7 @@ in
         rule = "Host(`exil.kyrena.dev`) && PathPrefix(`/api/metrics`)";
         entryPoints = [ "websecure" ];
         service = "metrics-api";
+        middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
         tls.certResolver = "cloudflare";
       };
       
@@ -56,6 +57,7 @@ in
         rule = "Host(`exil.kyrena.dev`) && Path(`/ws/metrics`)";
         entryPoints = [ "websecure" ];
         service = "metrics-sse";
+        middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
         tls.certResolver = "cloudflare";
       };
       

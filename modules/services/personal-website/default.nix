@@ -156,6 +156,7 @@ in
         rule = "Host(`${cfg.domain}`)";
         entryPoints = [ cfg.traefik.entryPoint ];
         service = "personal-website";
+        middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
         tls = mkIf cfg.enableSSL {
           certResolver = "cloudflare";
         };

@@ -94,8 +94,9 @@ in {
       rule = "Host(`${cfg.host}`) && PathPrefix(`${cfg.path}`)";
       entryPoints = [ "websecure" ];
       service = "myexpenses-upload";
+      middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName
+        ++ [ "myexpenses-buffer" ];
       tls.certResolver = "cloudflare";
-      middlewares = [ "myexpenses-buffer" ];
     };
 
     services.traefik.dynamicConfigOptions.http.middlewares.myexpenses-buffer.buffering = {

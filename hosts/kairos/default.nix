@@ -79,6 +79,16 @@ in {
     secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
     user = vars.user;
     group = "users";
+    firewallAllowedCidrs = [
+      "10.0.0.0/8"
+      "172.16.0.0/12"
+      "192.168.0.0/16"
+      "100.64.0.0/10"
+    ];
+    firewallAllowedCidrs6 = [
+      "fc00::/7"
+      "fe80::/10"
+    ];
   };
 
   programs.backup-android.enable = true;
@@ -86,7 +96,6 @@ in {
   networking = {
     hostName = "kairos";
     networkmanager.enable = true;
-    firewall.allowedTCPPorts = [3000];
   };
 
   services.libinput.mouse.accelProfile = "flat";
