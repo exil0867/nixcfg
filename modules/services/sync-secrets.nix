@@ -14,6 +14,7 @@ in {
 
     secretsDir = mkOption {
       type = types.str;
+      default = "/home/${cfg.user}/Develop/nixcfg/secrets";
       description = "Path where secrets are synced to.";
     };
 
