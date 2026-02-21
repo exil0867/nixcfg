@@ -26,8 +26,8 @@
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [
-        "librewolf-bin-unwrapped-147.0.2-1"
-        "librewolf-bin-147.0.2-1"
+        "librewolf-bin-unwrapped-147.0.3-2"
+        "librewolf-bin-147.0.3-2"
       ];
     };
     overlays = [inputs.nix-vscode-extensions.overlays.default];

@@ -272,7 +272,7 @@ in {
         # librewolf
         sshpass
         gimp
-        discord
+        # discord
         # bruno
         obs-studio
         bottles
@@ -286,7 +286,7 @@ in {
         # aspell
         # aspellDicts.en
         wl-clipboard
-        antigravity-fhs
+#         antigravity
       ])
       ++ (with system-definition.kdePackages; [
         kate
