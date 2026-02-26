@@ -99,7 +99,11 @@ in {
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      monospace = ["Inconsolata" "JetBrains Mono" "Source Code Pro"];
+      monospace = [
+        "Inconsolata"
+        "JetBrains Mono"
+        "Source Code Pro"
+      ];
       sansSerif = ["Noto Sans" "Carlito"];
       serif = ["Noto Serif"];
       emoji = ["Noto Color Emoji"];
