@@ -282,14 +282,14 @@ in {
         dbeaver-bin
         obsidian
         # handbrake
-        krita
+        # krita
         transmission_4-qt
         # zed-editor
         android-tools
         # aspell
         # aspellDicts.en
         wl-clipboard
-#         antigravity
+        #         antigravity
       ])
       ++ (with system-definition.kdePackages; [
         kate
