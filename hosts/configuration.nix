@@ -165,21 +165,6 @@ in {
     dconf.enable = true;
   };
 
-  systemd.network.links = {
-    "10-mtu-ethernet" = {
-      matchConfig.Name = "en*";
-      linkConfig.MTUBytes = "1422";
-    };
-    "10-mtu-ethernet-legacy" = {
-      matchConfig.Name = "eth*";
-      linkConfig.MTUBytes = "1422";
-    };
-    "10-mtu-wifi" = {
-      matchConfig.Name = "wl*";
-      linkConfig.MTUBytes = "1422";
-    };
-  };
-
   services = {
     printing = {
       enable = true;
