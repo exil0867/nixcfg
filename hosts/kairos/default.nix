@@ -276,7 +276,9 @@ in {
         # discord
         # bruno
         obs-studio
+        source-sans-pro
         bottles
+        inkscape
         dbeaver-bin
         obsidian
         # handbrake
