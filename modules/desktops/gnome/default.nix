@@ -118,6 +118,13 @@ with lib; {
         example = ["appindicatorsupport@rgcjonas.gmail.com"];
       };
 
+      # Declarative display layout for GNOME Wayland
+      monitorsXml = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "Path to a GNOME monitors.xml file to install at ~/.config/monitors.xml";
+      };
+
       # Additional dconf settings
       extraDconfSettings = mkOption {
         type = types.attrs;
@@ -366,6 +373,14 @@ with lib; {
         # User-provided extra settings
         config.gnome.extraDconfSettings
       ];
+
+      home.file =
+        mkIf (config.gnome.monitorsXml != null) {
+          ".config/monitors.xml" = {
+            source = config.gnome.monitorsXml;
+            force = true;
+          };
+        };
 
       # Enable extensions if specified
       home.packages = with pkgs.gnomeExtensions; (

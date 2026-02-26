@@ -183,6 +183,7 @@ in {
     enable = true;
 
     displayManager.defaultSession = "gnome";
+    monitorsXml = ./monitors.xml;
 
     nightLight = {
       enable = true;
