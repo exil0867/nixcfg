@@ -26,23 +26,12 @@
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [
-        "librewolf-bin-unwrapped-147.0.4-1"
-        "librewolf-bin-147.0.4-1"
+        "librewolf-bin-unwrapped-148.0-1"
+        "librewolf-bin-148.0-1"
       ];
     };
     overlays = [
       inputs.nix-vscode-extensions.overlays.default
-      (final: prev: {
-        pythonPackagesExtensions =
-          prev.pythonPackagesExtensions
-          ++ [
-            (python-final: python-prev: {
-              picosvg = python-prev.picosvg.overridePythonAttrs (oldAttrs: {
-                doCheck = false;
-              });
-            })
-          ];
-      })
     ];
   };
 
