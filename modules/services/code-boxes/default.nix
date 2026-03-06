@@ -212,7 +212,7 @@ in {
         // {
           "editor.formatOnSave" = true;
         };
-      extensions = coreExtensions ++ csharpExtensions;
+      # extensions = coreExtensions ++ csharpExtensions;
     };
   };
 }
