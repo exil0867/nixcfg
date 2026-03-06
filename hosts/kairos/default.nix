@@ -320,6 +320,13 @@ in {
     dataRoot = "/var/lib/docker";
   };
 
+  # Faster swap for desktop responsiveness under memory spikes.
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
+    algorithm = "zstd";
+  };
+
   home-manager.users.${vars.user} = {
     imports = [
       inputs.plasma-manager-unstable.homeModules.plasma-manager
