@@ -259,6 +259,10 @@ in {
 
   flatpak.enable = true;
 
+  fonts.packages = with system-definition; [
+    roboto
+  ];
+
   environment = {
     systemPackages =
       (with system-definition; [
