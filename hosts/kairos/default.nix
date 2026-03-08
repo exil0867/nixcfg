@@ -261,6 +261,7 @@ in {
 
   fonts.packages = with system-definition; [
     roboto
+    inter
   ];
 
   environment = {
