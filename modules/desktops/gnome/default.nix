@@ -307,7 +307,7 @@ with lib; {
             enabled-extensions = [
               pkgs.gnomeExtensions.clipboard-history.extensionUuid
               pkgs.gnomeExtensions.emoji-copy.extensionUuid
-              pkgs.gnomeExtensions.dash-to-dock.extensionUuid
+              # pkgs.gnomeExtensions.dash-to-dock.extensionUuid
             ];
 
             favorite-apps =
@@ -374,13 +374,12 @@ with lib; {
         config.gnome.extraDconfSettings
       ];
 
-      home.file =
-        mkIf (config.gnome.monitorsXml != null) {
-          ".config/monitors.xml" = {
-            source = config.gnome.monitorsXml;
-            force = true;
-          };
+      home.file = mkIf (config.gnome.monitorsXml != null) {
+        ".config/monitors.xml" = {
+          source = config.gnome.monitorsXml;
+          force = true;
         };
+      };
 
       # Enable extensions if specified
       home.packages = with pkgs.gnomeExtensions; (
