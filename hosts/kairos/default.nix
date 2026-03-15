@@ -295,6 +295,7 @@ in {
         # aspellDicts.en
         wl-clipboard
         antigravity-fhs
+        opencode
       ])
       ++ (with system-definition.kdePackages; [
         kate
