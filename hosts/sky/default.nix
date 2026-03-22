@@ -132,7 +132,7 @@ in
   };
 
   age.secrets."metrics/token" = {
-    file = ../../secrets-sync/metrics/token.age;
+    file = ../../secrets/metrics/token.age;
     mode = "0400";
   };
 
@@ -170,7 +170,7 @@ in
 
   syncSecrets = {
     enable = true;
-    secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets-sync";
+    secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets";
     user = vars.user;
     group = "users";
     firewallAllowedCidrs = syncthingAllowedV4;
@@ -270,8 +270,8 @@ in
     };
   };
 
-  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
-  age.secrets."cloudflare/kitspark.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kitspark.dev-DNS-RW.age;
+  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets/cloudflare/kyrena.dev-DNS-RW.age;
+  age.secrets."cloudflare/kitspark.dev-DNS-RW".file = ../../secrets/cloudflare/kitspark.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
     config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path

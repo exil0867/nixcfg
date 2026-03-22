@@ -2,7 +2,7 @@ let
   personal_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP";
   kairos_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGejHkTo/wf6g9QRAKnpLV9FWTNEoh7OMUpum3q+xN+V";
   echo_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInjI+XzPKAmRH/S/zpx4XVusY8W0IbG6cithnOZBZJo";
-  sky_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEriuOuF5+iFUxyOZx3adyDj2mUt5hmJN73y/14v0pL2";
+  sky_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA5OBgoL9DV+lrXUhKAq32mQPVDvyaaHNNoibhULIiuO";
 in {
   "cloudflare/kyrena.dev-DNS-RW.age".publicKeys = [echo_key sky_key];
   "tailscale/preauth-kairos.age".publicKeys = [kairos_key echo_key];
