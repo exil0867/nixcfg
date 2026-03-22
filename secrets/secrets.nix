@@ -15,4 +15,6 @@ in {
   "immich/sync.age".publicKeys = [kairos_key];
   "metrics/token.age".publicKeys = [kairos_key echo_key sky_key];
   "trena/main.age".publicKeys = [sky_key];
+  "kitspark/web.age".publicKeys = [sky_key];
+  "cloudflare/kitspark.dev-DNS-RW.age".publicKeys = [sky_key];
 }

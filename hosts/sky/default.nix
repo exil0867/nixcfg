@@ -233,7 +233,7 @@ in
           };
           http.tls = {
             certResolver = "cloudflare";
-            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; }];
+            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; } { main = "kitspark.dev"; sans = [ "*.kitspark.dev" ]; }];
           };
         };
       };
@@ -271,9 +271,11 @@ in
   };
 
   age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
+  age.secrets."cloudflare/kitspark.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kitspark.dev-DNS-RW.age;
 
   services.traefik.environmentFiles = [
     config.age.secrets."cloudflare/kyrena.dev-DNS-RW".path
+    config.age.secrets."cloudflare/kitspark.dev-DNS-RW".path
   ];
 
   # Ensure the Traefik directory exists
