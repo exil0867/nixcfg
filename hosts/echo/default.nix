@@ -106,7 +106,7 @@ in {
     hostName = "echo";
     networkmanager.enable = true;
     # Simple allowlist for 80/443; Traefik middleware enforces LAN-only access.
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [80 443];
   };
 
   traefikOrigin = {

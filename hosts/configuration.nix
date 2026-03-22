@@ -23,7 +23,7 @@ in {
     ++ [
       inputs.agenix.nixosModules.default
       {
-        age.identityPaths = ["/home/${vars.user}/.ssh/id_ed25519"];
+        age.identityPaths = ["/home/${vars.user}/.ssh/nopf_ed25519"];
       }
     ];
 
