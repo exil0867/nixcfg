@@ -95,7 +95,7 @@ in {
 
   syncSecrets = {
     enable = true;
-    secretsDir = "/home/${vars.user}/nixcfg/secrets-sync";
+    secretsDir = "/home/${vars.user}/nixcfg/secrets";
     user = vars.user;
     group = "users";
     firewallAllowedCidrs = privateIPv4;
@@ -180,7 +180,7 @@ in {
     peer-limit-global = 200;
   };
 
-  age.secrets."metrics/token".file = ../../secrets-sync/metrics/token.age;
+  age.secrets."metrics/token".file = ../../secrets/metrics/token.age;
 
   services.metrics-agent = {
     enable = true;
@@ -197,16 +197,16 @@ in {
   };
 
   # Tailscale Configuration
-  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets-sync/cloudflare/kyrena.dev-DNS-RW.age;
+  age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets/cloudflare/kyrena.dev-DNS-RW.age;
   # age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
-    file = ../../secrets-sync/cloudflare/kyrena.dev-tunnel-echo2world.age;
+    file = ../../secrets/cloudflare/kyrena.dev-tunnel-echo2world.age;
     owner = vars.user;
     # group = config.services.cloudflared.group;
     mode = "400";
   };
 
-  age.secrets."cloudflare/email".file = ../../secrets-sync/cloudflare/email.age;
+  age.secrets."cloudflare/email".file = ../../secrets/cloudflare/email.age;
 
   #   # ACME (Let's Encrypt) Configuration
   #  security.acme = {

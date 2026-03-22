@@ -133,6 +133,7 @@ in
 
   age.secrets."metrics/token" = {
     file = ../../secrets/metrics/token.age;
+    file = ../../secrets/metrics/token.age;
     mode = "0400";
   };
 
