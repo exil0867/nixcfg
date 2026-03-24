@@ -272,6 +272,7 @@ in {
         ollama
         jetbrains.rider
         jetbrains.webstorm
+        jetbrains.pycharm
         # vscode
         keepassxc
         libreoffice
