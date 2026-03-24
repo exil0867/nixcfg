@@ -21,7 +21,6 @@ in {
       ../../modules/services/mounter.nix
       ../../modules/services/immich-sync.nix
       ../../modules/services/sync-secrets.nix
-      ../../modules/desktops/virtualisation/docker.nix
       ../../modules/services/metrics-agent
       ../../modules/programs/backup-android
       ../../modules/programs/jellyfin-player.nix
@@ -318,9 +317,9 @@ in {
   #   loginServer = "http://192.168.1.5:8181";
   # };
 
-  docker = {
+  distroboxDev = {
     enable = true;
-    dataRoot = "/var/lib/docker";
+    defaultImage = "docker.io/library/archlinux:latest";
   };
 
   # Faster swap for desktop responsiveness under memory spikes.
