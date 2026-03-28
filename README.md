@@ -9,7 +9,7 @@ This repository contains my personal NixOS configuration files for system and se
 ## Hosts
 
 ### Kairos (Primary Desktop)
-Primary workstation for daily use, development, and gaming. With a customized Plasma desktop environment.
+Primary workstation for daily use, development, and gaming. With GNOME as a desktop environment.
 
 ### Echo (Home Server)
 Central homelab node running 24/7 with high uptime. Provides centralized storage, self-hosted services, and automated backups. Operates as a low-power HTPC capable of directing input to TVs and handling light gaming. Hosts containerized services while maintaining remote accessibility.
