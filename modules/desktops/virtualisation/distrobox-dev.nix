@@ -2,6 +2,7 @@
 
 let
   cfg = config.distroboxDev;
+  stableDistroboxBinDir = ".local/share/distrobox/bin";
 
   createScript = pkgs.writeShellApplication {
     name = "devbox-create";
@@ -17,6 +18,7 @@ let
     text = ''
       set -euo pipefail
 
+      distrobox_cmd="$HOME/${stableDistroboxBinDir}/distrobox"
       box="''${1:-}"
       project_path="''${2:-}"
       image="''${3:-${cfg.defaultImage}}"
@@ -29,6 +31,12 @@ let
 
       if [ -z "$box" ]; then
         echo "usage: devbox-create <box-name> [project-path] [image]" >&2
+        exit 1
+      fi
+
+      if [ ! -x "$distrobox_cmd" ]; then
+        echo "Missing stable distrobox wrapper at $distrobox_cmd" >&2
+        echo "Rebuild Home Manager/NixOS to install the wrapper set." >&2
         exit 1
       fi
 
@@ -67,13 +75,13 @@ EOF
         volume_args=()
       fi
 
-      if distrobox list --no-color | awk 'NR>1 {print $1}' | grep -Fxq "$box"; then
+      if "$distrobox_cmd" list --no-color | awk 'NR>1 {print $1}' | grep -Fxq "$box"; then
         echo "Devbox '$box' already exists."
         echo "Enter it with: devbox-enter $box"
         exit 0
       fi
 
-      distrobox create \
+      "$distrobox_cmd" create \
         --name "$box" \
         --image "$image" \
         --yes \
@@ -110,6 +118,7 @@ EOF
     text = ''
       set -euo pipefail
 
+      distrobox_cmd="$HOME/${stableDistroboxBinDir}/distrobox"
       box="''${1:-}"
       shift || true
 
@@ -118,11 +127,17 @@ EOF
         exit 1
       fi
 
-      if [ "''$#" -eq 0 ]; then
-        exec distrobox enter "$box"
+      if [ ! -x "$distrobox_cmd" ]; then
+        echo "Missing stable distrobox wrapper at $distrobox_cmd" >&2
+        echo "Rebuild Home Manager/NixOS to install the wrapper set." >&2
+        exit 1
       fi
 
-      exec distrobox enter "$box" -- "''$@"
+      if [ "''$#" -eq 0 ]; then
+        exec "$distrobox_cmd" enter "$box"
+      fi
+
+      exec "$distrobox_cmd" enter "$box" -- "''$@"
     '';
   };
 
@@ -132,6 +147,7 @@ EOF
     text = ''
       set -euo pipefail
 
+      distrobox_cmd="$HOME/${stableDistroboxBinDir}/distrobox"
       box="''${1:-}"
       state_root="$HOME/.local/share/devboxes/$box"
       project_file="$state_root/project-path"
@@ -140,6 +156,12 @@ EOF
 
       if [ -z "$box" ]; then
         echo "usage: devbox-code <box-name> [project-path] [code-args...]" >&2
+        exit 1
+      fi
+
+      if [ ! -x "$distrobox_cmd" ]; then
+        echo "Missing stable distrobox wrapper at $distrobox_cmd" >&2
+        echo "Rebuild Home Manager/NixOS to install the wrapper set." >&2
         exit 1
       fi
 
@@ -153,7 +175,7 @@ EOF
 
       project_path="$(realpath "$project_path")"
 
-      exec distrobox enter "$box" -- code \
+      exec "$distrobox_cmd" enter "$box" -- code \
         --new-window \
         "$project_path" "''$@"
     '';
@@ -230,6 +252,46 @@ in {
         [storage.options.overlay]
         mount_program = "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs"
       '';
+
+      home.file."${stableDistroboxBinDir}/distrobox" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          exec /run/current-system/sw/bin/distrobox "$@"
+        '';
+      };
+
+      home.file."${stableDistroboxBinDir}/distrobox-init" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          exec /run/current-system/sw/bin/distrobox-init "$@"
+        '';
+      };
+
+      home.file."${stableDistroboxBinDir}/distrobox-export" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          exec /run/current-system/sw/bin/distrobox-export "$@"
+        '';
+      };
+
+      home.file."${stableDistroboxBinDir}/distrobox-host-exec" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          exec /run/current-system/sw/bin/distrobox-host-exec "$@"
+        '';
+      };
+
+      home.file."${stableDistroboxBinDir}/distrobox-generate-entry" = {
+        executable = true;
+        text = ''
+          #!/bin/sh
+          exec /run/current-system/sw/bin/distrobox-generate-entry "$@"
+        '';
+      };
 
       home.sessionVariables = {
         DISTROBOX_USE_PODMAN = "1";
