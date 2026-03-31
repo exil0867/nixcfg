@@ -1,12 +1,15 @@
 # Git Configuration
 # Enable with "git.enable = true;"
 # Add additional Git configuration with "git.extraConfig = { ... };"
-
-{ config, lib, pkgs, vars, inputs, ... }:
-
-with lib;
-
 {
+  config,
+  lib,
+  pkgs,
+  vars,
+  inputs,
+  ...
+}:
+with lib; {
   options = {
     git = {
       enable = mkOption {
@@ -27,6 +30,7 @@ with lib;
     home-manager.users.${vars.user} = {
       programs.git = {
         enable = true;
+        signing.format = null;
         settings = {
           user = {
             email = "exil@kyrena.dev";
