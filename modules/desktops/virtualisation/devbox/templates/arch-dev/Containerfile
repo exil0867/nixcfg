@@ -1,0 +1,46 @@
+FROM docker.io/library/archlinux:latest
+
+RUN pacman-key --init && \
+    pacman-key --populate archlinux && \
+    pacman -Syu --noconfirm && \
+    pacman -S --noconfirm --needed \
+      base-devel \
+      bash \
+      ca-certificates \
+      coreutils \
+      curl \
+      direnv \
+      fd \
+      file \
+      fontconfig \
+      findutils \
+      gawk \
+      git \
+      gnome-keyring \
+      grep \
+      gzip \
+      jq \
+      less \
+      man-db \
+      man-pages \
+      noto-fonts \
+      openssh \
+      procps-ng \
+      ripgrep \
+      sed \
+      shadow \
+      sudo \
+      tar \
+      ttf-dejavu \
+      unzip \
+      wget \
+      xz \
+      zip \
+      zsh && \
+    useradd -m -U builder && \
+    install -d -o builder -g builder /tmp/devbox-build && \
+    su -s /bin/sh builder -c 'set -eu; git clone https://aur.archlinux.org/yay-bin.git /tmp/devbox-build/yay-bin; cd /tmp/devbox-build/yay-bin; makepkg --syncdeps --noconfirm --needed' && \
+    pacman -U --noconfirm "$(find /tmp/devbox-build/yay-bin -maxdepth 1 -type f -name "*.pkg.tar.*" ! -name "*.sig" | head -n1)" && \
+    userdel -r builder && \
+    rm -rf /tmp/devbox-build && \
+    pacman -Sc --noconfirm

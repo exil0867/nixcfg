@@ -1,0 +1,37 @@
+FROM docker.io/library/archlinux:latest
+
+RUN pacman -Syu --noconfirm && \
+    pacman -S --noconfirm --needed \
+      bash \
+      ca-certificates \
+      coreutils \
+      curl \
+      direnv \
+      fd \
+      file \
+      fontconfig \
+      findutils \
+      gawk \
+      git \
+      gnome-keyring \
+      grep \
+      gzip \
+      jq \
+      less \
+      man-db \
+      man-pages \
+      noto-fonts \
+      openssh \
+      procps-ng \
+      ripgrep \
+      sed \
+      shadow \
+      sudo \
+      tar \
+      ttf-dejavu \
+      unzip \
+      wget \
+      xz \
+      zip \
+      zsh && \
+    pacman -Scc --noconfirm

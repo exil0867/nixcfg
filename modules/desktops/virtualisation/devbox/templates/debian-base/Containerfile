@@ -1,0 +1,38 @@
+FROM docker.io/library/debian:12
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      bash \
+      ca-certificates \
+      coreutils \
+      curl \
+      direnv \
+      fd-find \
+      file \
+      fontconfig \
+      fonts-dejavu-core \
+      fonts-noto-core \
+      findutils \
+      gawk \
+      git \
+      gnome-keyring \
+      grep \
+      gzip \
+      jq \
+      less \
+      openssh-client \
+      passwd \
+      procps \
+      ripgrep \
+      sed \
+      sudo \
+      tar \
+      unzip \
+      wget \
+      xz-utils \
+      zip \
+      zsh && \
+    ln -sf /usr/bin/fdfind /usr/local/bin/fd && \
+    rm -rf /var/lib/apt/lists/*

@@ -269,9 +269,9 @@ in {
         ungoogled-chromium
         git
         ollama
-        jetbrains.rider
-        jetbrains.webstorm
-        jetbrains.pycharm
+        # jetbrains.rider
+        # jetbrains.webstorm
+        # jetbrains.pycharm
         # vscode
         keepassxc
         libreoffice
@@ -319,7 +319,7 @@ in {
 
   distroboxDev = {
     enable = true;
-    defaultImage = "docker.io/library/archlinux:latest";
+    defaultTemplate = "arch-base";
   };
 
   # Faster swap for desktop responsiveness under memory spikes.
