@@ -32,7 +32,7 @@ start_box "$box"
 workdir="$(resolve_workdir "$box" "$PWD" "$project_path")"
 
 if [ "$#" -eq 0 ]; then
-  shell_path="$(box_shell "$box")"
+  shell_path="$(preferred_shell "$box")"
   [ -n "$shell_path" ] || shell_path="/bin/sh"
   append_host_env_args exec_args
   exec podman exec -it \

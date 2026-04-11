@@ -73,9 +73,52 @@ seed_home() {
 
   cat > "$container_home/.zshenv" <<'EOF'
 export ZSH_DISABLE_COMPFIX=true
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=10000
+export SAVEHIST=10000
 EOF
 
   cat > "$container_home/.zshrc" <<'EOF'
+autoload -Uz compinit
+if [ -d "$HOME/.cache/zsh" ]; then
+  compinit -d "$HOME/.cache/zsh/zcompdump"
+else
+  mkdir -p "$HOME/.cache/zsh"
+  compinit -d "$HOME/.cache/zsh/zcompdump"
+fi
+
+setopt APPEND_HISTORY
+setopt AUTO_CD
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt INTERACTIVE_COMMENTS
+setopt NO_BEEP
+setopt PROMPT_SUBST
+setopt SHARE_HISTORY
+
+bindkey -e
+bindkey '^[[A' up-line-or-history
+bindkey '^[[B' down-line-or-history
+bindkey '^[[C' forward-char
+bindkey '^[[D' backward-char
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[3~' delete-char
+
+if [[ -z "${TERM:-}" || "${TERM:-}" = "dumb" ]]; then
+  export TERM=xterm-256color
+fi
+
+if [[ -z "${PROMPT:-}" ]]; then
+  PROMPT='%F{cyan}%n@%m%f:%F{blue}%~%f %# '
+fi
+
 if command -v direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
@@ -120,6 +163,7 @@ remove_managed_shell_files() {
 start_box() {
   local box="$1"
   local status=""
+  local state_error=""
 
   status="$(podman inspect "$box" --format '{{.State.Status}}' 2>/dev/null || true)"
   if [ "$status" = "running" ]; then
@@ -137,12 +181,49 @@ start_box() {
     return 0
   fi
 
+  state_error="$(podman inspect "$box" --format '{{.State.Error}}' 2>/dev/null || true)"
+  if [ -n "$state_error" ]; then
+    if printf '%s' "$state_error" | grep -Fq 'potentially insufficient UIDs or GIDs available in user namespace'; then
+      die "Devbox '$box' failed to become ready.
+Podman error: $state_error
+This container was created against an older user namespace layout.
+Recreate the container object; the devbox home under $(state_root_for "$box")/home can be kept."
+    fi
+
+    die "Devbox '$box' failed to become ready.
+Podman error: $state_error"
+  fi
+
   die "Devbox '$box' failed to become ready."
 }
 
 box_shell() {
   local box="$1"
   podman exec "$box" /bin/sh -lc "getent passwd '$DEVBOX_USER' | cut -d: -f7"
+}
+
+preferred_shell() {
+  local box="$1"
+  local shell_path=""
+
+  shell_path="$(podman exec "$box" /bin/sh -lc '
+    if command -v zsh >/dev/null 2>&1; then
+      command -v zsh
+    elif [ -x /usr/bin/zsh ]; then
+      printf "/usr/bin/zsh\n"
+    elif [ -x /bin/zsh ]; then
+      printf "/bin/zsh\n"
+    else
+      getent passwd "'"$DEVBOX_USER"'" | cut -d: -f7
+    fi
+  ')"
+
+  if [ -n "$shell_path" ]; then
+    printf '%s\n' "$shell_path"
+    return 0
+  fi
+
+  printf '/bin/sh\n'
 }
 
 box_home() {
