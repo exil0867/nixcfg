@@ -33,6 +33,8 @@ RUN apt-get update && \
       wget \
       xz-utils \
       zip \
-      zsh && \
+      zsh \
+      zsh-autosuggestions \
+      zsh-syntax-highlighting && \
     ln -sf /usr/bin/fdfind /usr/local/bin/fd && \
     rm -rf /var/lib/apt/lists/*

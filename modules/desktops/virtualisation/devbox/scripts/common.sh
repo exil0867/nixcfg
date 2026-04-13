@@ -79,6 +79,11 @@ export SAVEHIST=10000
 EOF
 
   cat > "$container_home/.zshrc" <<'EOF'
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' group-name ''
+
 autoload -Uz compinit
 if [ -d "$HOME/.cache/zsh" ]; then
   compinit -d "$HOME/.cache/zsh/zcompdump"
@@ -102,9 +107,13 @@ setopt NO_BEEP
 setopt PROMPT_SUBST
 setopt SHARE_HISTORY
 
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
 bindkey -e
-bindkey '^[[A' up-line-or-history
-bindkey '^[[B' down-line-or-history
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
 bindkey '^[[C' forward-char
 bindkey '^[[D' backward-char
 bindkey '^[[H' beginning-of-line
@@ -115,13 +124,36 @@ if [[ -z "${TERM:-}" || "${TERM:-}" = "dumb" ]]; then
   export TERM=xterm-256color
 fi
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats ' %F{yellow}(git:%b)%f'
+zstyle ':vcs_info:git:*' actionformats ' %F{yellow}(git:%b|%a)%f'
+precmd() { vcs_info }
+
 if [[ -z "${PROMPT:-}" ]]; then
-  PROMPT='%F{cyan}%n@%m%f:%F{blue}%~%f %# '
+  PROMPT='%F{cyan}%n@%m%f:%F{blue}%~%f${vcs_info_msg_0_} %# '
 fi
 
 if command -v direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
+
+for plugin_file in \
+  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
+  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+  if [ -r "$plugin_file" ]; then
+    source "$plugin_file"
+    break
+  fi
+done
+
+for plugin_file in \
+  /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+  if [ -r "$plugin_file" ]; then
+    source "$plugin_file"
+    break
+  fi
+done
 EOF
 
   cat > "$container_home/.zprofile" <<'EOF'
@@ -260,6 +292,37 @@ run_post_create() {
 
   start_box "$box"
   podman exec -i "$box" /bin/sh -s -- "$DEVBOX_USER" "$project_path" < "$post_create"
+}
+
+install_zsh_baseline_packages() {
+  local box="$1"
+
+  podman exec -u 0 "$box" /bin/sh -lc '
+    set -eu
+
+    if command -v pacman >/dev/null 2>&1; then
+      pacman -Syu --noconfirm
+      pacman -S --noconfirm --needed \
+        zsh \
+        zsh-autosuggestions \
+        zsh-completions \
+        zsh-syntax-highlighting
+      exit 0
+    fi
+
+    if command -v apt-get >/dev/null 2>&1; then
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y --no-install-recommends \
+        zsh \
+        zsh-autosuggestions \
+        zsh-syntax-highlighting
+      exit 0
+    fi
+
+    echo "No known package manager found for Zsh baseline packages." >&2
+    exit 0
+  '
 }
 
 append_host_env_args() {

@@ -36,7 +36,10 @@ RUN pacman-key --init && \
       wget \
       xz \
       zip \
-      zsh && \
+      zsh \
+      zsh-autosuggestions \
+      zsh-completions \
+      zsh-syntax-highlighting && \
     useradd -m -U builder && \
     install -d -o builder -g builder /tmp/devbox-build && \
     su -s /bin/sh builder -c 'set -eu; git clone https://aur.archlinux.org/yay-bin.git /tmp/devbox-build/yay-bin; cd /tmp/devbox-build/yay-bin; makepkg --syncdeps --noconfirm --needed' && \

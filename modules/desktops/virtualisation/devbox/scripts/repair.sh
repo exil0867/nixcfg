@@ -15,9 +15,11 @@ repair_box() {
     return 0
   fi
 
+  start_box "$box"
+  install_zsh_baseline_packages "$box"
   remove_managed_shell_files "$container_home"
   seed_home "$container_home"
-  echo "Repaired managed shell files for '$box'."
+  echo "Repaired Zsh baseline for '$box'."
 }
 
 if [ "$#" -gt 0 ]; then
