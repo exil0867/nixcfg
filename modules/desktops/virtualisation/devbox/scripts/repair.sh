@@ -17,6 +17,7 @@ repair_box() {
 
   start_box "$box"
   install_zsh_baseline_packages "$box"
+  install_host_command_shim "$box" "cloudflare-tunnel" "cloudflare-tunnel"
   remove_managed_shell_files "$container_home"
   seed_home "$container_home"
   echo "Repaired Zsh baseline for '$box'."

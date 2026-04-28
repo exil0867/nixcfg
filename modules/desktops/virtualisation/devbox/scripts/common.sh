@@ -345,3 +345,19 @@ append_host_env_args() {
     fi
   done
 }
+
+install_host_command_shim() {
+  local box="$1"
+  local command_name="$2"
+  local host_command="$3"
+
+  podman exec -u 0 "$box" /bin/sh -lc "
+    set -eu
+    mkdir -p /usr/local/bin
+    cat > /usr/local/bin/$command_name <<'EOF'
+#!/usr/bin/env sh
+exec distrobox-host-exec $host_command \"\$@\"
+EOF
+    chmod 755 /usr/local/bin/$command_name
+  "
+}

@@ -61,6 +61,7 @@ printf '%s\n' "$image_tag" > "$state_root/image"
   "${volume_args[@]}"
 
 seed_home "$container_home"
+install_host_command_shim "$box" "cloudflare-tunnel" "cloudflare-tunnel"
 run_post_create "$template" "$box" "$project_path"
 
 echo "Devbox ready:"

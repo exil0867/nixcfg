@@ -23,6 +23,7 @@ in {
       ../../modules/services/sync-secrets.nix
       ../../modules/services/metrics-agent
       ../../modules/programs/backup-android
+      ../../modules/programs/cloudflare-tunnel.nix
       ../../modules/programs/jellyfin-player.nix
       ../../modules/programs/obs.nix
     ]
@@ -91,6 +92,7 @@ in {
   };
 
   programs.backup-android.enable = true;
+  programs.cloudflare-tunnel.enable = true;
 
   networking = {
     hostName = "kairos";
@@ -256,7 +258,12 @@ in {
 
   hardware = {};
 
-  flatpak.enable = true;
+  flatpak = {
+    enable = true;
+    extraPackages = [
+      "com.usebottles.bottles"
+    ];
+  };
 
   fonts.packages = with system-definition; [
     roboto
@@ -274,7 +281,7 @@ in {
         # jetbrains.pycharm
         # vscode
         keepassxc
-        libreoffice
+        # libreoffice
         # librewolf
         sshpass
         gimp
@@ -282,7 +289,6 @@ in {
         # bruno
         obs-studio
         source-sans-pro
-        bottles
         inkscape
         dbeaver-bin
         obsidian
@@ -294,7 +300,7 @@ in {
         # aspell
         # aspellDicts.en
         wl-clipboard
-        antigravity-fhs
+        # antigravity-fhs
         opencode
       ])
       ++ (with system-definition.kdePackages; [
@@ -337,7 +343,6 @@ in {
       ../../modules/services/code-boxes
       ../../modules/services/gradia.nix
     ];
-
     mediaMime = "mpv.desktop";
     programs = {
       plasma = {
