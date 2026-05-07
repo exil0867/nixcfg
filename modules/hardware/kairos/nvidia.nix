@@ -40,7 +40,7 @@ in
 	# accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    # Keep the driver package aligned with the selected kernel packages.
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 }
