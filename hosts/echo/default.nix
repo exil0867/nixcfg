@@ -199,12 +199,12 @@ in {
   # Tailscale Configuration
   age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets/cloudflare/kyrena.dev-DNS-RW.age;
   age.secrets."reddit/reddit-cleaner".file = ../../secrets/reddit/reddit-cleaner.age;
-  age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
-    file = ../../secrets/cloudflare/kyrena.dev-tunnel-echo2world.age;
-    owner = vars.user;
-    # group = config.services.cloudflared.group;
-    mode = "400";
-  };
+  # age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
+  #   file = ../../secrets/cloudflare/kyrena.dev-tunnel-echo2world.age;
+  #   owner = vars.user;
+  #   # group = config.services.cloudflared.group;
+  #   mode = "400";
+  # };
 
   age.secrets."cloudflare/email".file = ../../secrets/cloudflare/email.age;
 
@@ -377,19 +377,19 @@ in {
   #   environmentFile = config.age.secrets."reddit/reddit-cleaner".path;
   # };
 
-  services.cloudflared = {
-    enable = true;
-    # user = vars.user;
-    tunnels = {
-      "64911839-8e12-46f9-9f31-2e8a84fd5406" = {
-        credentialsFile = "${config.age.secrets."cloudflare/kyrena.dev-tunnel-echo2world".path}";
-        ingress = {
-          "jellywrld.kyrena.dev" = "http://localhost:8096";
-        };
-        default = "http_status:404";
-      };
-    };
-  };
+  # services.cloudflared = {
+  #   enable = true;
+  #   # user = vars.user;
+  #   tunnels = {
+  #     "64911839-8e12-46f9-9f31-2e8a84fd5406" = {
+  #       credentialsFile = "${config.age.secrets."cloudflare/kyrena.dev-tunnel-echo2world".path}";
+  #       ingress = {
+  #         "jellywrld.kyrena.dev" = "http://localhost:8096";
+  #       };
+  #       default = "http_status:404";
+  #     };
+  #   };
+  # };
 
   jellyfin-player = {
     enable = true;
