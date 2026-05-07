@@ -198,7 +198,7 @@ in {
 
   # Tailscale Configuration
   age.secrets."cloudflare/kyrena.dev-DNS-RW".file = ../../secrets/cloudflare/kyrena.dev-DNS-RW.age;
-  # age.secrets."reddit/reddit-cleaner".file = ../../secrets-sync/reddit/reddit-cleaner.age;
+  age.secrets."reddit/reddit-cleaner".file = ../../secrets/reddit/reddit-cleaner.age;
   age.secrets."cloudflare/kyrena.dev-tunnel-echo2world" = {
     file = ../../secrets/cloudflare/kyrena.dev-tunnel-echo2world.age;
     owner = vars.user;
