@@ -22,3 +22,4 @@ hosts/**/private/
 modules/**/private/
 modules/**/private.nix
 
+.codex
