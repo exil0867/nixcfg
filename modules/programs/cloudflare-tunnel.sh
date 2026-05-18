@@ -3,21 +3,55 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: cloudflare-tunnel [--port PORT] [--env-file FILE] [--set KEY[:host|url]]...
+Usage: cloudflare-tunnel [--port PORT] [--env-file FILE [--set KEY[:host|url]]...]...
 
-Each --set entry is KEY[:host|url].
-  host = write only the hostname, e.g. example.trycloudflare.com
-  url  = write the full https URL
+Multiple --env-file groups can be given. Each group defines the file and the
+variables to update when the tunnel URL is ready.
+
+Modes:
+  host  -> write only the hostname (example.trycloudflare.com)
+  url   -> write the full URL (https://example.trycloudflare.com)
+
+If no --env-file is provided at all, .env is used with any --set specs
+(or WEBSOCKET_BASE_URL:host if none are given).
 
 Examples:
-  cloudflare-tunnel --port 8080 --env-file .env --set WEBSOCKET_BASE_URL:host
-  cloudflare-tunnel --port 3000 --env-file ../tdoc/apps/web/.env.local --set NEXT_PUBLIC_SITE_URL:url
+  # Two files, different variables
+  cloudflare-tunnel --port 3000 \
+    --env-file frontend/.env --set NEXT_PUBLIC_SITE_URL:url \
+    --env-file backend/.env  --set API_HOST:host --set WS_URL:url
+
+  # Default: single .env with a default variable
+  cloudflare-tunnel --port 8080
+
+  # Multiple updates to the same file (two separate groups)
+  cloudflare-tunnel --port 8080 \
+    --env-file .env --set KEY1:host \
+    --env-file .env --set KEY2:url
 EOF
 }
 
 port="8080"
-env_file=".env"
-set_specs=()
+# Array of groups: each group is "file::spec1|spec2|..."
+groups=()
+current_file=""
+current_specs=()
+
+finalize_current_group() {
+  if [[ -n "$current_file" ]]; then
+    local joined
+    if [[ ${#current_specs[@]} -gt 0 ]]; then
+      # join specs with '|'
+      printf -v joined '%s|' "${current_specs[@]}"
+      joined="${joined%|}"   # remove trailing |
+    else
+      joined=""
+    fi
+    groups+=("${current_file}::${joined}")
+    current_file=""
+    current_specs=()
+  fi
+}
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -26,11 +60,16 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --env-file)
-      env_file="${2:-}"
+      finalize_current_group
+      current_file="${2:-}"
       shift 2
       ;;
     --set)
-      set_specs+=("${2:-}")
+      if [[ -z "$current_file" ]]; then
+        # No --env-file seen yet -> treat as default .env group (create it now)
+        current_file=".env"
+      fi
+      current_specs+=("${2:-}")
       shift 2
       ;;
     --help|-h)
@@ -44,18 +83,17 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+finalize_current_group
 
-if [[ -z "$port" || -z "$env_file" ]]; then
-  echo "Missing required values for --port or --env-file" >&2
+# If no groups at all, create a default .env group with default spec
+if [[ ${#groups[@]} -eq 0 ]]; then
+  groups+=(".env::WEBSOCKET_BASE_URL:host")
+fi
+
+if [[ -z "$port" ]]; then
+  echo "Missing required value for --port" >&2
   exit 1
 fi
-
-if [[ ${#set_specs[@]} -eq 0 ]]; then
-  set_specs=(WEBSOCKET_BASE_URL:host)
-fi
-
-resolved_url=""
-buffer=""
 
 parse_set() {
   local spec="$1"
@@ -88,7 +126,7 @@ update_env_file() {
   tmp_file="$(mktemp)"
   cp "$file_path" "$tmp_file"
 
-  local key value current_line found
+  local key value found
   while [[ $# -gt 0 ]]; do
     key="$1"
     value="$2"
@@ -108,11 +146,32 @@ update_env_file() {
   mv "$tmp_file" "$file_path"
 }
 
-set_entries=()
-for spec in "${set_specs[@]}"; do
-  while IFS=$'\t' read -r key mode; do
-    set_entries+=("$key" "$mode")
-  done < <(parse_set "$spec")
+resolved_url=""
+buffer=""
+
+# Process groups: for each group, build the list of (key, mode) pairs
+declare -A group_entries   # file -> list of "key mode" pairs
+declare -a file_order      # preserve order of files
+
+for group in "${groups[@]}"; do
+  file="${group%%::*}"
+  specs_str="${group#*::}"
+
+  if [[ -z "$specs_str" ]]; then
+    continue  # empty spec list – skip this group
+  fi
+
+  IFS='|' read -ra specs <<< "$specs_str"
+  for spec in "${specs[@]}"; do
+    while IFS=$'\t' read -r key mode; do
+      group_entries["$file"]+="$key $mode"$'\n'
+    done < <(parse_set "$spec")
+  done
+
+  # track order of first appearance
+  if [[ ! " ${file_order[*]} " =~ " ${file} " ]]; then
+    file_order+=("$file")
+  fi
 done
 
 cloudflared tunnel --url "http://127.0.0.1:${port}" --no-autoupdate 2>&1 | while IFS= read -r -n 1 char; do
@@ -125,19 +184,25 @@ cloudflared tunnel --url "http://127.0.0.1:${port}" --no-autoupdate 2>&1 | while
     resolved_url="${BASH_REMATCH[1]}"
     host="${resolved_url#https://}"
 
-    updates=()
-    for ((i = 0; i < ${#set_entries[@]}; i += 2)); do
-      key="${set_entries[i]}"
-      mode="${set_entries[i + 1]}"
-      if [[ "$mode" == "url" ]]; then
-        updates+=("$key" "$resolved_url")
-      else
-        updates+=("$key" "$host")
+    # Update each file with its own set of keys
+    for file in "${file_order[@]}"; do
+      updates=()
+      # Read the stored pairs for this file
+      while IFS=' ' read -r key mode; do
+        [[ -z "$key" ]] && continue
+        if [[ "$mode" == "url" ]]; then
+          updates+=("$key" "$resolved_url")
+        else
+          updates+=("$key" "$host")
+        fi
+      done <<< "${group_entries[$file]}"
+
+      if [[ ${#updates[@]} -gt 0 ]]; then
+        update_env_file "$file" "${updates[@]}"
+        printf 'Updated %s with %s\n' "$file" "$(printf '%s=%s ' "${updates[@]}")"
       fi
     done
 
-    update_env_file "$env_file" "${updates[@]}"
-    printf 'Updated %s with %s\n' "$env_file" "$(printf '%s=%s ' "${updates[@]}")"
     printf 'Tunnel URL: %s\n' "$resolved_url"
   fi
 done
