@@ -53,6 +53,7 @@ in
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
     ../../modules/programs/jellyfin.nix
+    ../../modules/services/minecraft-server.nix
   ];
 
   # Boot Options
@@ -75,6 +76,11 @@ in
     domain = "exil.kyrena.dev";
   };
 
+
+  services.minecraft-private = {
+    enable = true;
+    openPublicFirewall = true;
+  };
 
   programs.nix-ld.enable = true;
 
