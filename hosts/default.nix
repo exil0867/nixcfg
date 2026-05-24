@@ -26,8 +26,8 @@
     config = {
       allowUnfree = true;
       permittedInsecurePackages = [
-        "librewolf-bin-unwrapped-150.0.1-1"
-        "librewolf-bin-150.0.1-1"
+        "librewolf-bin-unwrapped-150.0.2-1"
+        "librewolf-bin-150.0.2-1"
       ];
     };
     overlays = [

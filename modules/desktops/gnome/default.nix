@@ -183,7 +183,6 @@ with lib; {
       displayManager = {
         gdm = {
           enable = true;
-          wayland = mkDefault true;
         };
       };
       xserver = {
