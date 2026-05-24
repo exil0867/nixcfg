@@ -45,6 +45,17 @@ in {
     };
   };
 
+  nix.settings = {
+    substituters = [
+      "https://cache.garnix.io"
+      "https://freesmlauncher.cachix.org"
+    ];
+    trusted-public-keys = [
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "freesmlauncher.cachix.org-1:Jcp5Q9wiLL+EDv8Mh7c6L9xGk+lXr7/otpKxMOuBuDs="
+    ];
+  };
+
   users.users.${vars.user} = {
     # openssh.authorizedKeys.keys = [];
   };
@@ -313,7 +324,10 @@ in {
       ])
       ++ (with stable; [
         # Apps
-      ]);
+      ])
+      ++ [
+        inputs.freesmlauncher.packages.${system-definition.system}.default
+      ];
   };
 
   # age.secrets."tailscale/preauth-kairos".file = ../../secrets-sync/tailscale/preauth-kairos.age;
