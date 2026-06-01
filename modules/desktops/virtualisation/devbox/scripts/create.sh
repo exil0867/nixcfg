@@ -9,6 +9,10 @@ state_root=""
 container_home=""
 image_tag=""
 gitconfig_args=()
+docker_socket=""
+docker_socket_dir=""
+docker_socket_args=()
+additional_flags="--group-add keep-groups"
 
 if [ -z "$box" ]; then
   echo "usage: devbox-create <box-name> [project-path] [template]" >&2
@@ -44,6 +48,15 @@ if [ -f "$HOME/.gitconfig" ]; then
   gitconfig_args=(--volume "$HOME/.gitconfig:$container_home/.gitconfig:ro")
 fi
 
+docker_socket="$(podman_socket_path)"
+docker_socket_dir="${docker_socket%/*}"
+ensure_podman_socket "$docker_socket"
+docker_socket_args=(
+  --volume "$docker_socket_dir:$docker_socket_dir:rw"
+  --volume "$docker_socket:/var/run/docker.sock:rw"
+)
+additional_flags="$additional_flags --env DOCKER_HOST=unix://$docker_socket"
+
 image_tag="$(template_image "$template")"
 build_template "$template" "$image_tag"
 printf '%s\n' "$image_tag" > "$state_root/image"
@@ -56,11 +69,13 @@ printf '%s\n' "$image_tag" > "$state_root/image"
   --home "$container_home" \
   --init \
   --nvidia \
-  --additional-flags "--group-add keep-groups" \
+  --additional-flags "$additional_flags" \
+  "${docker_socket_args[@]}" \
   "${gitconfig_args[@]}" \
   "${volume_args[@]}"
 
 seed_home "$container_home"
+start_box "$box"
 install_host_command_shim "$box" "cloudflare-tunnel" "cloudflare-tunnel"
 run_post_create "$template" "$box" "$project_path"
 
@@ -75,6 +90,7 @@ fi
 if [ -f "$HOME/.gitconfig" ]; then
   echo "  git: host ~/.gitconfig mounted read-only"
 fi
+echo "  docker: host Podman socket mounted at $docker_socket and /var/run/docker.sock"
 echo
 echo "Enter it with:"
 echo "  devbox-enter $box"

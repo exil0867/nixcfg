@@ -7,6 +7,7 @@
 }: let
   cfg = config.distroboxDev;
   stableDistroboxBinDir = ".local/share/distrobox/bin";
+  stableTemplateManifest = "$HOME/.local/share/devbox/templates.json";
 
   renderTemplate = src: replacements:
     let
@@ -22,25 +23,25 @@
 
   defaultTemplates = {
     arch-base = {
-      description = "Arch base with zsh, sudo, git, curl, direnv, ripgrep, fd, and jq.";
+      description = "Arch base with zsh, sudo, git, curl, direnv, ripgrep, fd, jq, and Docker CLI.";
       dir = ./templates/arch-base;
       postCreate = null;
     };
 
     arch-dev = {
-      description = "Arch dev base with base-devel and yay bootstrapped for the devbox user.";
+      description = "Arch dev base with base-devel, Docker CLI, and yay bootstrapped for the devbox user.";
       dir = ./templates/arch-dev;
       postCreate = null;
     };
 
     ubuntu-base = {
-      description = "Ubuntu 24.04 base with zsh, sudo, git, curl, direnv, ripgrep, fd, and jq.";
+      description = "Ubuntu 24.04 base with zsh, sudo, git, curl, direnv, ripgrep, fd, jq, and Docker CLI.";
       dir = ./templates/ubuntu-base;
       postCreate = null;
     };
 
     debian-base = {
-      description = "Debian 12 base with zsh, sudo, git, curl, direnv, ripgrep, fd, and jq.";
+      description = "Debian 12 base with zsh, sudo, git, curl, direnv, ripgrep, fd, jq, and Docker CLI.";
       dir = ./templates/debian-base;
       postCreate = null;
     };
@@ -64,7 +65,7 @@
     defaultTemplate = cfg.defaultTemplate;
     devboxUser = vars.user;
     distroboxCmd = "${stableDistroboxBinDir}/distrobox";
-    templateManifest = toString templateManifest;
+    templateManifest = stableTemplateManifest;
   });
 
   createScript = writeDevboxApplication {
@@ -78,6 +79,7 @@
       gnugrep
       jq
       podman
+      systemd
     ];
     text = renderTemplate ./scripts/create.sh {
       devboxCommon = toString devboxCommon;
@@ -117,7 +119,12 @@
     runtimeInputs = with pkgs; [
       bash
       coreutils
+      distrobox
+      gawk
+      gnugrep
       jq
+      podman
+      systemd
     ];
     text = renderTemplate ./scripts/repair.sh {
       devboxCommon = toString devboxCommon;
@@ -241,6 +248,8 @@ in {
         [storage.options.overlay]
         mount_program = "${pkgs.fuse-overlayfs}/bin/fuse-overlayfs"
       '';
+
+      home.file.".local/share/devbox/templates.json".source = templateManifest;
 
       home.file."${stableDistroboxBinDir}/distrobox" = {
         executable = true;
