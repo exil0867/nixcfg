@@ -7,7 +7,6 @@ RUN pacman -Syu --noconfirm && \
       coreutils \
       curl \
       direnv \
-      docker \
       fd \
       file \
       fontconfig \

@@ -1,6 +1,6 @@
 DEVBOX_USER='@devboxUser@'
 DEVBOX_DEFAULT_TEMPLATE='@defaultTemplate@'
-DEVBOX_TEMPLATE_MANIFEST="@templateManifest@"
+DEVBOX_TEMPLATE_MANIFEST='@templateManifest@'
 DEVBOX_DISTROBOX_CMD="$HOME/@distroboxCmd@"
 
 die() {
@@ -32,8 +32,7 @@ list_templates() {
 require_template() {
   local template="$1"
   if ! jq -e --arg name "$template" '.[$name] != null' "$DEVBOX_TEMPLATE_MANIFEST" >/dev/null; then
-    printf 'Unknown devbox template: %s\n' "$template" >&2
-    printf 'Template manifest: %s\n\nAvailable templates:\n' "$DEVBOX_TEMPLATE_MANIFEST" >&2
+    printf 'Unknown devbox template: %s\n\nAvailable templates:\n' "$template" >&2
     list_templates >&2
     exit 1
   fi
@@ -66,30 +65,6 @@ build_template() {
     --tag "$image_tag" \
     --file "$template_dir/Containerfile" \
     "$template_dir" >&2
-}
-
-podman_socket_path() {
-  local runtime_dir="${XDG_RUNTIME_DIR:-}"
-
-  if [ -z "$runtime_dir" ]; then
-    runtime_dir="/run/user/$(id -u)"
-  fi
-
-  printf '%s/podman/podman.sock\n' "$runtime_dir"
-}
-
-ensure_podman_socket() {
-  local socket_path="$1"
-
-  if [ -S "$socket_path" ]; then
-    return 0
-  fi
-
-  if command -v systemctl >/dev/null 2>&1; then
-    systemctl --user start podman.socket >/dev/null 2>&1 || true
-  fi
-
-  [ -S "$socket_path" ] || die "Podman Docker-compatible socket is not available at $socket_path"
 }
 
 seed_home() {
