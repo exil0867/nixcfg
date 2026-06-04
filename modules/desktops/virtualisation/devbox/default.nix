@@ -8,14 +8,13 @@
   cfg = config.distroboxDev;
   stableDistroboxBinDir = ".local/share/distrobox/bin";
 
-  renderTemplate = src: replacements:
-    let
-      names = builtins.attrNames replacements;
-    in
-      lib.replaceStrings
-      (map (name: "@${name}@") names)
-      (map (name: replacements.${name}) names)
-      (builtins.readFile src);
+  renderTemplate = src: replacements: let
+    names = builtins.attrNames replacements;
+  in
+    lib.replaceStrings
+    (map (name: "@${name}@") names)
+    (map (name: replacements.${name}) names)
+    (builtins.readFile src);
 
   writeDevboxApplication = attrs:
     pkgs.writeShellApplication (attrs // {checkPhase = "";});
@@ -94,6 +93,20 @@
       jq
     ];
     text = renderTemplate ./scripts/enter.sh {
+      devboxCommon = toString devboxCommon;
+    };
+  };
+
+  initScript = writeDevboxApplication {
+    name = "devbox-init";
+    runtimeInputs = with pkgs; [
+      bash
+      coreutils
+      distrobox
+      podman
+      jq
+    ];
+    text = renderTemplate ./scripts/init.sh {
       devboxCommon = toString devboxCommon;
     };
   };
@@ -228,6 +241,7 @@ in {
     home-manager.users.${vars.user} = {
       home.packages = [
         createScript
+        initScript
         enterScript
         codeScript
         repairScript

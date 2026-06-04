@@ -61,20 +61,11 @@ printf '%s\n' "$image_tag" > "$state_root/image"
   "${volume_args[@]}"
 
 seed_home "$container_home"
-install_host_command_shim "$box" "cloudflare-tunnel" "cloudflare-tunnel"
-run_post_create "$template" "$box" "$project_path"
 
-echo "Devbox ready:"
+echo "Devbox created successfully!"
 echo "  name: $box"
 echo "  template: $template"
-echo "  image: $image_tag"
-echo "  home: $container_home"
-if [ -n "$project_path" ]; then
-  echo "  project: $project_path"
-fi
-if [ -f "$HOME/.gitconfig" ]; then
-  echo "  git: host ~/.gitconfig mounted read-only"
-fi
-echo
-echo "Enter it with:"
-echo "  devbox-enter $box"
+echo "  project: ${project_path:-none}"
+echo 
+echo "To finish setting up the environment, run:"
+echo "  devbox-init $box"

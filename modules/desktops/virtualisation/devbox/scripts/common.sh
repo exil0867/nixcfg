@@ -202,12 +202,8 @@ start_box() {
     return 0
   fi
 
-  timeout 90 "$DEVBOX_DISTROBOX_CMD" enter --no-tty "$box" -- /bin/sh -lc "true" </dev/null >/dev/null 2>&1 || true
-
-  status="$(podman inspect "$box" --format '{{.State.Status}}' 2>/dev/null || true)"
-  if [ "$status" != "running" ]; then
-    podman start "$box" >/dev/null 2>&1 || true
-  fi
+  # Safe to run simple start once the first-time interactive setup is finished
+  podman start "$box" >/dev/null 2>&1 || true
 
   if podman exec "$box" /bin/sh -lc "getent passwd '$DEVBOX_USER' >/dev/null 2>&1"; then
     return 0
@@ -215,15 +211,7 @@ start_box() {
 
   state_error="$(podman inspect "$box" --format '{{.State.Error}}' 2>/dev/null || true)"
   if [ -n "$state_error" ]; then
-    if printf '%s' "$state_error" | grep -Fq 'potentially insufficient UIDs or GIDs available in user namespace'; then
-      die "Devbox '$box' failed to become ready.
-Podman error: $state_error
-This container was created against an older user namespace layout.
-Recreate the container object; the devbox home under $(state_root_for "$box")/home can be kept."
-    fi
-
-    die "Devbox '$box' failed to become ready.
-Podman error: $state_error"
+    die "Devbox '$box' failed to become ready. Podman error: $state_error"
   fi
 
   die "Devbox '$box' failed to become ready."
