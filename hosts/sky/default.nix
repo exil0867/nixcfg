@@ -156,7 +156,7 @@ in
   };
 
   age.secrets."joplin/server" = {
-    file = ../../secrets/joplin/server.age;
+    file = ../../secrets/joplin/main.age;
     mode = "0400";
   };
 
