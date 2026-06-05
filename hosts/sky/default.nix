@@ -52,6 +52,7 @@ in
     ../../modules/services/personal-website
     ../../modules/services/metrics-server
     ../../modules/services/metrics-agent
+    ../../modules/services/joplin-server.nix
     ../../modules/programs/jellyfin.nix
     ../../modules/services/minecraft-server.nix
   ];
@@ -152,6 +153,18 @@ in
     authTokenFile = config.age.secrets."metrics/token".path;
     interval = 5;
     gpu = "none";
+  };
+
+  age.secrets."joplin/server" = {
+    file = ../../secrets/joplin/server.age;
+    mode = "0400";
+  };
+
+  services.joplin-server-oci = {
+    enable = true;
+    hostName = "joplin.kyrena.dev";
+    dataDir = "/data/joplin";
+    database.passwordFile = config.age.secrets."joplin/server".path;
   };
 
   # Jellyfin Configuration
