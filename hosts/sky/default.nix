@@ -155,7 +155,7 @@ in
     gpu = "none";
   };
 
-  age.secrets."joplin/server" = {
+  age.secrets."joplin/main" = {
     file = ../../secrets/joplin/main.age;
     mode = "0400";
   };
@@ -164,7 +164,7 @@ in
     enable = true;
     hostName = "joplin.kyrena.dev";
     dataDir = "/data/joplin";
-    database.passwordFile = config.age.secrets."joplin/server".path;
+    database.passwordFile = config.age.secrets."joplin/main".path;
   };
 
   # Jellyfin Configuration
