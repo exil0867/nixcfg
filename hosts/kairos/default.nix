@@ -308,6 +308,8 @@ in {
         transmission_4-qt
         # zed-editor
         android-tools
+        dino
+        joplin-desktop
         # aspell
         # aspellDicts.en
         wl-clipboard
