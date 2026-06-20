@@ -281,7 +281,7 @@ in {
     inter
   ];
 
-  environment = {
+    environment = {
     systemPackages =
       (with system-definition; [
         ungoogled-chromium
@@ -315,11 +315,13 @@ in {
         wl-clipboard
         # antigravity-fhs
         opencode
+        kdePackages.breeze-icons
+        nixos-icons
       ])
       ++ (with system-definition.kdePackages; [
         kate
         # partitionmanager
-        # kdenlive
+        kdenlive
         # kcalc
         # sonnet
         # plasma-systemmonitor

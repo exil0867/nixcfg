@@ -62,6 +62,19 @@ with lib; {
         };
       };
 
+      iconTheme = {
+        name = mkOption {
+          type = types.str;
+          default = "Papirus-Dark";
+          description = "Icon theme name applied to org/gnome/desktop/interface.icon-theme (GNOME Shell dash + GTK apps)";
+        };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.papirus-icon-theme;
+          description = "Package providing the icon theme; added to environment.systemPackages";
+        };
+      };
+
       # File manager (Nautilus) settings
       fileManager = {
         confirmTrash = mkOption {
@@ -200,20 +213,22 @@ with lib; {
       config.gnome.displayManager.defaultSession;
 
     # Install useful GNOME apps
-    environment.systemPackages = with pkgs;
-      [
-        gnome-tweaks
-        dconf-editor
-      ]
-      ++ (
-        with pkgs.gnomeExtensions;
-        # Map extension names to packages if needed
-          [
-            clipboard-history
-            emoji-copy
-            dash-to-dock
-          ]
-      );
+    environment.systemPackages =
+      [config.gnome.iconTheme.package]
+      ++ (with pkgs;
+        [
+          gnome-tweaks
+          dconf-editor
+        ]
+        ++ (
+          with pkgs.gnomeExtensions;
+          # Map extension names to packages if needed
+            [
+              clipboard-history
+              emoji-copy
+              dash-to-dock
+            ]
+        ));
 
     # xdg.portal = {
     #   enable = true;
@@ -247,6 +262,7 @@ with lib; {
             color-scheme = config.gnome.interface.colorScheme;
             clock-show-date = config.gnome.interface.clockShowDate;
             clock-show-seconds = config.gnome.interface.clockShowSeconds;
+            icon-theme = config.gnome.iconTheme.name;
           };
 
           # Window manager
