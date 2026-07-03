@@ -281,7 +281,7 @@ in {
     inter
   ];
 
-    environment = {
+  environment = {
     systemPackages =
       (with system-definition; [
         ungoogled-chromium
@@ -292,7 +292,7 @@ in {
         # jetbrains.pycharm
         # vscode
         keepassxc
-        # libreoffice
+        libreoffice
         # librewolf
         sshpass
         gimp
