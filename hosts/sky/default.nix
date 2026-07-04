@@ -79,7 +79,7 @@ in
 
 
   services.minecraft-private = {
-    enable = true;
+    enable = false;
     openPublicFirewall = true;
   };
 
