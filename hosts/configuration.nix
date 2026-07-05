@@ -191,6 +191,8 @@ in {
   nix = {
     settings = {
       auto-optimise-store = true;
+      max-jobs = 1;
+      cores = 2;
     };
     gc = {
       automatic = true;
