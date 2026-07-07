@@ -119,6 +119,13 @@ in {
     mode = "0400";
   };
 
+  services.ollama = {
+    enable = true;
+    package = unstable.ollama-cuda;
+  };
+
+  services.open-webui.enable = true;
+
   services.immich-sync = {
     enable = true;
     user = "exil0681";
@@ -286,7 +293,6 @@ in {
       (with system-definition; [
         ungoogled-chromium
         git
-        ollama
         # jetbrains.rider
         # jetbrains.webstorm
         # jetbrains.pycharm
