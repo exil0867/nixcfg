@@ -122,9 +122,19 @@ in {
   services.ollama = {
     enable = true;
     package = unstable.ollama-cuda;
+    user = "ollama";
+    group = "ollama";
   };
 
-  services.open-webui.enable = true;
+  systemd.services.ollama.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    PrivateUsers = lib.mkForce false;
+  };
+
+  services.open-webui = {
+    enable = true;
+    port = 8088;
+  };
 
   services.immich-sync = {
     enable = true;
@@ -282,6 +292,8 @@ in {
       "com.usebottles.bottles"
     ];
   };
+
+  programs.nix-ld.enable = true;
 
   fonts.packages = with system-definition; [
     roboto
