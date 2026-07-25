@@ -1,13 +1,22 @@
-{ lib, config, pkgs, host, vars, ... }:
-
 {
+  lib,
+  config,
+  pkgs,
+  host,
+  vars,
+  ...
+}: {
   home-manager.users.${vars.user} = {
     home = {
       pointerCursor = {
+        enable = true;
         gtk.enable = false;
         name = "Dracula-cursors";
         package = pkgs.dracula-theme;
-        size = if host.hostName == "xps" then 26 else 16;
+        size =
+          if host.hostName == "xps"
+          then 26
+          else 16;
       };
     };
 

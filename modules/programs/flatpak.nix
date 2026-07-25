@@ -1,7 +1,11 @@
-{ config, lib, pkgs, vars, ... }:
-
-with lib;
 {
+  config,
+  lib,
+  pkgs,
+  vars,
+  ...
+}:
+with lib; {
   options = {
     flatpak = {
       enable = mkOption {
@@ -10,12 +14,13 @@ with lib;
       };
       extraPackages = mkOption {
         type = types.listOf types.str;
-        default = [ ];
+        default = [];
       };
     };
   };
 
-  config = mkIf (config.flatpak.enable)
+  config =
+    mkIf (config.flatpak.enable)
     {
       xdg.portal.enable = true;
       xdg.portal.config.common.default = "*";
@@ -27,47 +32,45 @@ with lib;
 
       services.flatpak.enable = true;
 
-      system.activationScripts =
-        let
-          extraPackages = concatStringsSep " " config.flatpak.extraPackages;
-        in
-        mkIf (config.flatpak.extraPackages != [ ])
-          {
-            flatpak.text =
-              ''
-                flatpaks=(
-                  ${extraPackages}
-                )
+      system.activationScripts = let
+        extraPackages = concatStringsSep " " config.flatpak.extraPackages;
+      in
+        mkIf (config.flatpak.extraPackages != [])
+        {
+          flatpak.text = ''
+            flatpaks=(
+              ${extraPackages}
+            )
 
-                ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+            ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-                # for package in ''${flatpaks[*]}; do
+            # for package in ''${flatpaks[*]}; do
 
-                for package in ''${flatpaks[@]}; do
-                  if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "$package"; then
-                    ${pkgs.flatpak}/bin/flatpak install -y flathub $package
-                  fi
-                done
+            for package in ''${flatpaks[@]}; do
+              if ! ${pkgs.flatpak}/bin/flatpak list --app | grep -q "$package"; then
+                ${pkgs.flatpak}/bin/flatpak install -y flathub $package
+              fi
+            done
 
-                installed=($(${pkgs.flatpak}/bin/flatpak list --app --columns=application | tail -n +1))
+            installed=($(${pkgs.flatpak}/bin/flatpak list --app --columns=application | tail -n +1))
 
-                for remove in ''${installed[@]}; do
-                  found=false
-                  for package in ''${flatpaks[@]}; do
-                    if [[ "$remove" == "$package"* ]]; then
-                      found=true
-                      break
-                    fi
-                  done
+            for remove in ''${installed[@]}; do
+              found=false
+              for package in ''${flatpaks[@]}; do
+                if [[ "$remove" == "$package"* ]]; then
+                  found=true
+                  break
+                fi
+              done
 
-                  if [[ "$found" == false ]]; then
-                    ${pkgs.flatpak}/bin/flatpak uninstall -y "$remove"
-                    ${pkgs.flatpak}/bin/flatpak uninstall -y --unused
-                  fi
-                done
+              if [[ "$found" == false ]]; then
+                ${pkgs.flatpak}/bin/flatpak uninstall -y "$remove"
+                ${pkgs.flatpak}/bin/flatpak uninstall -y --unused
+              fi
+            done
 
-                /run/wrappers/bin/su - ${vars.user} -c "${pkgs.flatpak}/bin/flatpak override --user --filesystem=host"
-              '';
-          };
+            /run/wrappers/bin/su - ${vars.user} -c "${pkgs.flatpak}/bin/flatpak override --user --filesystem=host"
+          '';
+        };
     };
 }

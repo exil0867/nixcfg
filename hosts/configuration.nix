@@ -225,6 +225,7 @@ in {
     home = {
       stateVersion = "24.11";
       pointerCursor = {
+        enable = true;
         gtk.enable = false;
         name = "Dracula-cursors";
         package = system-definition.dracula-theme;
@@ -245,28 +246,28 @@ in {
         enable = true;
         enableDefaultConfig = false;
 
-        matchBlocks = {
+        settings = {
           "*" = {
-            forwardAgent = false;
-            serverAliveInterval = 0;
-            serverAliveCountMax = 3;
-            compression = false;
-            addKeysToAgent = "no";
-            hashKnownHosts = false;
-            userKnownHostsFile = "~/.ssh/known_hosts";
-            controlMaster = "no";
-            controlPath = "~/.ssh/master-%r@%n:%p";
-            controlPersist = null;
+            ForwardAgent = false;
+            AddKeysToAgent = "no";
+            Compression = false;
+            ServerAliveInterval = 0;
+            ServerAliveCountMax = 3;
+            HashKnownHosts = false;
+            UserKnownHostsFile = "~/.ssh/known_hosts";
+            ControlMaster = "no";
+            ControlPath = "~/.ssh/master-%r@%n:%p";
+            ControlPersist = "no";
           };
 
           sky = {
-            hostname = "37.120.187.211";
-            user = vars.user;
+            HostName = "37.120.187.211";
+            User = vars.user;
           };
 
           echo = {
-            hostname = "192.168.1.5";
-            user = vars.user;
+            HostName = "192.168.1.5";
+            User = vars.user;
           };
         };
       };

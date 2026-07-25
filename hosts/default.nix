@@ -41,7 +41,6 @@
 in {
   # Desktop Profile
   kairos = unstable-lib.nixosSystem {
-    inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
       nixpkgs-channel = nixpkgs-unstable;
@@ -74,7 +73,6 @@ in {
   };
 
   echo = stable-lib.nixosSystem {
-    inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
       nixpkgs-channel = nixpkgs-stable;
@@ -108,7 +106,6 @@ in {
   };
 
   sky = stable-lib.nixosSystem {
-    inherit system;
     specialArgs = {
       inherit inputs system stable unstable vars;
       nixpkgs-channel = nixpkgs-stable;
