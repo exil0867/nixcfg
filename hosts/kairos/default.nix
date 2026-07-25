@@ -120,19 +120,19 @@ in {
   };
 
   services.ollama = {
-    enable = true;
+    enable = false;
     package = unstable.ollama-cuda;
     user = "ollama";
     group = "ollama";
   };
 
-  systemd.services.ollama.serviceConfig = {
-    DynamicUser = lib.mkForce false;
-    PrivateUsers = lib.mkForce false;
-  };
+  # systemd.services.ollama.serviceConfig = {
+  #   DynamicUser = lib.mkForce false;
+  #   PrivateUsers = lib.mkForce false;
+  # };
 
   services.open-webui = {
-    enable = true;
+    enable = false;
     port = 8088;
   };
 
