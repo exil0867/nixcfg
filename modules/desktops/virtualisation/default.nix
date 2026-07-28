@@ -1,7 +1,7 @@
 [
   ./devbox
   # ./docker.nix
-  # ./qemu.nix
+  ./qemu.nix
   ./x11vnc.nix
   ./waydroid.nix
 ]

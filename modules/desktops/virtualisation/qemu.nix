@@ -1,20 +1,28 @@
-
-{ lib, config, pkgs, stable, inputs, vars, ... }:
 {
+  lib,
+  config,
+  pkgs,
+  stable,
+  inputs,
+  vars,
+  ...
+}: {
   virtualisation = {
     libvirtd = {
       enable = true;
       qemu = {
-        package = pkgs.qemu_kvm;
+        package = pkgs.qemu_kvm.override {
+          hostCpuOnly = false;
+          cephSupport = false;
+          glusterfsSupport = false;
+        };
         swtpm.enable = true;
-        ovmf.enable = true;
-        ovmf.packages = [ pkgs.OVMFFull.fd ];
       };
     };
     spiceUSBRedirection.enable = true;
   };
 
-  users.users.${vars.user}.extraGroups = [ "libvirtd" ];
+  users.users.${vars.user}.extraGroups = ["libvirtd"];
 
   environment.systemPackages = with pkgs; [
     spice
@@ -29,8 +37,8 @@
   home-manager.users.${vars.user} = {
     dconf.settings = {
       "org/virt-manager/virt-manager/connections" = {
-        autoconnect = [ "qemu:///system" ];
-        uris = [ "qemu:///system" ];
+        autoconnect = ["qemu:///system"];
+        uris = ["qemu:///system"];
       };
     };
   };
