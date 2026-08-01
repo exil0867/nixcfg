@@ -18,4 +18,7 @@ in {
   "trena/main.age".publicKeys = [sky_key];
   "kitspark/web.age".publicKeys = [sky_key];
   "cloudflare/kitspark.dev-DNS-RW.age".publicKeys = [sky_key];
+  "neostarter/website.age".publicKeys = [sky_key];
+  "neostarter/ghcr-token.age".publicKeys = [sky_key];
+  "cloudflare/neostarter.dev-DNS-RW.age".publicKeys = [sky_key];
 }
