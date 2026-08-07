@@ -227,8 +227,8 @@ in {
       pointerCursor = {
         enable = true;
         gtk.enable = false;
-        name = "Dracula-cursors";
-        package = system-definition.dracula-theme;
+        name = "Bibata-Modern-Classic";
+        package = system-definition.bibata-cursors;
         size = 24;
       };
     };
