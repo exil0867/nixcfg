@@ -14,7 +14,7 @@
         package = pkgs.qemu_kvm.override {
           hostCpuOnly = false;
           cephSupport = false;
-          glusterfsSupport = false;
+          # glusterfsSupport = false;
         };
         swtpm.enable = true;
       };

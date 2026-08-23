@@ -201,7 +201,7 @@ in {
       };
     };
 
-    security.unprivilegedUsernsClone = true;
+    # security.unprivilegedUsernsClone = true;
     boot.kernel.sysctl."user.max_user_namespaces" = lib.mkDefault 28633;
 
     users.users.${vars.user} = {
