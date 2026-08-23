@@ -11,25 +11,25 @@
   plasmaConfig = import ../../modules/desktops/plasma-prefs.nix;
 in {
   imports =
-     [
-       ./hardware-configuration.nix
-       inputs.nixvim-unstable.nixosModules.nixvim
-       # ../../modules/programs/neovim
-       ../../modules/programs/flatpak.nix
-       ../../modules/programs/games.nix
-       ../../modules/services/rclone-sftp.nix
-       ../../modules/services/mounter.nix
-       ../../modules/services/immich-sync.nix
-       ../../modules/services/sync-secrets.nix
-       ../../modules/services/metrics-agent
-       ../../modules/programs/backup-android
-       ../../modules/programs/cloudflare-tunnel.nix
-       ../../modules/programs/jellyfin-player.nix
-       ../../modules/programs/obs.nix
-       ../../modules/hardware/mouse.nix
-     ]
-     ++ (import ../../modules/hardware/kairos)
-     ++ (import ../../modules/desktops/virtualisation);
+    [
+      ./hardware-configuration.nix
+      inputs.nixvim-unstable.nixosModules.nixvim
+      # ../../modules/programs/neovim
+      ../../modules/programs/flatpak.nix
+      ../../modules/programs/games.nix
+      ../../modules/services/rclone-sftp.nix
+      ../../modules/services/mounter.nix
+      ../../modules/services/immich-sync.nix
+      ../../modules/services/sync-secrets.nix
+      ../../modules/services/metrics-agent
+      ../../modules/programs/backup-android
+      ../../modules/programs/cloudflare-tunnel.nix
+      ../../modules/programs/jellyfin-player.nix
+      ../../modules/programs/obs.nix
+      ../../modules/hardware/mouse.nix
+    ]
+    ++ (import ../../modules/hardware/kairos)
+    ++ (import ../../modules/desktops/virtualisation);
 
   # Boot Options
   boot = {
@@ -349,7 +349,7 @@ in {
         # Apps
       ])
       ++ [
-        inputs.freesmlauncher.packages.${system-definition.system}.default
+        # inputs.freesmlauncher.packages.${system-definition.system}.default
       ];
   };
 
