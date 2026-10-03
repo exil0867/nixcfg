@@ -6,7 +6,7 @@ let
   oldImmichGalleryDir = "/mnt/1TB-ST1000DM010-2EP102/databox/immich-gallery/";
   
   # Pin to specific version to force upgrade
-  immichVersion = "v2.3.1";
+  immichVersion = "v3.2.4";
   
   directories = [
     "${serviceConfigRoot}/"
