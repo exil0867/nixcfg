@@ -320,20 +320,20 @@ in {
         obs-studio
         source-sans-pro
         inkscape
-        dbeaver-bin
-        obsidian
-        # handbrake
-        # krita
+        # dbeaver-bin
+        # obsidian
+        handbrake
+        krita
         transmission_4-qt
         # zed-editor
         android-tools
-        dino
+        gajim
         joplin-desktop
         # aspell
         # aspellDicts.en
         wl-clipboard
         # antigravity-fhs
-        opencode
+        # opencode
         kdePackages.breeze-icons
         nixos-icons
       ])
