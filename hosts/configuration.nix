@@ -149,6 +149,7 @@ in {
         pulseaudio # Audio Server/Control
         qpwgraph # Pipewire Graph Manager
         remmina # XRDP & VNC Client
+        tmux
 
         # neovim
 
