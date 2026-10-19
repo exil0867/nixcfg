@@ -327,7 +327,7 @@ in {
         transmission_4-qt
         # zed-editor
         android-tools
-        gajim
+        # gajim
         joplin-desktop
         # aspell
         # aspellDicts.en
