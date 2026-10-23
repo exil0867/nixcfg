@@ -1,10 +1,11 @@
-{ config, lib, ... }:
-
-let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.services.joplin-server-oci;
   dockercli = "${config.virtualisation.docker.package}/bin/docker";
-in
-{
+in {
   options.services.joplin-server-oci = {
     enable = lib.mkEnableOption "Joplin Server via OCI containers";
 
@@ -28,7 +29,7 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "joplin/server:3.7.1";
+      default = "joplin/server:3.7.3";
       description = "Joplin Server container image.";
     };
 
@@ -88,9 +89,9 @@ in
 
     systemd.services.init-joplin-network = {
       description = "Create the Docker network for Joplin Server.";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["docker.service"];
+      requires = ["docker.service"];
+      wantedBy = ["multi-user.target"];
       serviceConfig.Type = "oneshot";
       script = ''
         if ! ${dockercli} network inspect joplin-net >/dev/null 2>&1; then
@@ -103,7 +104,7 @@ in
       joplin_postgres = {
         image = cfg.postgresImage;
         autoStart = true;
-        environmentFiles = [ cfg.database.passwordFile ];
+        environmentFiles = [cfg.database.passwordFile];
         environment = {
           POSTGRES_DB = cfg.database.name;
           POSTGRES_USER = cfg.database.user;
@@ -111,13 +112,13 @@ in
         volumes = [
           "${cfg.dataDir}/postgres:/var/lib/postgresql/data"
         ];
-        extraOptions = [ "--network=joplin-net" ];
+        extraOptions = ["--network=joplin-net"];
       };
 
       joplin = {
         image = cfg.image;
         autoStart = true;
-        environmentFiles = [ cfg.database.passwordFile ];
+        environmentFiles = [cfg.database.passwordFile];
         environment = {
           APP_BASE_URL = "https://${cfg.hostName}";
           APP_PORT = toString cfg.port;
@@ -127,34 +128,34 @@ in
           POSTGRES_PORT = "5432";
           POSTGRES_USER = cfg.database.user;
         };
-        ports = [ "127.0.0.1:${toString cfg.port}:${toString cfg.port}" ];
-        dependsOn = [ "joplin_postgres" ];
-        extraOptions = [ "--network=joplin-net" ];
+        ports = ["127.0.0.1:${toString cfg.port}:${toString cfg.port}"];
+        dependsOn = ["joplin_postgres"];
+        extraOptions = ["--network=joplin-net"];
       };
     };
 
     systemd.services.docker-joplin_postgres = {
-      after = [ "init-joplin-network.service" ];
-      requires = [ "init-joplin-network.service" ];
+      after = ["init-joplin-network.service"];
+      requires = ["init-joplin-network.service"];
     };
 
     systemd.services.docker-joplin = {
-      after = [ "init-joplin-network.service" ];
-      requires = [ "init-joplin-network.service" ];
+      after = ["init-joplin-network.service"];
+      requires = ["init-joplin-network.service"];
     };
 
     services.traefik.dynamicConfigOptions = lib.mkIf cfg.traefik.enable {
       http = {
         routers.joplin = {
           rule = "Host(`${cfg.hostName}`)";
-          entryPoints = [ cfg.traefik.entryPoint ];
+          entryPoints = [cfg.traefik.entryPoint];
           service = "joplin";
           middlewares = lib.optional (config.traefikOrigin.middlewareName != null) config.traefikOrigin.middlewareName;
           tls.certResolver = cfg.traefik.certResolver;
         };
 
         services.joplin.loadBalancer.servers = [
-          { url = "http://127.0.0.1:${toString cfg.port}"; }
+          {url = "http://127.0.0.1:${toString cfg.port}";}
         ];
       };
     };

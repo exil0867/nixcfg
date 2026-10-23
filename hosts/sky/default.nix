@@ -1,6 +1,13 @@
-{ config, lib, vars, unstable, stable, system-definition, inputs, ... }:
-
-let
+{
+  config,
+  lib,
+  vars,
+  unstable,
+  stable,
+  system-definition,
+  inputs,
+  ...
+}: let
   # Cloudflare IP ranges for origin allowlisting (v4/v6).
   cloudflareIPv4 = [
     "173.245.48.0/20"
@@ -41,9 +48,7 @@ let
   syncthingAllowedV6 = [
     "fc00::/7"
   ];
-
-in
-{
+in {
   imports = [
     ./hardware-configuration.nix
     ../../modules/services/sync-secrets.nix
@@ -77,7 +82,6 @@ in
     domain = "exil.kyrena.dev";
   };
 
-
   services.minecraft-private = {
     enable = false;
     openPublicFirewall = true;
@@ -86,7 +90,7 @@ in
   programs.nix-ld.enable = true;
 
   users.users.${vars.user} = {
-    extraGroups = [ "transmission" ];
+    extraGroups = ["transmission"];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItpAE9vRUSAOZAqG9rUmS58ANi/kIIdM9Ki34kEARIP exilvm@3x1l-d3skt0p"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInjI+XzPKAmRH/S/zpx4XVusY8W0IbG6cithnOZBZJo exil@n0t3x1l.dev"
@@ -100,18 +104,22 @@ in
     useNetworkd = true;
 
     # Simple allowlist for 80/443; Traefik middleware enforces Cloudflare-only access.
-    firewall.allowedTCPPorts = [ 80 443 ];
+    firewall.allowedTCPPorts = [80 443];
     enableIPv6 = true;
 
-    interfaces.ens3.ipv4.addresses = [{
-      address = "37.120.187.211";
-      prefixLength = 22;
-    }];
+    interfaces.ens3.ipv4.addresses = [
+      {
+        address = "37.120.187.211";
+        prefixLength = 22;
+      }
+    ];
 
-    interfaces.ens3.ipv6.addresses = [{
-      address = "2a03:4000:f:ce4::1";
-      prefixLength = 64;
-    }];
+    interfaces.ens3.ipv6.addresses = [
+      {
+        address = "2a03:4000:f:ce4::1";
+        prefixLength = 64;
+      }
+    ];
 
     defaultGateway = {
       address = "37.120.184.1";
@@ -127,7 +135,6 @@ in
     middlewareName = "cloudflare-only";
     sourceRange = cloudflareIPv4 ++ cloudflareIPv6;
   };
-
 
   # Enable SSH for remote management
   services.openssh = {
@@ -163,6 +170,7 @@ in
   services.joplin-server-oci = {
     enable = true;
     hostName = "joplin.kyrena.dev";
+    image = "joplin/server:3.7.3";
     dataDir = "/data/joplin";
     database.passwordFile = config.age.secrets."joplin/main".path;
   };
@@ -186,7 +194,6 @@ in
     user = vars.user;
   };
 
-
   syncSecrets = {
     enable = true;
     secretsDir = "/home/${vars.user}/Develop/nixcfg/secrets";
@@ -195,7 +202,6 @@ in
     firewallAllowedCidrs = syncthingAllowedV4;
     firewallAllowedCidrs6 = syncthingAllowedV6;
   };
-
 
   # age.secrets."deluge/auth" = {
   #   file = ../../secrets/deluge/auth.age;
@@ -213,7 +219,7 @@ in
   #   # dataDir = "/home/${vars.user}/data/deluge";
   #   user = vars.user;
   #   group = "users";
-    
+
   #   # Basic configuration
   #   config = {
   #     allow_remote = true;
@@ -224,7 +230,7 @@ in
   #     listen_ports = [51413 51413]; # Single port for better firewall management
   #     random_port = false;
   #   };
-    
+
   #   # Reference to auth file managed by agenix
   #   authFile = config.age.secrets."deluge/auth".path;
   # };
@@ -252,7 +258,16 @@ in
           };
           http.tls = {
             certResolver = "cloudflare";
-            domains = [{ main = "kyrena.dev"; sans = [ "*.kyrena.dev" ]; } { main = "kitspark.dev"; sans = [ "*.kitspark.dev" ]; }];
+            domains = [
+              {
+                main = "kyrena.dev";
+                sans = ["*.kyrena.dev"];
+              }
+              {
+                main = "kitspark.dev";
+                sans = ["*.kitspark.dev"];
+              }
+            ];
           };
         };
       };
@@ -281,9 +296,11 @@ in
         };
 
         services = {
-          jellyfin.loadBalancer.servers = [{
-            url = "http://127.0.0.1:8096";
-          }];
+          jellyfin.loadBalancer.servers = [
+            {
+              url = "http://127.0.0.1:8096";
+            }
+          ];
         };
       };
     };
@@ -309,7 +326,7 @@ in
   # Basic System Packages
   environment.systemPackages = with system-definition; [
     git
-    curl 
+    curl
     wget
     # vim
     htop
@@ -334,7 +351,7 @@ in
         };
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" ];
+          plugins = ["git"];
           theme = "robbyrussell";
         };
       };
