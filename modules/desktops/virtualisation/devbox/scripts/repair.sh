@@ -8,14 +8,19 @@ repair_box() {
   local container_home=""
 
   state_root="$(state_root_for "$box")"
-  container_home="$state_root/home"
 
-  if [ ! -d "$container_home" ]; then
-    echo "Skipping '$box': no managed home at $container_home" >&2
+  if [ ! -d "$state_root" ]; then
+    echo "Skipping '$box': no managed devbox state at $state_root" >&2
     return 0
   fi
 
   start_box "$box"
+  container_home="$(box_home "$box")"
+  if [ -z "$container_home" ] || [ ! -d "$container_home" ]; then
+    echo "Skipping '$box': no accessible managed home at ${container_home:-<unset>}" >&2
+    return 0
+  fi
+
   install_zsh_baseline_packages "$box"
   install_host_command_shim "$box" "cloudflare-tunnel" "cloudflare-tunnel"
   remove_managed_shell_files "$container_home"

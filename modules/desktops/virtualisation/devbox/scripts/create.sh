@@ -19,7 +19,7 @@ require_distrobox
 require_template "$template"
 
 state_root="$(state_root_for "$box")"
-container_home="$state_root/home"
+container_home="$(container_home_for "$box")"
 
 if "$DEVBOX_DISTROBOX_CMD" list --no-color | awk 'NR>1 {print $1}' | grep -Fxq "$box"; then
   echo "Devbox '$box' already exists."
@@ -28,6 +28,7 @@ if "$DEVBOX_DISTROBOX_CMD" list --no-color | awk 'NR>1 {print $1}' | grep -Fxq "
 fi
 
 mkdir -p "$state_root" "$container_home"
+printf '%s\n' "$container_home" > "$state_root/home-path"
 seed_home "$container_home"
 
 if [ -n "$project_path" ]; then
@@ -65,6 +66,7 @@ seed_home "$container_home"
 echo "Devbox created successfully!"
 echo "  name: $box"
 echo "  template: $template"
+echo "  home: $container_home"
 echo "  project: ${project_path:-none}"
 echo 
 echo "To finish setting up the environment, run:"

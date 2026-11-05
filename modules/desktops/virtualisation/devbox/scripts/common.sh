@@ -18,6 +18,17 @@ state_root_for() {
   printf '%s\n' "$HOME/.local/share/devboxes/$1"
 }
 
+container_home_for() {
+  local box="$1"
+  local box_id=""
+
+  # Distrobox exposes the custom home path inside the container as-is. Keep it
+  # short so applications that create Unix sockets below $HOME cannot exceed
+  # the platform socket-path limit. The full box name remains in state_root.
+  box_id="$(printf '%s' "$box" | sha256sum | cut -c1-16)"
+  printf '%s\n' "$HOME/.dbx/$box_id"
+}
+
 list_templates() {
   jq -r 'to_entries[] | "\(.key)\t\(.value.description)"' "$DEVBOX_TEMPLATE_MANIFEST" |
     while IFS=$'\t' read -r name description; do

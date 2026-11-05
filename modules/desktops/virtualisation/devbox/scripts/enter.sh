@@ -19,16 +19,17 @@ fi
 
 require_distrobox
 state_root="$(state_root_for "$box")"
-container_home="$state_root/home"
 project_file="$state_root/project-path"
 
 if [ -f "$project_file" ]; then
   project_path="$(cat "$project_file")"
 fi
 
+start_box "$box"
+container_home="$(box_home "$box")"
+[ -n "$container_home" ] || die "Devbox '$box' has no configured home directory."
 mkdir -p "$container_home"
 seed_home "$container_home"
-start_box "$box"
 workdir="$(resolve_workdir "$box" "$PWD" "$project_path")"
 
 if [ "$#" -eq 0 ]; then
